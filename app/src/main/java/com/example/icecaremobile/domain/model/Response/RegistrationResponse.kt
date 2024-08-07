@@ -6,3 +6,5 @@ data class RegistrationResponse(
     val statusCode: Int,
     val data: String
 )
+
+

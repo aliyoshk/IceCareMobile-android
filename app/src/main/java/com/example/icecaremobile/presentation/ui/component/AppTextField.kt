@@ -2,6 +2,7 @@ package com.example.icecaremobile.presentation.ui.component
 
 import androidx.annotation.ColorRes
 import androidx.compose.foundation.border
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,6 +22,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,15 +35,18 @@ import com.example.icecaremobile.ui.theme.LightGray
 fun AppTextField(
     enteredValue: (String) -> Unit,
     label: String,
-    startIcon: Painter?,
-    endIcon: Painter?,
-    keyboardType: KeyboardType = KeyboardType.Text
+    startIcon: Painter? = null,
+    endIcon: Painter? = null,
+    keyboardType: KeyboardType = KeyboardType.Text,
+    enableField: Boolean = true
 )
 {
     var text by remember { mutableStateOf("") }
 
     OutlinedTextField(
-        label = { Text(label) },
+        modifier = Modifier
+            .fillMaxWidth(),
+        label = { Text(label, color = Color.Black) },
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         value = text,
         onValueChange =
@@ -48,14 +54,14 @@ fun AppTextField(
             text = it
             enteredValue(text)
         },
+        enabled = enableField,
         shape = RoundedCornerShape(10.dp),
         colors = TextFieldDefaults.colors(
             Color.Black,
             unfocusedIndicatorColor = Color.Transparent,
-            focusedIndicatorColor = AppGolden
+            focusedIndicatorColor = AppGolden,
+            disabledIndicatorColor = Color.Transparent
         ),
-        modifier = Modifier .fillMaxWidth(),
-
         trailingIcon =
         {
             if (endIcon != null)

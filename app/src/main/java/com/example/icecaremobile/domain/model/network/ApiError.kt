@@ -9,3 +9,5 @@ data class ApiError(
     val concatenatedErrors: String
         get() = errors?.joinToString("\n") ?: message ?: responseMessage.orEmpty()
 }
+
+

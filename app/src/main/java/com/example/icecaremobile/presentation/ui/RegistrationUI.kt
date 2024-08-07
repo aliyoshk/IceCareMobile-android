@@ -125,9 +125,11 @@ fun RegistrationUI(
         )
 
         Row(
-            horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(2.dp)
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(2.dp)
         )
         {
             Checkbox(

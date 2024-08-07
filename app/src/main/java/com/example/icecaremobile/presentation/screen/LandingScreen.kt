@@ -14,15 +14,7 @@ import com.example.icecaremobile.presentation.ui.LandingPageUI
 @Composable
 fun LandingScreen(navController: NavHostController)
 {
-    var btnClick by remember { mutableStateOf(false) }
-
-    LandingPageUI { btnClick = true }
-
-    if (btnClick)
-    {
-        btnClick = false
-        navController.navigate(Screen.RegistrationScreen.route)
-    }
+    LandingPageUI { navController.navigate(Screen.RegistrationScreen.route)}
 }
 
 @Composable
