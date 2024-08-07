@@ -7,3 +7,5 @@ data class RegistrationRequest(
     val password: String,
     val confirmPassword: String
 )
+
+
