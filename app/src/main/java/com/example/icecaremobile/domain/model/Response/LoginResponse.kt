@@ -14,5 +14,13 @@ data class UserProfile(
     val phoneNumber: String,
     val dollarRate: Double,
     val accountNumber: String,
-    val isAccountVerified: Boolean
+    val isAccountVerified: Boolean,
+    val banks : List<Banks>
 )
+
+data class Banks(
+    val bankName: String,
+    val accountName: String,
+    val accountNumber: String
+)
+

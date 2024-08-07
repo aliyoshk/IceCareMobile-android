@@ -12,3 +12,4 @@ interface IRepository {
         onError: (ApiError) -> Unit
     )
 }
+
