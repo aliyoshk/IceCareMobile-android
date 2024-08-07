@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "18865340651",
+    "project_id": "ice-care-nig-ltd",
+    "storage_bucket": "ice-care-nig-ltd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:18865340651:android:7013f017acec094ae97eae",
+        "android_client_info": {
+          "package_name": "com.example.icecaremobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoR2GxnkNehPVOQNWCmniabuoqoMon3JQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

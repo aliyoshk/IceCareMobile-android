@@ -1,0 +1,23 @@
+<resources>
+<!--    <style name="Theme.SplashScreen.MySplash" parent="Theme.SplashScreen">-->
+<!--        <item name="android:windowNoTitle">true</item>-->
+<!--        <item name="android:windowFullscreen">true</item>-->
+<!--        <item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>-->
+<!--        <item name="windowSplashScreenBackground">#FFD0BCFF</item>-->
+<!--        <item name="postSplashScreenTheme">@style/Theme.SplashScreen</item>-->
+<!--        <item name="android:windowBackground">@drawable/splash_bg</item>-->
+<!--        <item name="android:windowActionBar">false</item>-->
+<!--    </style>-->
+
+    <style name="Theme.SplashScreen.MySplash" parent="Theme.SplashScreen">
+        <item name="postSplashScreenTheme">@style/Theme.SplashScreen</item>
+        <item name="windowSplashScreenBackground">@android:color/transparent</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_bg</item>
+        <item name="windowSplashScreenIconBackgroundColor">@android:color/transparent</item>
+        <item name="splashScreenIconSize">@dimen/splashscreen_icon_size</item>
+<!--        <item name="postSplashScreenTheme">@style/Theme.IceCareMobile</item>-->
+<!--        <item name="windowSplashScreenBackground">@drawable/splash_bg</item>-->
+<!--        <item name="windowSplashScreenAnimatedIcon">@null</item>-->
+<!--        <item name="splashScreenIconSize">0dp</item>-->
+    </style>
+</resources>
