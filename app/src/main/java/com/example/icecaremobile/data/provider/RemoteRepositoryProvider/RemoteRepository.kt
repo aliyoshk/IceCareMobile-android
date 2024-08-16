@@ -27,3 +27,4 @@ class RemoteRepository @Inject constructor() : IRepositoryProvider
         return RepositoryImpl(apiService)
     }
 }
+

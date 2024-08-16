@@ -31,6 +31,7 @@ import com.example.icecaremobile.ui.theme.LightGray
 
 @Composable
 fun LoginUI(
+    modifier: Modifier = Modifier,
     username: (String) -> Unit,
     password: (String) -> Unit,
     btnLogin: () -> Unit
@@ -38,7 +39,7 @@ fun LoginUI(
 {
     val scrollState = rememberScrollState()
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(30.dp)
@@ -101,5 +102,5 @@ fun LoginUI(
 @Preview(showSystemUi = true)
 fun LoginUIPreview()
 {
-    LoginUI({}, {}, {})
+    LoginUI(username = {}, password = {}, btnLogin = {})
 }

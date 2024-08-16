@@ -15,3 +15,4 @@ data class Device(
     val biometricToken: String,
     val biometricCode: String
 )
+

@@ -6,3 +6,4 @@ interface IRepositoryProvider
 {
     fun provideRepository(): IRepository
 }
+

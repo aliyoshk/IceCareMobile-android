@@ -16,8 +16,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,6 +38,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.icecaremobile.R
 import com.example.icecaremobile.ui.theme.AppGolden
 import com.example.icecaremobile.ui.theme.LightGolden
@@ -43,6 +46,7 @@ import com.example.icecaremobile.ui.theme.LightGray
 
 @Composable
 fun DashboardUI(
+    modifier: Modifier = Modifier,
     name: String,
     acctNumber: String,
     dollarRate: Double,
@@ -53,15 +57,22 @@ fun DashboardUI(
     onTransferMoneyClick: () -> Unit,
     onTopUpClick: () -> Unit,
     onViewHistoryClick: () -> Unit,
-    notification: Boolean
+    notification: Boolean = false
 ){
+    val scrollState = rememberScrollState()
+
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(150.dp)
             .background(color = LightGolden.copy(alpha = 0.4f))
     )
+
     Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .verticalScroll(scrollState)
     ){
         Column(
             modifier = Modifier
@@ -161,7 +172,93 @@ fun DashboardCard(
                 )
                 .padding(20.dp)
         ) {
-            Column(
+            ConstraintLayout(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .padding(10.dp)
+            ) {
+                val (nameValue, acctNumberValue,
+                    dollarRateText, dollarRateValue,
+                    balanceText, balanceValue,
+                ) = createRefs()
+                val verticalGuideline = createGuidelineFromStart(0.5f)
+
+                Text(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 22.sp,
+                    text = "Hi, $name",
+                    modifier = Modifier
+                        .constrainAs(nameValue)
+                        {
+                            start.linkTo(verticalGuideline, margin = 35.dp)
+                            start.linkTo(parent.start)
+                            top.linkTo(parent.top, margin = 5.dp)
+                        }
+                )
+
+                Text(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 22.sp,
+                    text = "Dollar Rate",
+                    modifier = Modifier
+                        .constrainAs(dollarRateText)
+                        {
+                            top.linkTo(parent.top, margin = 5.dp)
+                            start.linkTo(verticalGuideline, margin = 50.dp)
+                        },
+                )
+
+                Text(
+                    fontWeight = FontWeight.Light,
+                    fontSize = 18.sp,
+                    text = acctNumber,
+                    modifier = Modifier
+                        .constrainAs(acctNumberValue)
+                        {
+                            top.linkTo(nameValue.bottom, margin = 5.dp)
+                            start.linkTo(nameValue.start)
+                        }
+                )
+
+                Text(
+                    fontWeight = FontWeight.Light,
+                    fontSize = 18.sp,
+                    text = "N$dollarRate",
+                    modifier = Modifier
+                        .constrainAs(dollarRateValue)
+                        {
+                            top.linkTo(dollarRateText.bottom, margin = 5.dp)
+                            start.linkTo(dollarRateText.start)
+                        }
+                )
+
+                Text(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 22.sp,
+                    text = "Balance",
+                    modifier = Modifier
+                        .constrainAs(balanceText)
+                        {
+                            top.linkTo(acctNumberValue.bottom, margin = 20.dp)
+                            start.linkTo(acctNumberValue.start)
+                        }
+                )
+
+                Text(
+                    fontWeight = FontWeight.Light,
+                    fontSize = 18.sp,
+                    text = "N$balance",
+                    modifier = Modifier
+                        .constrainAs(balanceValue)
+                        {
+                            top.linkTo(balanceText.bottom, margin = 10.dp)
+                            start.linkTo(balanceText.start)
+                        }
+                )
+            }
+
+            /*Column(
                 modifier = Modifier.wrapContentHeight()
             ) {
                 Row {
@@ -223,7 +320,7 @@ fun DashboardCard(
                     fontSize = 18.sp,
                     text = "N$balance",
                 )
-            }
+            }*/
         }
     }
 }
@@ -286,19 +383,22 @@ fun DashboardSection2(
 fun DashboardSection3(onTransferStatusClick: () -> Unit) {
     Box(
         modifier = Modifier
+            .fillMaxWidth()
             .padding(start = 10.dp, end = 10.dp)
             .clip(RoundedCornerShape(10.dp))
             .clickable { onTransferStatusClick() }
     ){
         Image(
+            modifier = Modifier.fillMaxWidth(),
             painter = painterResource(R.drawable.bg_status),
             contentDescription = null,
-            contentScale = ContentScale.Inside,
+            contentScale = ContentScale.FillWidth,
         )
 
         Row(
             modifier = Modifier
-                .padding(20.dp),
+                .fillMaxWidth()
+                .padding(top = 20.dp, bottom = 20.dp, start = 20.dp),
             verticalAlignment = Alignment.CenterVertically
         ){
             Image(
@@ -310,7 +410,8 @@ fun DashboardSection3(onTransferStatusClick: () -> Unit) {
 
             Column(
                 modifier = Modifier
-                    .padding(start = 10.dp, end = 10.dp)
+                    .padding(start = 10.dp, end = 3.dp)
+                    .wrapContentWidth()
             ){
                 Text(
                     text = "Transfer Status",
@@ -330,7 +431,8 @@ fun DashboardSection3(onTransferStatusClick: () -> Unit) {
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(Color.Black),
                 modifier = Modifier
-                    .scale(2f)
+                    .size(20.dp)
+                    //.scale(2f)
             )
         }
     }
