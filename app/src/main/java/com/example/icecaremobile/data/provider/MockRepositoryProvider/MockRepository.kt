@@ -16,6 +16,34 @@ import javax.inject.Singleton
 @Singleton
 class MockRepository @Inject constructor() : IRepositoryProvider
 {
+    companion object {
+        fun provideMockResponse(): LoginResponse
+        {
+            val mockLoginResponse = LoginResponse(
+                message = "Login Successful",
+                statusCode = 200,
+                status = true,
+                userProfile = UserProfile(
+                    dollarRate = 1500.2,
+                    isAccountVerified = true,
+                    name = "Isa Musa",
+                    accountNumber = "012446645",
+                    email = "isamusa@gmail.com",
+                    phoneNumber = "080123456789",
+                    accountBalance = 723900.76,
+                    banks = listOf(
+                        Banks("Wema Bank", "01234567890", "Ice Care Nig Ltd"),
+                        Banks("Union Bank", "01234567890", "Ice Care Nig Ltd"),
+                        Banks("UBA", "01234567890", "Ice Care Nig Ltd"),
+                        Banks("Taj Bank", "01234567890", "Ice Care Nig Ltd"),
+                        Banks("Jaiz Bank", "01234567890", "Ice Care Nig Ltd")
+                    )
+                )
+            )
+            return mockLoginResponse
+        }
+    }
+
     override fun provideRepository(): IRepository
     {
         return object : IRepository
