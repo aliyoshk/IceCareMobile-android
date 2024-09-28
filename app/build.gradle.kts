@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.compose.compiler)
 
     //Firebase dependency
     id("com.google.gms.google-services")
@@ -8,6 +9,8 @@ plugins {
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     id("dagger.hilt.android.plugin")
+
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -56,9 +59,6 @@ android {
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -105,6 +105,9 @@ dependencies {
     annotationProcessor(libs.hilt.compiler)
     //Live data and view model
     implementation(libs.androidx.runtime.livedata)
+
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.androidx.navigation.compose)
 }
 
 // Allow references to generated code

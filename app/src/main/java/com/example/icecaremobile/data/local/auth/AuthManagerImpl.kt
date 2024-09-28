@@ -7,10 +7,6 @@ import com.example.icecaremobile.domain.model.Response.CompanyAccounts
 import com.example.icecaremobile.domain.model.Response.LoginResponse
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.example.icecaremobile.domain.model.Response.LoginResponse
-import com.google.gson.Gson
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class AuthManagerImpl(context: Context) : AuthManager {
 

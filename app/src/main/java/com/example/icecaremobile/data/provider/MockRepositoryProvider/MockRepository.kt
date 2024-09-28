@@ -32,11 +32,11 @@ class MockRepository @Inject constructor() : IRepositoryProvider
                     phoneNumber = "080123456789",
                     accountBalance = 723900.76,
                     banks = listOf(
-                        Banks("Wema Bank", "01234567890", "Ice Care Nig Ltd"),
-                        Banks("Union Bank", "01234567890", "Ice Care Nig Ltd"),
-                        Banks("UBA", "01234567890", "Ice Care Nig Ltd"),
-                        Banks("Taj Bank", "01234567890", "Ice Care Nig Ltd"),
-                        Banks("Jaiz Bank", "01234567890", "Ice Care Nig Ltd")
+//                        Banks("Wema Bank", "01234567890", "Ice Care Nig Ltd"),
+//                        Banks("Union Bank", "01234567890", "Ice Care Nig Ltd"),
+//                        Banks("UBA", "01234567890", "Ice Care Nig Ltd"),
+//                        Banks("Taj Bank", "01234567890", "Ice Care Nig Ltd"),
+//                        Banks("Jaiz Bank", "01234567890", "Ice Care Nig Ltd")
                     )
                 )
             )
