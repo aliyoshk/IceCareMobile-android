@@ -19,15 +19,11 @@ fun SubmissionScreen(
     message: String?
 ) {
     var color = Color.Black
-    var screen = Screen.DashboardScreen.route
 
     Scaffold(modifier = Modifier.fillMaxWidth()) { padding ->
 
-        if (route == Screen.RegistrationScreen.route)
-        {
+        if (route == Screen.RegistrationScreen.toString())
             color = Color.Red.copy(alpha = 0.8f)
-            screen = Screen.LoginScreen.route
-        }
 
         SubmissionUI(
             modifier = Modifier.padding(padding),
@@ -35,7 +31,10 @@ fun SubmissionScreen(
             textColor = color,
             onButtonClick =
             {
-                navController.navigate(screen)
+                if (route == Screen.RegistrationScreen.toString())
+                    navController.navigate(Screen.LoginScreen)
+                else
+                    navController.navigate(Screen.DashboardScreen)
             }
         )
     }

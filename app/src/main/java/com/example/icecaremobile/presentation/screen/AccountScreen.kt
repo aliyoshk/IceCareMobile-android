@@ -48,7 +48,7 @@ fun AccountScreen(navController: NavHostController)
             banks = bankList ?: emptyList(),
             onButtonClick = {
                 btnProceed = true
-                navController.navigate(Screen.MultipleTransferScreen.route)
+                navController.navigate(Screen.MultipleTransferScreen)
             }
         )
     }

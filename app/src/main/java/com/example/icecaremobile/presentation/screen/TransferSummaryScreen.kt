@@ -23,7 +23,7 @@ fun TransferSummaryScreen(navController: NavHostController) {
         val message = "You transfer details has been successfully submitted for admin to verified. You will be notified once the transfer is confirmed.\n" +
                 "\n" +
                 "You can confirmed the status of your transfer in the dashboard\n"
-        val destination = Screen.TransferSummaryScreen.route
+        val destination = Screen.TransferSummaryScreen
 
         TransferSummaryUI(
             modifier = Modifier.padding(padding),
@@ -36,7 +36,10 @@ fun TransferSummaryScreen(navController: NavHostController) {
             uploadedReceipt = { println("Selected file: $it") },
             onSubmitClick = {
                 navController.navigate(
-                    Screen.SubmissionScreen.route + "/${message}/${destination}"
+                    Screen.SubmissionScreen(
+                        data = message,
+                        key = destination.toString()
+                    )
                 )
             }
         )

@@ -1,5 +1,6 @@
 package com.example.icecaremobile.data.remote.repository
 
+import com.example.icecaremobile.data.local.dataSource.TokenManager
 import com.example.icecaremobile.data.remote.implementation.ApiService
 import com.example.icecaremobile.domain.model.Request.LoginRequest
 import com.example.icecaremobile.domain.model.Request.RegistrationRequest
@@ -16,7 +17,8 @@ import java.io.IOException
 import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    private val tokenManager: TokenManager
 ) : IRepository
 {
     override suspend fun registration(
@@ -49,32 +51,19 @@ class RepositoryImpl @Inject constructor(
             try {
                 val response = apiService.login(loginRequest)
                 if (response.isSuccessful) {
-                    withContext(Dispatchers.Main) { onSuccess(response.body()!!) }
+                    val loginResponse = response.body()!!
+                    withContext(Dispatchers.Main) {
+                        loginResponse.data.token.let { tokenManager.saveToken(it) }
+                        onSuccess(loginResponse)
+                    }
                 } else {
                     withContext(Dispatchers.Main) { onError(ApiError("Login failed", response.code(), response.message())) }
                 }
             } catch (e: IOException) {
-                withContext(Dispatchers.Main) { onError(ApiError("Network error", 500, e.message)) }
+                withContext(Dispatchers.Main) { onError(ApiError(e.message, 500, e.message)) }
             } catch (e: HttpException) {
-                withContext(Dispatchers.Main) { onError(ApiError("Server error", e.code(), e.message)) }
+                withContext(Dispatchers.Main) { onError(ApiError(e.message, e.code(), e.message)) }
             }
-
-
-//            try {
-//                val response = apiService.login(loginRequest)
-//                withContext(Dispatchers.Main) {
-//                    onSuccess(response)
-//                }
-//            } catch (e: Exception) {
-//                val apiError = ApiError(
-//                    message = e.message,
-//                    statusCode = 500,
-//                    responseMessage = "Failed to data"
-//                )
-//                withContext(Dispatchers.Main) {
-//                    onError(apiError)
-//                }
-//            }
         }
     }
 }

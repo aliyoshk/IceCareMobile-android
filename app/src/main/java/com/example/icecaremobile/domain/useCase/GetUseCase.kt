@@ -7,10 +7,8 @@ import com.example.icecaremobile.domain.model.Request.RegistrationRequest
 import com.example.icecaremobile.domain.model.Response.LoginResponse
 import com.example.icecaremobile.domain.model.Response.RegistrationResponse
 import com.example.icecaremobile.domain.model.network.ApiError
-import com.example.icecaremobile.domain.repository.IRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -40,7 +38,7 @@ class GetUseCase @Inject constructor(
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
                         authManager.saveLoginResponse(loginResponse)
-                        authManager.saveBankResponse(loginResponse.userProfile.banks)
+                        authManager.saveBankResponse(loginResponse.data.companyAccounts)
                         onSuccess(loginResponse)
                     } catch (e: Exception) {
                         onError(ApiError(message = e.message ?: "Error saving login response"))

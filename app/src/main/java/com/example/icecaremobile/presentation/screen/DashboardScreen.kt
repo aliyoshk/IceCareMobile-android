@@ -1,7 +1,6 @@
 package com.example.icecaremobile.presentation.screen
 
 import android.annotation.SuppressLint
-import android.os.Bundle
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -18,7 +17,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.icecaremobile.core.utils.Helpers
 import com.example.icecaremobile.data.local.auth.AuthManagerImpl
-import com.example.icecaremobile.domain.auth.AuthManager
 import com.example.icecaremobile.domain.model.Response.LoginResponse
 import com.example.icecaremobile.presentation.navigator.Screen
 import com.example.icecaremobile.presentation.ui.DashboardUI
@@ -51,10 +49,10 @@ fun DashboardScreen(navController: NavHostController)
         var viewHistoryClick by remember { mutableStateOf(false) }
 
         loginResponse?.let {
-            name = it.userProfile.name
-            acctNumber = it.userProfile.accountNumber
-            dollarRate = it.userProfile.dollarRate.toString()
-            balance = it.userProfile.accountBalance.toString()
+            name = it.data.fullName
+            acctNumber = it.data.accountNumber
+            dollarRate = it.data.dollarRate.toString()
+            balance = it.data.accountBalance.toString()
         }
 
         DashboardUI(
@@ -67,15 +65,15 @@ fun DashboardScreen(navController: NavHostController)
             onRemitStatusClick =
             {
                 remitStatusClick = true
-                navController.navigate(Screen.RemitStatusScreen.route+ "/isRemitStatus")
+                navController.navigate(Screen.RemitStatusScreen("isRemitStatus"))
             },
             onTransferStatusClick = {
-                navController.navigate(Screen.RemitStatusScreen.route + "/isTransferStatus")
+                navController.navigate(Screen.RemitStatusScreen("isTransferStatus"))
             },
             onTransferMoneyClick =
             {
                 transferMoneyClick = true
-                navController.navigate(Screen.SendMoneyScreen.route)
+                navController.navigate(Screen.SendMoneyScreen)
             },
             onTopUpClick = { topUpMoneyClick = true },
             onViewHistoryClick = { viewHistoryClick = true },

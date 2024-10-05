@@ -8,7 +8,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -31,7 +30,7 @@ fun MultipleTransferScreen(navController: NavHostController)
     val message = "You transfer details has been successfully submitted for admin to verified. You will be notified once the transfer is confirmed.\n" +
             "\n" +
             "You can confirmed the status of your transfer in the dashboard\n"
-    val destination = Screen.TransferSummaryScreen.route
+    val destination = Screen.TransferSummaryScreen
 
     val authManager = AuthManagerImpl(LocalContext.current)
     var bankList by remember { mutableStateOf<List<CompanyAccounts>?>(null) }
@@ -66,7 +65,7 @@ fun MultipleTransferScreen(navController: NavHostController)
                 uploadedReceipts = receipts
             },
             onSubmitClick = {
-                navController.navigate(Screen.SubmissionScreen.route + "/${message}/${destination}")
+                navController.navigate(Screen.SubmissionScreen(key = destination.toString(), data = message))
             }
         )
 

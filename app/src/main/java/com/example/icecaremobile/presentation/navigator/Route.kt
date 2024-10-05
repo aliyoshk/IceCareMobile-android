@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.example.icecaremobile.presentation.screen.AccountBalanceTransferScreen
 import com.example.icecaremobile.presentation.screen.AccountScreen
 import com.example.icecaremobile.presentation.screen.DashboardScreen
@@ -25,78 +26,61 @@ fun Route()
 
     NavHost(
         navController = navController,
-        startDestination = Screen.LandingScreen.route
+        startDestination = Screen.LandingScreen
     ) {
-        composable(route = Screen.LandingScreen.route)
+        composable<Screen.LandingScreen>
         {
             LandingScreen(navController)
         }
-        composable(route = Screen.LoginScreen.route)
+        composable<Screen.LoginScreen>
         {
             LoginScreen(navController)
         }
-        composable(Screen.RegistrationScreen.route)
+        composable<Screen.RegistrationScreen>
         {
             RegistrationScreen(navController)
         }
-        composable(Screen.DashboardScreen.route)
+        composable<Screen.DashboardScreen>
         {
             DashboardScreen(navController)
         }
-        composable(Screen.SendMoneyScreen.route)
+        composable<Screen.SendMoneyScreen>
         {
             SendMoneyScreen(navController)
         }
-        composable(Screen.AccountScreen.route)
+        composable<Screen.AccountScreen>
         {
             AccountScreen(navController)
         }
-        composable(Screen.TransferScreen.route)
+        composable<Screen.TransferScreen>
         {
             TransferScreen(navController)
         }
-        composable(Screen.TransferSummaryScreen.route)
+        composable<Screen.TransferSummaryScreen>
         {
             TransferSummaryScreen(navController)
         }
-        composable(Screen.MultipleTransferScreen.route)
+        composable<Screen.MultipleTransferScreen>
         {
             MultipleTransferScreen(navController)
         }
-        composable(Screen.AccountBalanceTransferScreen.route)
+        composable<Screen.AccountBalanceTransferScreen>
         {
             AccountBalanceTransferScreen(navController)
         }
-        composable(Screen.ThirdPartyTransferScreen.route)
+        composable<Screen.ThirdPartyTransferScreen>
         {
             ThirdPartyTransferScreen(navController)
         }
-        composable(Screen.RemitStatusScreen.route+ "/{key}")
+        composable<Screen.RemitStatusScreen>
         {
-            val key = it.arguments?.getString("key")
-            RemitStatusScreen(navController, key)
+            val args = it.toRoute<Screen.RemitStatusScreen>()
+            RemitStatusScreen(navController, args.key)
         }
-        composable(Screen.SubmissionScreen.route + "/{bundle}/{destinationScreen}")
+        composable<Screen.SubmissionScreen>
         {
-            val message = it.arguments?.getString("bundle")
-            val destinationScreen = it.arguments?.getString("destinationScreen")
-            SubmissionScreen(navController, message = message, route = destinationScreen)
+            val args = it.toRoute<Screen.SubmissionScreen>()
+            SubmissionScreen(navController, message = args.data, route = args.key)
         }
-
-//        composable(
-//            Screen.DetailsScreen.route + "/{bundle}",
-//            arguments = listOf(
-//                navArgument("data")
-//                {
-//                    type = NavType.StringType
-//                    defaultValue = "Empty value return"
-//                    nullable = true
-//                }
-//            )
-//        )
-//        {
-//            val data = it.arguments?.getString("bundle")!!
-//            Detail(data = data)
-//        }
     }
 }

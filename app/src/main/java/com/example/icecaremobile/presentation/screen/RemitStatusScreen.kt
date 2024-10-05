@@ -15,7 +15,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.icecaremobile.presentation.navigator.Screen
 import com.example.icecaremobile.presentation.ui.RemitStatusUI
-import com.example.icecaremobile.presentation.ui.RemitStatusUIPreview
 import com.example.icecaremobile.presentation.ui.component.AppTopBar
 
 
@@ -44,7 +43,7 @@ fun RemitStatusScreen(
         RemitStatusUI(
             modifier = Modifier.padding(padding),
             isSuccess = flag,
-            btnProceed = { navController.navigate(Screen.RemitStatusScreen.route) },
+            btnProceed = { navController.navigate(Screen.RemitStatusScreen) },
             onDownloadClick = {}
         )
     }

@@ -10,20 +10,12 @@ import retrofit2.http.POST
 
 interface IApiService
 {
-    @POST("registration")
+    @POST("user/register")
     suspend fun registration(
         @Body registrationRequest: RegistrationRequest
     ): Response<RegistrationResponse>
 
-    @POST("login")
-    suspend fun login(
-        @Body loginRequest: LoginRequest
-    ): Response<LoginResponse>
-
-//    @GET("data/2.5/weather")
-//    suspend fun getWeather(
-//        @Query("q") cityName: String,
-//        @Query("appid") apiKey: String = "a224befbe0282d095bb3e06e0cd2b568"
-//    ): WeatherDataResponse
+    @POST("user/login")
+    suspend fun login(@Body loginRequest: LoginRequest): Response<LoginResponse>
 }
 

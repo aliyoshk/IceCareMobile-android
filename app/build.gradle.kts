@@ -108,6 +108,8 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.datastore.preferences.core)
+    implementation(libs.logging.interceptor)
 }
 
 // Allow references to generated code

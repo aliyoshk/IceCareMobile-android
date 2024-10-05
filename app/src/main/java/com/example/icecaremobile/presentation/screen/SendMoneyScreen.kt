@@ -1,7 +1,6 @@
 package com.example.icecaremobile.presentation.screen
 
 import android.annotation.SuppressLint
-import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -12,13 +11,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.icecaremobile.presentation.navigator.Screen
-import com.example.icecaremobile.presentation.ui.component.AppTopBar
 import com.example.icecaremobile.presentation.ui.SendMoneyUI
+import com.example.icecaremobile.presentation.ui.component.AppTopBar
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -46,13 +44,13 @@ fun SendMoneyScreen(navController: NavHostController)
         {
             onClicked = false
             if (titleOption.contains("single", ignoreCase = true))
-                navController.navigate(Screen.TransferScreen.route)
+                navController.navigate(Screen.TransferScreen)
             else if (titleOption.contains("multiple", ignoreCase = true))
-                navController.navigate(Screen.AccountScreen.route)
+                navController.navigate(Screen.AccountScreen)
             else if (titleOption.contains("from", ignoreCase = true))
-                navController.navigate(Screen.AccountBalanceTransferScreen.route)
+                navController.navigate(Screen.AccountBalanceTransferScreen)
             else if (titleOption.contains("third", ignoreCase = true))
-                navController.navigate(Screen.ThirdPartyTransferScreen.route)
+                navController.navigate(Screen.ThirdPartyTransferScreen)
         }
     }
 }

@@ -6,7 +6,7 @@ import com.example.icecaremobile.domain.model.Request.RegistrationRequest
 import com.example.icecaremobile.domain.model.Response.CompanyAccounts
 import com.example.icecaremobile.domain.model.Response.LoginResponse
 import com.example.icecaremobile.domain.model.Response.RegistrationResponse
-import com.example.icecaremobile.domain.model.Response.UserProfile
+import com.example.icecaremobile.domain.model.Response.Response
 import com.example.icecaremobile.domain.model.network.ApiError
 import com.example.icecaremobile.domain.repository.IRepository
 import kotlinx.coroutines.delay
@@ -23,20 +23,33 @@ class MockRepository @Inject constructor() : IRepositoryProvider
                 message = "Login Successful",
                 statusCode = 200,
                 status = true,
-                userProfile = UserProfile(
-                    dollarRate = 1500.2,
-                    isAccountVerified = true,
-                    name = "Isa Musa",
-                    accountNumber = "012446645",
-                    email = "isamusa@gmail.com",
-                    phoneNumber = "080123456789",
-                    accountBalance = 723900.76,
-                    banks = listOf(
-//                        Banks("Wema Bank", "01234567890", "Ice Care Nig Ltd"),
-//                        Banks("Union Bank", "01234567890", "Ice Care Nig Ltd"),
-//                        Banks("UBA", "01234567890", "Ice Care Nig Ltd"),
-//                        Banks("Taj Bank", "01234567890", "Ice Care Nig Ltd"),
-//                        Banks("Jaiz Bank", "01234567890", "Ice Care Nig Ltd")
+                data = Response(
+                    id = 6,
+                    phone = "08034678912",
+                    token = "rfgdssgdygsfguy463634",
+                    status = "Approved",
+                    accountNumber = "012567823",
+                    accountBalance = "567000",
+                    email = "johndoe@gmail.com",
+                    dollarRate = 1500,
+                    fullName = "John Doe",
+                    companyNumber = "0905678934",
+                    companyAccounts = listOf(
+                        CompanyAccounts(
+                            accountNumber = "2134789034",
+                            accountName = "Ice Care Nig Ltd",
+                            bankName = "UBA"
+                        ),
+                        CompanyAccounts(
+                            accountNumber = "0252458264",
+                            accountName = "Ice Care Nig Ltd",
+                            bankName = "Wema Bank"
+                        ),
+                        CompanyAccounts(
+                            accountNumber = "5678902314",
+                            accountName = "Ice Care Nig Ltd",
+                            bankName = "Providus Bank"
+                        )
                     )
                 )
             )
@@ -68,8 +81,6 @@ class MockRepository @Inject constructor() : IRepositoryProvider
                 )
             }
 
-
-
             override suspend fun login(
                 loginRequest: LoginRequest,
                 onSuccess: (LoginResponse) -> Unit,
@@ -81,22 +92,33 @@ class MockRepository @Inject constructor() : IRepositoryProvider
                         message = "Login Successful",
                         statusCode = 200,
                         status = true,
-                        userProfile = UserProfile(
-                            dollarRate = 1670.25,
-                            isAccountVerified = true,
-                            name = "Isa Musa",
-                            accountNumber = "012446645",
-                            email = "isamusa@gmail.com",
-                            phoneNumber = "080123456789",
-                            accountBalance = 723900.76,
-                            banks = listOf(
-                                CompanyAccounts("Wema Bank", "01234567890", "Ice Care Nig Ltd"),
-                                CompanyAccounts("Union Bank", "01234567890", "Ice Care Nig Ltd"),
-                                CompanyAccounts("UBA", "01234567890", "Ice Care Nig Ltd"),
-                                CompanyAccounts("Taj Bank", "01234567890", "Ice Care Nig Ltd"),
-                                CompanyAccounts("Jaiz Bank", "01234567890", "Ice Care Nig Ltd"),
-                                CompanyAccounts("Taj Bank", "01234567890", "Ice Care Nig Ltd"),
-                                CompanyAccounts("Jaiz Bank", "01234567890", "Ice Care Nig Ltd")
+                        data = Response(
+                            id = 6,
+                            phone = "08034678912",
+                            token = "rfgdssgdygsfguy463634",
+                            status = "Approved",
+                            accountNumber = "012567823",
+                            accountBalance = "567000",
+                            email = "johndoe@gmail.com",
+                            dollarRate = 1500,
+                            fullName = "John Doe",
+                            companyNumber = "0905678934",
+                            companyAccounts = listOf(
+                                CompanyAccounts(
+                                    accountNumber = "2134789034",
+                                    accountName = "Ice Care Nig Ltd",
+                                    bankName = "UBA"
+                                ),
+                                CompanyAccounts(
+                                    accountNumber = "0252458264",
+                                    accountName = "Ice Care Nig Ltd",
+                                    bankName = "Wema Bank"
+                                ),
+                                CompanyAccounts(
+                                    accountNumber = "5678902314",
+                                    accountName = "Ice Care Nig Ltd",
+                                    bankName = "Providus Bank"
+                                )
                             )
                         )
                     )

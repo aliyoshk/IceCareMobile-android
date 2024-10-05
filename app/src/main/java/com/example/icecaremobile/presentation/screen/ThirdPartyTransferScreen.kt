@@ -36,7 +36,10 @@ fun ThirdPartyTransferScreen(navController: NavHostController)
             description = {},
             boxChecked = {},
             submitClicked= {
-                navController.navigate(Screen.SubmissionScreen.route + "/${message}/${Screen.ThirdPartyTransferScreen.route}")
+                navController.navigate(Screen.SubmissionScreen(
+                    data = message,
+                    key = Screen.ThirdPartyTransferScreen.toString())
+                )
             }
         )
     }

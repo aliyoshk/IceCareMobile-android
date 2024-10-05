@@ -45,7 +45,7 @@ fun TransferScreen(navController: NavHostController)
             bankDetails = selectedBankDetails,
             onButtonClick =
             {
-                navController.navigate(Screen.TransferSummaryScreen.route)
+                navController.navigate(Screen.TransferSummaryScreen)
             }
         )
     }

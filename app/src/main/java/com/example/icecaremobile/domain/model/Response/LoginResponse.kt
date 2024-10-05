@@ -4,18 +4,21 @@ data class LoginResponse(
     val status : Boolean,
     val message: String,
     val statusCode: Int,
-    val userProfile: UserProfile
+    val data: Response
 )
 
-data class UserProfile(
-    val name: String,
-    val accountBalance: Double,
+data class Response(
+    val id: Int,
+    val fullName: String,
     val email: String,
-    val phoneNumber: String,
-    val dollarRate: Double,
+    val token: String,
+    val phone: String,
+    val status: String,
+    val accountBalance: String,
     val accountNumber: String,
-    val isAccountVerified: Boolean,
-    val banks : List<CompanyAccounts>
+    val dollarRate: Long,
+    val companyNumber: String,
+    val companyAccounts: List<CompanyAccounts>
 )
 
 data class CompanyAccounts(

@@ -2,7 +2,6 @@ package com.example.icecaremobile.presentation.screen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -36,7 +35,10 @@ fun AccountBalanceTransferScreen(navController: NavHostController)
             description = {},
             boxCheck = {},
             buttonClicked = {
-                navController.navigate(Screen.SubmissionScreen.route + "/${message}/${Screen.AccountBalanceTransferScreen.route}")
+                navController.navigate(Screen.SubmissionScreen(
+                    key = Screen.AccountBalanceTransferScreen.toString(),
+                    data = message
+                ))
             }
         )
     }

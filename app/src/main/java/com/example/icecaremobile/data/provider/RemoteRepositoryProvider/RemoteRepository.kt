@@ -1,6 +1,7 @@
 package com.example.icecaremobile.data.provider.RemoteRepositoryProvider
 
 import com.example.icecaremobile.core.utils.Urls
+import com.example.icecaremobile.data.local.dataSource.TokenManager
 import com.example.icecaremobile.data.provider.RepositoryProvider.IRepositoryProvider
 import com.example.icecaremobile.data.remote.dataSource.IApiService
 import com.example.icecaremobile.data.remote.implementation.ApiService
@@ -12,9 +13,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class RemoteRepository @Inject constructor() : IRepositoryProvider
+class RemoteRepository @Inject constructor(
+    private val tokenManager: TokenManager
+) : IRepositoryProvider
 {
-
     private val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl(Urls.BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
@@ -24,7 +26,7 @@ class RemoteRepository @Inject constructor() : IRepositoryProvider
     private val apiService = ApiService(api)
 
     override fun provideRepository(): IRepository {
-        return RepositoryImpl(apiService)
+        return RepositoryImpl(apiService, tokenManager)
     }
 }
 

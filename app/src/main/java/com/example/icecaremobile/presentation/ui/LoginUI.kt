@@ -1,6 +1,7 @@
 package com.example.icecaremobile.presentation.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,28 +13,29 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.icecaremobile.R
 import com.example.icecaremobile.presentation.ui.component.AppButton
 import com.example.icecaremobile.presentation.ui.component.AppTextField
-import com.example.icecaremobile.ui.theme.LightGray
 
 @Composable
 fun LoginUI(
     modifier: Modifier = Modifier,
     username: (String) -> Unit,
     password: (String) -> Unit,
+    onSignUpClick: () -> Unit,
+    onForgotPasswordClick: () -> Unit,
     btnLogin: () -> Unit
 )
 {
@@ -89,6 +91,31 @@ fun LoginUI(
             endIcon = painterResource(R.drawable.ic_password)
         )
 
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(15.dp)
+        ) {
+            Text(
+                text = "Sign up",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                textDecoration = TextDecoration.Underline,
+                color = Color.Red,
+                modifier = Modifier.clickable { onSignUpClick }
+            )
+
+            Text(
+                text = "Forgot password",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                textDecoration = TextDecoration.Underline,
+                color = Color.Red,
+                modifier = Modifier.clickable { onForgotPasswordClick }
+            )
+        }
+
         Spacer(Modifier.height(50.dp))
 
         AppButton(
@@ -102,5 +129,6 @@ fun LoginUI(
 @Preview(showSystemUi = true)
 fun LoginUIPreview()
 {
-    LoginUI(username = {}, password = {}, btnLogin = {})
+    LoginUI(username = {}, password = {}, btnLogin = {},
+        onSignUpClick = {}, onForgotPasswordClick = {})
 }

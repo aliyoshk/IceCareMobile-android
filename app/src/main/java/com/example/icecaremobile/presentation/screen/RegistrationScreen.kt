@@ -1,7 +1,6 @@
 package com.example.icecaremobile.presentation.screen
 
 import android.annotation.SuppressLint
-import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -18,12 +17,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.icecaremobile.data.remote.entity.LoginResponseState
 import com.example.icecaremobile.data.remote.entity.RegistrationResponseState
 import com.example.icecaremobile.domain.model.Request.RegistrationRequest
 import com.example.icecaremobile.presentation.navigator.Screen
@@ -108,9 +105,12 @@ fun RegistrationResponseHandler(
                 buttonState(false)
                 println(response.registrationResponse.message)
                 println(response.registrationResponse.data)
-                val destination = Screen.RegistrationScreen.route
+                val destination = Screen.RegistrationScreen
                 navController.navigate(
-                    Screen.SubmissionScreen.route + "/${response.registrationResponse.message}/${destination}"
+                    Screen.SubmissionScreen(
+                        data = response.registrationResponse.message,
+                        key = destination.toString()
+                    )
                 )
             }
             is RegistrationResponseState.Error -> {
