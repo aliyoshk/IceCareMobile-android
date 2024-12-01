@@ -17,9 +17,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import com.example.icecaremobile.R
 import com.example.icecaremobile.presentation.ui.component.AppButton
 import com.example.icecaremobile.presentation.ui.component.AppTextField
+import com.example.icecaremobile.ui.theme.DarkGolden
 
 @Composable
 fun LoginUI(
@@ -98,20 +99,22 @@ fun LoginUI(
                 .padding(15.dp)
         ) {
             Text(
-                text = "Sign up",
-                fontSize = 14.sp,
+                text = "Create Account",
+                fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
+                fontStyle = FontStyle.Italic,
                 textDecoration = TextDecoration.Underline,
-                color = Color.Red,
+                color = DarkGolden,
                 modifier = Modifier.clickable { onSignUpClick }
             )
 
             Text(
-                text = "Forgot password",
-                fontSize = 14.sp,
+                text = "Forgot Password",
+                fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
+                fontStyle = FontStyle.Italic,
                 textDecoration = TextDecoration.Underline,
-                color = Color.Red,
+                color = DarkGolden,
                 modifier = Modifier.clickable { onForgotPasswordClick }
             )
         }

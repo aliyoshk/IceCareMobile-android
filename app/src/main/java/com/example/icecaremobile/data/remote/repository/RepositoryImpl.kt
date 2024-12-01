@@ -1,5 +1,6 @@
 package com.example.icecaremobile.data.remote.repository
 
+import android.util.Log
 import com.example.icecaremobile.data.local.dataSource.TokenManager
 import com.example.icecaremobile.data.remote.implementation.ApiService
 import com.example.icecaremobile.domain.model.Request.LoginRequest
@@ -12,6 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
@@ -32,7 +34,11 @@ class RepositoryImpl @Inject constructor(
                 if (response.isSuccessful) {
                     withContext(Dispatchers.Main) { onSuccess(response.body()!!) }
                 } else {
-                    withContext(Dispatchers.Main) { onError(ApiError("Login failed", response.code(), response.message())) }
+                    val errorBody = response.errorBody()?.string()
+                    val json = try { JSONObject(errorBody?: "{}") } catch (e: Exception) { JSONObject() }
+                    val message = json.optString("message", "Unknown error")
+
+                    withContext(Dispatchers.Main) { onError(ApiError(message, response.code(), "Registration failed")) }
                 }
             } catch (e: IOException) {
                 withContext(Dispatchers.Main) { onError(ApiError("Network error", 500, e.message)) }
@@ -57,7 +63,17 @@ class RepositoryImpl @Inject constructor(
                         onSuccess(loginResponse)
                     }
                 } else {
-                    withContext(Dispatchers.Main) { onError(ApiError("Login failed", response.code(), response.message())) }
+                    val errorBody = response.errorBody()?.string()
+                    val json = try { JSONObject(errorBody?: "{}") } catch (e: Exception) { JSONObject() }
+                    val message = json.optString("message", "Unknown error")
+                    val statusCode = json.optInt("statusCode", response.code())
+                    val status = json.optBoolean("status", false)
+                    val errors = json.optJSONObject("errors")
+
+                    Log.d("LoginResponse", "Error body: $errorBody, $errors")
+
+                    withContext(Dispatchers.Main) { onError(ApiError(message, response.code(), "Login failed")) }
+//                    withContext(Dispatchers.Main) { onError(ApiError(response.message(), response.code(), "Login failed")) }
                 }
             } catch (e: IOException) {
                 withContext(Dispatchers.Main) { onError(ApiError(e.message, 500, e.message)) }

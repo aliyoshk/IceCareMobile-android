@@ -2,6 +2,7 @@
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
 <!--        <domain includeSubdomains="true">192.168.22.127</domain>-->
-        <domain includeSubdomains="true">10.0.2.2</domain>
+<!--        <domain includeSubdomains="true">10.0.2.2</domain>-->
+        <domain includeSubdomains="true">ice-care-nig-ltd-98a37161d4a2.herokuapp.com</domain>
     </domain-config>
 </network-security-config>

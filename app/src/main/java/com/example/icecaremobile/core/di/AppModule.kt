@@ -8,6 +8,7 @@ import com.example.icecaremobile.core.utils.Urls
 import com.example.icecaremobile.data.local.auth.AuthManagerImpl
 import com.example.icecaremobile.data.local.dataSource.AuthInterceptor
 import com.example.icecaremobile.data.local.dataSource.TokenManager
+import com.example.icecaremobile.data.provider.MockRepositoryProvider.MockRepository
 import com.example.icecaremobile.data.provider.RemoteRepositoryProvider.RemoteRepository
 import com.example.icecaremobile.data.provider.RepositoryProvider.IRepositoryProvider
 import com.example.icecaremobile.data.remote.dataSource.IApiService
@@ -85,8 +86,8 @@ object AppModule {
         val isDebug = BuildConfig.DEBUG
         val useMockData = BuildConfig.USE_MOCK_DATA
         return if (isDebug && useMockData) {
-            //MockRepository()
-            RemoteRepository(tokenManager)
+            MockRepository()
+            //RemoteRepository(tokenManager)
         } else {
             RemoteRepository(tokenManager) // Assuming RemoteRepository needs Context
         }
