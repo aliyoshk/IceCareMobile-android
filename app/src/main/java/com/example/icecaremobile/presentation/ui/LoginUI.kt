@@ -38,8 +38,7 @@ fun LoginUI(
     onSignUpClick: () -> Unit,
     onForgotPasswordClick: () -> Unit,
     btnLogin: () -> Unit
-)
-{
+) {
     val scrollState = rememberScrollState()
     Column(
         modifier = modifier
@@ -105,7 +104,7 @@ fun LoginUI(
                 fontStyle = FontStyle.Italic,
                 textDecoration = TextDecoration.Underline,
                 color = DarkGolden,
-                modifier = Modifier.clickable { onSignUpClick }
+                modifier = Modifier.clickable { onSignUpClick() }
             )
 
             Text(
@@ -115,7 +114,7 @@ fun LoginUI(
                 fontStyle = FontStyle.Italic,
                 textDecoration = TextDecoration.Underline,
                 color = DarkGolden,
-                modifier = Modifier.clickable { onForgotPasswordClick }
+                modifier = Modifier.clickable { onForgotPasswordClick() }
             )
         }
 

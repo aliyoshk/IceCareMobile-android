@@ -1,7 +1,5 @@
 package com.example.icecaremobile.presentation.ui.component
 
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -11,12 +9,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import java.lang.reflect.Modifier
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppTopBar(title: String? = null, navigateBack: () -> Unit)
-{
+fun AppTopBar(title: String? = null, navigateBack:() -> Unit = {}) {
     CenterAlignedTopAppBar(
         title = {
             if (title != null)

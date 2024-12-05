@@ -21,7 +21,7 @@ fun ThirdPartyTransferScreen(navController: NavHostController)
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
-        topBar = { AppTopBar(title = "Transfer to third party", {}) }
+        topBar = { AppTopBar(title = "Transfer to third party") }
     ) { padding ->
 
         val message = " Your transfer details has been successful submitted\n" +

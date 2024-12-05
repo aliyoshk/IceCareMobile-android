@@ -2,6 +2,7 @@ package com.example.icecaremobile.presentation.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -61,10 +62,14 @@ fun AcceptDialog(
 
             Spacer(Modifier.height(27.dp))
 
-            AppButton(
-                title = buttonText,
-                onClick = { onButtonClick() }
-            )
+            Box(
+                Modifier.padding(start = 60.dp, end = 60.dp)
+            ) {
+                AppButton(
+                    title = buttonText,
+                    onClick = { onButtonClick() }
+                )
+            }
         }
     }
 }

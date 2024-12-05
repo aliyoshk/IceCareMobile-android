@@ -1,5 +1,13 @@
 package com.example.icecaremobile.core.utils
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
+import android.util.Base64
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
 import java.text.NumberFormat
 import java.util.Locale
 import java.util.regex.Pattern
@@ -55,6 +63,36 @@ object Helpers {
             "JPY" -> "¥"
             "CAD" -> "C$"
             else -> "NGN"
+        }
+    }
+
+    @SuppressLint("Recycle")
+    fun convertUriToBase64(context: Context, uri: Uri): String? {
+        return try {
+            val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
+            val byteArrayOutputStream = ByteArrayOutputStream()
+            val buffer = ByteArray(1024)
+            var bytesRead: Int
+
+            while (inputStream?.read(buffer).also { bytesRead = it ?: -1 } != -1) {
+                byteArrayOutputStream.write(buffer, 0, bytesRead)
+            }
+
+            val byteArray = byteArrayOutputStream.toByteArray()
+            Base64.encodeToString(byteArray, Base64.DEFAULT)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    fun decodeBase64ToBitmap(base64String: String): Bitmap? {
+        return try {
+            val decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
+            BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
         }
     }
 }

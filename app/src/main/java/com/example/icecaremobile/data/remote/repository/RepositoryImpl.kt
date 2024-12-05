@@ -5,8 +5,10 @@ import com.example.icecaremobile.data.local.dataSource.TokenManager
 import com.example.icecaremobile.data.remote.implementation.ApiService
 import com.example.icecaremobile.domain.model.Request.LoginRequest
 import com.example.icecaremobile.domain.model.Request.RegistrationRequest
+import com.example.icecaremobile.domain.model.Request.TransferRequest
 import com.example.icecaremobile.domain.model.Response.LoginResponse
 import com.example.icecaremobile.domain.model.Response.RegistrationResponse
+import com.example.icecaremobile.domain.model.Response.TransferResponse
 import com.example.icecaremobile.domain.model.network.ApiError
 import com.example.icecaremobile.domain.repository.IRepository
 import kotlinx.coroutines.CoroutineScope
@@ -79,6 +81,31 @@ class RepositoryImpl @Inject constructor(
                 withContext(Dispatchers.Main) { onError(ApiError(e.message, 500, e.message)) }
             } catch (e: HttpException) {
                 withContext(Dispatchers.Main) { onError(ApiError(e.message, e.code(), e.message)) }
+            }
+        }
+    }
+
+    override suspend fun transfer(
+        transferRequest: TransferRequest,
+        onSuccess: (TransferResponse) -> Unit,
+        onError: (ApiError) -> Unit
+    ) {
+        CoroutineScope(Dispatchers.IO).launch{
+            try {
+                val response = apiService.transfer(transferRequest)
+                if (response.isSuccessful) {
+                    withContext(Dispatchers.Main) { onSuccess(response.body()!!) }
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    val json = try { JSONObject(errorBody?: "{}") } catch (e: Exception) { JSONObject() }
+                    val message = json.optString("message", "Unknown error")
+
+                    withContext(Dispatchers.Main) { onError(ApiError(message, response.code(), "Transfer failed")) }
+                }
+            } catch (e: IOException) {
+                withContext(Dispatchers.Main) { onError(ApiError("Network error", 500, e.message)) }
+            } catch (e: HttpException) {
+                withContext(Dispatchers.Main) { onError(ApiError("Server error", e.code(), e.message)) }
             }
         }
     }

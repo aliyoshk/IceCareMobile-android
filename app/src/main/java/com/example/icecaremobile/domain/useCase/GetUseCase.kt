@@ -4,8 +4,10 @@ import com.example.icecaremobile.data.provider.RepositoryProvider.IRepositoryPro
 import com.example.icecaremobile.domain.auth.AuthManager
 import com.example.icecaremobile.domain.model.Request.LoginRequest
 import com.example.icecaremobile.domain.model.Request.RegistrationRequest
+import com.example.icecaremobile.domain.model.Request.TransferRequest
 import com.example.icecaremobile.domain.model.Response.LoginResponse
 import com.example.icecaremobile.domain.model.Response.RegistrationResponse
+import com.example.icecaremobile.domain.model.Response.TransferResponse
 import com.example.icecaremobile.domain.model.network.ApiError
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -47,6 +49,15 @@ class GetUseCase @Inject constructor(
             },
             onError = onError
         )
+    }
+
+
+    suspend operator fun invoke(
+        transferRequest: TransferRequest,
+        onSuccess: (TransferResponse) -> Unit,
+        onError: (ApiError) -> Unit
+    ) {
+        repository.transfer(transferRequest, onSuccess, onError)
     }
 }
 

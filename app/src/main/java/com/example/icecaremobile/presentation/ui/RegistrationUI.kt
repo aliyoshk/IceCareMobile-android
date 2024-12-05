@@ -20,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,10 +38,14 @@ fun RegistrationUI(
     phoneNumber: (String) -> Unit,
     password: (String) -> Unit,
     confirmPassword: (String) -> Unit,
-    btnSignUp: () -> Unit
-)
-{
+    isTermsChecked: Boolean,
+    onTermsCheckedChange: (Boolean) -> Unit,
+    btnSignUp: () -> Unit,
+    isError: () -> Map<String, String>
+) {
     val scrollState = rememberScrollState()
+    val errors = isError()
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -51,8 +54,7 @@ fun RegistrationUI(
             .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
-    )
-    {
+    ) {
         Image(
             painter = painterResource(R.drawable.circle_logo),
             contentDescription = null,
@@ -82,7 +84,9 @@ fun RegistrationUI(
             enteredValue = { fullName(it) },
             label = "Full name",
             startIcon = null,
-            endIcon = painterResource(R.drawable.ic_person)
+            endIcon = painterResource(R.drawable.ic_person),
+            isError = errors.containsKey("name"),
+            errorMessage = errors["name"]
         )
 
         Spacer(Modifier.height(20.dp))
@@ -91,7 +95,9 @@ fun RegistrationUI(
             enteredValue = { email(it) },
             label = "Valid email",
             startIcon = null,
-            endIcon = painterResource(R.drawable.ic_email)
+            endIcon = painterResource(R.drawable.ic_email),
+            isError = errors.containsKey("email"),
+            errorMessage = errors["email"]
         )
 
         Spacer(Modifier.height(20.dp))
@@ -101,7 +107,9 @@ fun RegistrationUI(
             label = "Phone number",
             startIcon = null,
             endIcon = painterResource(R.drawable.ic_phone),
-            keyboardType = KeyboardType.Number
+            keyboardType = KeyboardType.Number,
+            isError = errors.containsKey("phone"),
+            errorMessage = errors["phone"]
         )
 
         Spacer(Modifier.height(20.dp))
@@ -111,7 +119,9 @@ fun RegistrationUI(
             label = "Password",
             startIcon = null,
             endIcon = painterResource(R.drawable.ic_password),
-            keyboardType = KeyboardType.Password
+            keyboardType = KeyboardType.Password,
+            isError = errors.containsKey("password"),
+            errorMessage = errors["password"]
         )
 
         Spacer(Modifier.height(20.dp))
@@ -121,7 +131,9 @@ fun RegistrationUI(
             label = "Confirm password",
             startIcon = null,
             endIcon = painterResource(R.drawable.ic_password),
-            keyboardType = KeyboardType.Password
+            keyboardType = KeyboardType.Password,
+            isError = errors.containsKey("confirmPassword"),
+            errorMessage = errors["confirmPassword"]
         )
 
         Row(
@@ -130,11 +142,10 @@ fun RegistrationUI(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(2.dp)
-        )
-        {
+        ) {
             Checkbox(
-                checked = false,
-                onCheckedChange = {},
+                checked = isTermsChecked,
+                onCheckedChange = onTermsCheckedChange ,
                 colors = CheckboxDefaults.colors(LightGray)
             )
 
@@ -153,7 +164,6 @@ fun RegistrationUI(
 
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
-fun RegistrationUIPreview()
-{
-    RegistrationUI(modifier = Modifier, {}, {}, {}, {}, {}, {})
+fun RegistrationUIPreview() {
+    RegistrationUI(modifier = Modifier, {}, {}, {}, {}, {},false, {}, {}, { mapOf() })
 }

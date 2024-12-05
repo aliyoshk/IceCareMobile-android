@@ -3,10 +3,12 @@ package com.example.icecaremobile.data.provider.MockRepositoryProvider
 import com.example.icecaremobile.data.provider.RepositoryProvider.IRepositoryProvider
 import com.example.icecaremobile.domain.model.Request.LoginRequest
 import com.example.icecaremobile.domain.model.Request.RegistrationRequest
+import com.example.icecaremobile.domain.model.Request.TransferRequest
 import com.example.icecaremobile.domain.model.Response.CompanyAccounts
 import com.example.icecaremobile.domain.model.Response.LoginResponse
 import com.example.icecaremobile.domain.model.Response.RegistrationResponse
 import com.example.icecaremobile.domain.model.Response.Response
+import com.example.icecaremobile.domain.model.Response.TransferResponse
 import com.example.icecaremobile.domain.model.network.ApiError
 import com.example.icecaremobile.domain.repository.IRepository
 import kotlinx.coroutines.delay
@@ -61,7 +63,6 @@ class MockRepository @Inject constructor() : IRepositoryProvider
     {
         return object : IRepository
         {
-
             override suspend fun registration(
                 registrationRequest: RegistrationRequest,
                 onSuccess: (RegistrationResponse) -> Unit,
@@ -121,6 +122,22 @@ class MockRepository @Inject constructor() : IRepositoryProvider
                                 )
                             )
                         )
+                    )
+                )
+            }
+
+            // Mock Transfer response
+            override suspend fun transfer(
+                transferRequest: TransferRequest,
+                onSuccess: (TransferResponse) -> Unit,
+                onError: (ApiError) -> Unit
+            ) {
+                delay(2000)
+                onSuccess(
+                    TransferResponse(
+                        status = true,
+                        message = "You transfer details has been successfully submitted for admin to verified.",
+                        data = true
                     )
                 )
             }

@@ -18,17 +18,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.icecaremobile.domain.model.Response.CompanyAccounts
 import com.example.icecaremobile.ui.theme.AppGolden
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppDropdownMenu(
-    bankList: List<String>,
-    selectedValue: String,
+    accounts: List<CompanyAccounts>,
     label: String,
-    onValueChangedEvent: (String) -> Unit,
+    onValueChangedEvent: (CompanyAccounts) -> Unit,
+    isError: Boolean = false,
+    errorMessage: String? = null
 ) {
     var expanded by remember { mutableStateOf(false) }
+    var currentSelectedValue by remember { mutableStateOf("") }
 
     ExposedDropdownMenuBox(
         expanded = expanded,
@@ -37,7 +41,7 @@ fun AppDropdownMenu(
 
         OutlinedTextField(
             readOnly = true,
-            value = selectedValue,
+            value = currentSelectedValue,
             onValueChange = {},
             label = { Text(text = label) },
             trailingIcon = {
@@ -51,23 +55,34 @@ fun AppDropdownMenu(
             ),
             modifier = Modifier
                 .menuAnchor()
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            isError = isError,
         )
 
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            bankList.forEach { option: String ->
+            accounts.forEach { option: CompanyAccounts ->
                 DropdownMenuItem(
-                    text = { Text(text = option) },
+                    text = { Text(text = option.bankName) },
                     onClick = {
+                        currentSelectedValue = option.bankName
+                        onValueChangedEvent(option)
                         expanded = false
-                        onValueChangedEvent("option")
                     }
                 )
             }
         }
+    }
+
+    if (isError && !errorMessage.isNullOrEmpty()) {
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = errorMessage,
+            color = Color.Red,
+            fontSize = 12.sp,
+        )
     }
 }
 
@@ -76,8 +91,11 @@ fun AppDropdownMenu(
 @Composable
 fun AppDropdownMenuPreview() {
     AppDropdownMenu(
-        bankList = listOf("Wema Bank", "GTBank", "First Bank"),
-        selectedValue = "",
+        accounts = listOf(
+            CompanyAccounts("Wema Bank", "Ice Care Nig Ltd", "1234567890"),
+            CompanyAccounts("GTBank", "Ice Care Nig Ltd", "0987654321"),
+            CompanyAccounts("First Bank", "Ice Care Nig Ltd", "1122334455")
+        ),
         label = "Choose bank to transfer",
         onValueChangedEvent = {}
     )

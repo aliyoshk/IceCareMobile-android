@@ -21,7 +21,7 @@ fun AccountBalanceTransferScreen(navController: NavHostController)
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
-        topBar = { AppTopBar(title = "Pay from account balance", {})}
+        topBar = { AppTopBar(title = "Pay from account balance")}
     ) { padding ->
 
         val message = "Your request has been successfully submitted for admin to verified. You will be notified once confirmed.\n" +

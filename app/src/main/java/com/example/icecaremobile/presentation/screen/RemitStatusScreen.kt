@@ -35,7 +35,7 @@ fun RemitStatusScreen(
         screenHeader = "Remit Status"
 
     Scaffold(
-        topBar = { AppTopBar(title = screenHeader, {}) },
+        topBar = { AppTopBar(title = screenHeader) },
         modifier = Modifier
             .fillMaxWidth()
     ) { padding ->

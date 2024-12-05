@@ -13,17 +13,24 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val getWeatherUseCase: GetUseCase
+    private val getLoginUseCase: GetUseCase
 ) : ViewModel()
 {
     private val _loginResponse = MutableStateFlow<LoginResponseState>(LoginResponseState.Loading)
     val loginResponse: StateFlow<LoginResponseState> = _loginResponse
 
-
     fun login(loginRequest: LoginRequest) {
+        if (loginRequest.email.isEmpty() || loginRequest.password.isEmpty()) {
+            _loginResponse.value = LoginResponseState.Error("All fields are required.")
+            return
+        }
+        proceedToLogin(loginRequest)
+    }
+
+    private fun proceedToLogin(loginRequest: LoginRequest) {
         viewModelScope.launch {
             _loginResponse.value = LoginResponseState.Loading
-            getWeatherUseCase(
+            getLoginUseCase(
                 loginRequest = loginRequest,
                 onSuccess = { result ->
                     _loginResponse.value = LoginResponseState.Success(result)

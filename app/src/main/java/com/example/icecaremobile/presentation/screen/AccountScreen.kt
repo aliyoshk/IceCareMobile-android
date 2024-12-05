@@ -1,6 +1,7 @@
 package com.example.icecaremobile.presentation.screen
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -26,10 +27,10 @@ import com.example.icecaremobile.presentation.ui.component.AppTopBar
 @Composable
 fun AccountScreen(navController: NavHostController)
 {
+    val context = LocalContext.current
     val authManager = AuthManagerImpl(LocalContext.current)
     var bankList by remember { mutableStateOf<List<CompanyAccounts>?>(null) }
     var boxChecked by remember { mutableStateOf(false) }
-    var btnProceed by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         bankList = authManager.getBankResponse()
@@ -37,7 +38,7 @@ fun AccountScreen(navController: NavHostController)
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { AppTopBar(title = "Available Account", navigateBack = { /* Handle back navigation */ }) }
+        topBar = { AppTopBar(title = "Available Account") }
     ) { paddingValues ->
 
         AccountUI(
@@ -47,8 +48,10 @@ fun AccountScreen(navController: NavHostController)
             onCheck = { boxChecked = true },
             banks = bankList ?: emptyList(),
             onButtonClick = {
-                btnProceed = true
-                navController.navigate(Screen.MultipleTransferScreen)
+                if (!boxChecked)
+                    Toast.makeText(context, "Please check the box to proceed", Toast.LENGTH_SHORT).show()
+                else
+                    navController.navigate(Screen.MultipleTransferScreen)
             }
         )
     }

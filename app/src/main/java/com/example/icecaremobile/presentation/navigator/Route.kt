@@ -58,7 +58,8 @@ fun Route()
         }
         composable<Screen.TransferSummaryScreen>
         {
-            TransferSummaryScreen(navController)
+            val args = it.toRoute<Screen.TransferSummaryScreen>()
+            TransferSummaryScreen(navController, args)
         }
         composable<Screen.MultipleTransferScreen>
         {

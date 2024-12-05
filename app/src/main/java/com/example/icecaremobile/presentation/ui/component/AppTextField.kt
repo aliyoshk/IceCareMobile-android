@@ -1,13 +1,9 @@
 package com.example.icecaremobile.presentation.ui.component
 
-import androidx.annotation.ColorRes
-import androidx.compose.foundation.border
-import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -18,18 +14,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.icecaremobile.R
 import com.example.icecaremobile.ui.theme.AppGolden
-import com.example.icecaremobile.ui.theme.LightGray
 
 @Composable
 fun AppTextField(
@@ -38,9 +31,10 @@ fun AppTextField(
     startIcon: Painter? = null,
     endIcon: Painter? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
-    enableField: Boolean = true
-)
-{
+    enableField: Boolean = true,
+    isError: Boolean = false,
+    errorMessage: String? = null
+) {
     var text by remember { mutableStateOf("") }
 
     OutlinedTextField(
@@ -73,7 +67,16 @@ fun AppTextField(
                 )
             }
         },
+        isError = isError
     )
+    if (isError && !errorMessage.isNullOrEmpty()) {
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = errorMessage,
+            color = Color.Red,
+            fontSize = 12.sp,
+        )
+    }
 }
 
 @Composable

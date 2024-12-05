@@ -29,16 +29,14 @@ import com.example.icecaremobile.presentation.viewmodel.LoginViewModel
 fun LoginScreen(navController: NavHostController) {
     val viewModel: LoginViewModel = hiltViewModel()
     val response by viewModel.loginResponse.collectAsState()
+
     var buttonClick by remember { mutableStateOf(false) }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var showDialog by remember { mutableStateOf(true) }
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = { AppTopBar(title = "Login", {}) },
+        modifier = Modifier.fillMaxSize(), topBar = { AppTopBar(title = "Login") }
     ) { padding ->
-
 
         LoginUI(
             modifier = Modifier.padding(padding),
@@ -47,7 +45,7 @@ fun LoginScreen(navController: NavHostController) {
             onSignUpClick = { navController.navigate(Screen.RegistrationScreen) },
             onForgotPasswordClick = {},
             btnLogin = {
-                viewModel.login(getLoginRequest(email, password))
+                viewModel.login(LoginRequest(email, password))
                 buttonClick = true
             }
         )
@@ -55,7 +53,6 @@ fun LoginScreen(navController: NavHostController) {
         if (buttonClick) {
             when (val currentResponse = response) {
                 is LoginResponseState.Loading -> {
-                    showDialog = true
                     AppLoader()
                 }
                 is LoginResponseState.Success -> {
@@ -63,26 +60,17 @@ fun LoginScreen(navController: NavHostController) {
                     navController.navigate(Screen.DashboardScreen)
                 }
                 is LoginResponseState.Error -> {
-                    if (showDialog) {
-                        AcceptDialog(
-                            title = "Error",
-                            message = currentResponse.message,
-                            buttonText = "Okay",
-                            onButtonClick = { buttonClick = false; showDialog = false },
-                            onDismissRequest = { showDialog = false }
-                        )
-                    }
+                    AcceptDialog(
+                        title = "Error",
+                        message = currentResponse.message,
+                        buttonText = "Okay",
+                        onButtonClick = { buttonClick = false },
+                        onDismissRequest = { buttonClick = false }
+                    )
                 }
             }
         }
     }
-}
-
-private fun getLoginRequest(username: String, password: String): LoginRequest {
-    return LoginRequest(
-        email = username,
-        password = password
-    )
 }
 
 @Preview(showBackground = true, showSystemUi = true)

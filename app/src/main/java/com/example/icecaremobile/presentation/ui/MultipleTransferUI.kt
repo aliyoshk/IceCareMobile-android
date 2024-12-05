@@ -7,7 +7,20 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,7 +31,15 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -45,9 +66,12 @@ fun MultipleTransferUI(
     selectedBanks: (List<CompanyAccounts>) -> Unit,
     enteredAmounts: (Map<String, String>) -> Unit,
     receiptUploaded: (List<Uri>) -> Unit,
-    onSubmitClick: () -> Unit
+    onSubmitClick: () -> Unit,
+    isError: () -> Map<String, String>
 ) {
     val scrollState = rememberScrollState()
+    val errors = isError()
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -60,7 +84,9 @@ fun MultipleTransferUI(
             label = "",
             startIcon = null,
             endIcon = null,
-            keyboardType = KeyboardType.Number
+            keyboardType = KeyboardType.Number,
+            isError = errors.containsKey("dollarAmount"),
+            errorMessage = errors["dollarAmount"]
         )
 
         Spacer(Modifier.height(20.dp))
@@ -71,22 +97,34 @@ fun MultipleTransferUI(
             label = "",
             startIcon = null,
             endIcon = null,
+            isError = errors.containsKey("purpose"),
+            errorMessage = errors["purpose"]
         )
 
         Spacer(Modifier.height(20.dp))
 
+//        PopulateBanks(
+//            bankList = banks,
+//            onBankSelectionChanged =
+//            { selected ->
+//                selectedBanks(selected)
+//            },
+//            onAmountEntered = { amounts ->
+//                enteredAmounts(amounts)
+//            },
+//            errors = errors
+//        )
+
         PopulateBanks(
             bankList = banks,
-            onBankSelectionChanged =
-            { selected ->
-                selectedBanks(selected)
-            },
-            onAmountEntered = { amounts ->
-                enteredAmounts(amounts)
-            }
+            onBankSelectionChanged = selectedBanks,
+            onAmountEntered = enteredAmounts,
+            errors = errors
         )
 
-        ReceiptUploadField(onReceiptsChanged = receiptUploaded)
+        ReceiptUploadField(
+            onReceiptsChanged = receiptUploaded, errors = errors
+        )
 
         Spacer(Modifier.height(50.dp))
 
@@ -102,7 +140,8 @@ fun MultipleTransferUI(
 fun PopulateBanks(
     bankList: List<CompanyAccounts>,
     onBankSelectionChanged: (List<CompanyAccounts>) -> Unit,
-    onAmountEntered: (Map<String, String>) -> Unit
+    onAmountEntered: (Map<String, String>) -> Unit,
+    errors: Map<String, String>
 ) {
     val banks = bankList.takeIf { it.isNotEmpty() } ?: return
     val checkedStates = remember { mutableStateListOf<Boolean>().apply { addAll(List(banks.size) { false }) } }
@@ -118,11 +157,9 @@ fun PopulateBanks(
     }
 
     // Notify parent composable when bank selection changes
-    LaunchedEffect(selectedBanks.value)
-    {
+    LaunchedEffect(selectedBanks.value) {
         onBankSelectionChanged(selectedBanks.value)
     }
-
 
     Text("Select all banks that transfer involves")
 
@@ -140,8 +177,7 @@ fun PopulateBanks(
                     checked = checkedStates[index],
                     onCheckedChange = {
                         checkedStates[index] = it
-                        if (!it)
-                        {
+                        if (!it) {
                             checkAllState = false
                             bankAmounts.remove(bankName.bankName)
                         }
@@ -192,15 +228,14 @@ fun PopulateBanks(
                 enteredValue =
                 { amount ->
                     if (amount.isNotBlank())
-                    {
                         bankAmounts[bankName.bankName] = amount
-                    }
                     else
-                    {
                         bankAmounts.remove(bankName.bankName)
-                    }
+
                     onAmountEntered(bankAmounts.toMap())
-                }
+                },
+                isError = errors.containsKey(bankName.bankName),
+                errorMessage = errors[bankName.bankName]
             )
 
             Spacer(Modifier.height(20.dp))
@@ -211,7 +246,8 @@ fun PopulateBanks(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ReceiptUploadField(
-    onReceiptsChanged: (List<Uri>) -> Unit
+    onReceiptsChanged: (List<Uri>) -> Unit,
+    errors: Map<String, String>
 ) {
     val fileList = remember { mutableStateListOf<Uri>() }
     val launcher = rememberLauncherForActivityResult(
@@ -304,6 +340,14 @@ fun ReceiptUploadField(
             )
         }
     }
+
+    if (errors.containsKey("uploadedReceipts")) {
+        Text(
+            text = errors["uploadedReceipts"] ?: "",
+            color = Color.Red,
+            fontSize = 12.sp
+        )
+    }
 }
 
 @Preview(showBackground = true, showSystemUi = true)
@@ -321,6 +365,7 @@ fun MultipleTransferUIPreview() {
         selectedBanks = {},
         enteredAmounts = {},
         receiptUploaded = {},
-        onSubmitClick = {}
+        onSubmitClick = {},
+        isError = { mapOf() }
     )
 }

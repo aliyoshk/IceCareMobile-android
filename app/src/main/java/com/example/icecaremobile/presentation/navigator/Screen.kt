@@ -48,7 +48,15 @@ class Screen
     object TransferScreen
 
     @Serializable
-    object TransferSummaryScreen
+    data class TransferSummaryScreen(
+        val bankName: String?,
+        val accountName: String?,
+        val accountNumber: String?,
+        val amount: String?,
+        val dollarAmount: String?,
+        val email: String? = null,
+        val dollarRate: String? = null
+    )
 
     @Serializable
     object MultipleTransferScreen

@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
@@ -73,7 +72,8 @@ fun TransferSummaryUI(
         modifier = modifier
             .padding(10.dp)
             .fillMaxSize()
-            .verticalScroll(scrollState),
+            .verticalScroll(scrollState)
+            .padding(bottom = 50.dp)
     ) {
 
         var selectedFileUri by remember { mutableStateOf<Uri?>(null) }
@@ -293,8 +293,8 @@ fun TransferSummaryUI(
                         painter = painterResource(R.drawable.ic_upload),
                         contentDescription = null
                     )
-                    Spacer(Modifier.weight(1f))
-                    Text(text = "Upload Evidence of Payment")
+                    Spacer(Modifier.width(30.dp))
+                    Text("Upload Evidence of Payment")
                 }
             } else {
                 // Show file preview if a file is selected
