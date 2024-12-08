@@ -3,6 +3,8 @@ package com.example.icecaremobile.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.icecaremobile.data.remote.entity.TransferResponseState
+import com.example.icecaremobile.domain.model.Request.AccountPaymentRequest
+import com.example.icecaremobile.domain.model.Request.ThirdPartyRequest
 import com.example.icecaremobile.domain.model.Request.TransferRequest
 import com.example.icecaremobile.domain.useCase.GetUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PaymentViewModel @Inject constructor(
-    private val getTransferUseCase: GetUseCase
+    private val getUseCase: GetUseCase
 ): ViewModel() {
 
     private val _transferResponse = MutableStateFlow<TransferResponseState>(TransferResponseState.Loading)
@@ -22,7 +24,7 @@ class PaymentViewModel @Inject constructor(
     fun fundTransfer(transferRequest: TransferRequest) {
         viewModelScope.launch {
             _transferResponse.value = TransferResponseState.Loading
-            getTransferUseCase(
+            getUseCase(
                 transferRequest = transferRequest,
                 onSuccess = { result ->
                     _transferResponse.value = TransferResponseState.Success(result)
@@ -33,6 +35,37 @@ class PaymentViewModel @Inject constructor(
             )
         }
     }
+
+    fun accountTransfer(accountPaymentRequest: AccountPaymentRequest) {
+        viewModelScope.launch {
+            _transferResponse.value = TransferResponseState.Loading
+            getUseCase(
+                accountPaymentRequest = accountPaymentRequest,
+                onSuccess = { result ->
+                    _transferResponse.value = TransferResponseState.Success(result)
+                },
+                onError = { error ->
+                    _transferResponse.value = TransferResponseState.Error(error.concatenatedErrors)
+                }
+            )
+        }
+    }
+
+    fun thirdPartyTransfer(thirdPartyRequest: ThirdPartyRequest) {
+        viewModelScope.launch {
+            _transferResponse.value = TransferResponseState.Loading
+            getUseCase(
+                thirdPartyRequest = thirdPartyRequest,
+                onSuccess = { result ->
+                    _transferResponse.value = TransferResponseState.Success(result)
+                },
+                onError = { error ->
+                    _transferResponse.value = TransferResponseState.Error(error.concatenatedErrors)
+                }
+            )
+        }
+    }
+
     fun resetTransferState() {
         _transferResponse.value = TransferResponseState.Loading
     }

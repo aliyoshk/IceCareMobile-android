@@ -3,8 +3,10 @@ package com.example.icecaremobile.data.remote.repository
 import android.util.Log
 import com.example.icecaremobile.data.local.dataSource.TokenManager
 import com.example.icecaremobile.data.remote.implementation.ApiService
+import com.example.icecaremobile.domain.model.Request.AccountPaymentRequest
 import com.example.icecaremobile.domain.model.Request.LoginRequest
 import com.example.icecaremobile.domain.model.Request.RegistrationRequest
+import com.example.icecaremobile.domain.model.Request.ThirdPartyRequest
 import com.example.icecaremobile.domain.model.Request.TransferRequest
 import com.example.icecaremobile.domain.model.Response.LoginResponse
 import com.example.icecaremobile.domain.model.Response.RegistrationResponse
@@ -25,6 +27,7 @@ class RepositoryImpl @Inject constructor(
     private val tokenManager: TokenManager
 ) : IRepository
 {
+    // Registration block
     override suspend fun registration(
         registrationRequest: RegistrationRequest,
         onSuccess: (RegistrationResponse) -> Unit,
@@ -50,6 +53,7 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
+    //Login block
     override suspend fun login(
         loginRequest: LoginRequest,
         onSuccess: (LoginResponse) -> Unit,
@@ -85,6 +89,7 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
+    //Transfer block
     override suspend fun transfer(
         transferRequest: TransferRequest,
         onSuccess: (TransferResponse) -> Unit,
@@ -93,6 +98,58 @@ class RepositoryImpl @Inject constructor(
         CoroutineScope(Dispatchers.IO).launch{
             try {
                 val response = apiService.transfer(transferRequest)
+                if (response.isSuccessful) {
+                    withContext(Dispatchers.Main) { onSuccess(response.body()!!) }
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    val json = try { JSONObject(errorBody?: "{}") } catch (e: Exception) { JSONObject() }
+                    val message = json.optString("message", "Unknown error")
+
+                    withContext(Dispatchers.Main) { onError(ApiError(message, response.code(), "Transfer failed")) }
+                }
+            } catch (e: IOException) {
+                withContext(Dispatchers.Main) { onError(ApiError("Network error", 500, e.message)) }
+            } catch (e: HttpException) {
+                withContext(Dispatchers.Main) { onError(ApiError("Server error", e.code(), e.message)) }
+            }
+        }
+    }
+
+    //Account transfer block
+    override suspend fun accountTransfer(
+        accountPaymentRequest: AccountPaymentRequest,
+        onSuccess: (TransferResponse) -> Unit,
+        onError: (ApiError) -> Unit
+    ) {
+        CoroutineScope(Dispatchers.IO).launch{
+            try {
+                val response = apiService.accountTransfer(accountPaymentRequest)
+                if (response.isSuccessful) {
+                    withContext(Dispatchers.Main) { onSuccess(response.body()!!) }
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    val json = try { JSONObject(errorBody?: "{}") } catch (e: Exception) { JSONObject() }
+                    val message = json.optString("message", "Unknown error")
+
+                    withContext(Dispatchers.Main) { onError(ApiError(message, response.code(), "Transfer failed")) }
+                }
+            } catch (e: IOException) {
+                withContext(Dispatchers.Main) { onError(ApiError("Network error", 500, e.message)) }
+            } catch (e: HttpException) {
+                withContext(Dispatchers.Main) { onError(ApiError("Server error", e.code(), e.message)) }
+            }
+        }
+    }
+
+    //Third party transfer block
+    override suspend fun thirdPartyTransfer(
+        thirdPartyRequest: ThirdPartyRequest,
+        onSuccess: (TransferResponse) -> Unit,
+        onError: (ApiError) -> Unit
+    ) {
+        CoroutineScope(Dispatchers.IO).launch{
+            try {
+                val response = apiService.thirdPartyTransfer(thirdPartyRequest)
                 if (response.isSuccessful) {
                     withContext(Dispatchers.Main) { onSuccess(response.body()!!) }
                 } else {

@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -32,12 +31,15 @@ import com.example.icecaremobile.ui.theme.DarkGolden
 fun AccountBalanceTransferUI(
     modifier: Modifier = Modifier,
     nairaAmountEntered: (String) -> Unit,
-    dollarEquivalence: String,
+    dollarEquivalence: String?,
     description: (String) -> Unit,
-    boxCheck: () -> Unit,
-    buttonClicked: () -> Unit
+    isTermsChecked: Boolean,
+    onTermsCheckedChange: (Boolean) -> Unit,
+    buttonClicked: () -> Unit,
+    isError: () -> Map<String, String>
 ) {
     val scrollState = rememberScrollState()
+    val errors = isError()
     
     Column(
         modifier = modifier
@@ -54,7 +56,9 @@ fun AccountBalanceTransferUI(
             label = "",
             startIcon = null,
             endIcon  = null,
-            keyboardType = KeyboardType.Number
+            keyboardType = KeyboardType.Number,
+            isError = errors.containsKey("nairaAmount"),
+            errorMessage = errors["nairaAmount"]
         )
 
         Spacer(Modifier.height(20.dp))
@@ -63,11 +67,11 @@ fun AccountBalanceTransferUI(
 
         AppTextField(
             enteredValue = { },
-            label = dollarEquivalence,
+            label = dollarEquivalence ?: "",
             startIcon = null,
             endIcon  = null,
             keyboardType = KeyboardType.Number,
-            enableField = false
+            enableField = false,
         )
 
         Spacer(Modifier.height(30.dp))
@@ -79,6 +83,8 @@ fun AccountBalanceTransferUI(
             label = "",
             startIcon = null,
             endIcon  = null,
+            isError = errors.containsKey("description"),
+            errorMessage = errors["description"]
         )
 
         Spacer(Modifier.weight(1f))
@@ -89,11 +95,8 @@ fun AccountBalanceTransferUI(
         ) {
             Checkbox(
                 colors = CheckboxDefaults.colors(checkedColor = AppGolden),
-                checked = checked,
-                onCheckedChange = {
-                    boxCheck()
-                    checked = it
-                }
+                checked = isTermsChecked,
+                onCheckedChange = onTermsCheckedChange
             )
 
             Text(
@@ -120,7 +123,9 @@ fun AccountBalanceTransferUIPreview()
         nairaAmountEntered = {},
         description = {},
         dollarEquivalence = "4000",
-        boxCheck = {},
-        buttonClicked = {}
+        isTermsChecked = false,
+        onTermsCheckedChange = {},
+        buttonClicked = {},
+        isError = { mapOf() }
     )
 }

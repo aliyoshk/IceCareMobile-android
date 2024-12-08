@@ -72,15 +72,9 @@ fun MultipleTransferScreen(navController: NavHostController)
             banks = bankList ?: emptyList(),
             dollarAmount = { dollarAmount = it },
             purpose = { purposeOfPayment = it },
-            selectedBanks = { banks ->
-                selectedBanks = banks
-            },
-            enteredAmounts = { amounts ->
-                bankAmounts = amounts
-            },
-            receiptUploaded = { receipts ->
-                uploadedReceipts = receipts
-            },
+            selectedBanks = { selectedBanks = it },
+            enteredAmounts = { bankAmounts = it },
+            receiptUploaded = { uploadedReceipts = it },
             onSubmitClick = {
                 val errors = validateFields(
                     dollarAmount = dollarAmount,
@@ -112,8 +106,6 @@ fun MultipleTransferScreen(navController: NavHostController)
                         transferEvidence = transferEvidence
                     )
                     paymentViewModel.fundTransfer(transferRequest)
-
-                    //navController.navigate( Screen.SubmissionScreen(key = destination.toString(), data = ""))
                     onSubmitClick.value = true
                 }
                 else fieldErrors = errors

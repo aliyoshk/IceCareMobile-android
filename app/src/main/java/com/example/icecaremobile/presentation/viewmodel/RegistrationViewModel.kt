@@ -2,9 +2,7 @@ package com.example.icecaremobile.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.icecaremobile.data.remote.entity.LoginResponseState
 import com.example.icecaremobile.data.remote.entity.RegistrationResponseState
-import com.example.icecaremobile.domain.model.Request.LoginRequest
 import com.example.icecaremobile.domain.model.Request.RegistrationRequest
 import com.example.icecaremobile.domain.useCase.GetUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegistrationViewModel @Inject constructor(
-    private val getWeatherUseCase: GetUseCase
+    private val getUseCase: GetUseCase
 ): ViewModel()
 {
     private val _registrationResponse = MutableStateFlow<RegistrationResponseState>(RegistrationResponseState.Loading)
@@ -24,7 +22,7 @@ class RegistrationViewModel @Inject constructor(
     fun registration(registrationRequest: RegistrationRequest) {
         viewModelScope.launch {
             _registrationResponse.value = RegistrationResponseState.Loading
-            getWeatherUseCase(
+            getUseCase(
                 registrationRequest = registrationRequest,
                 onSuccess = { result ->
                     _registrationResponse.value = RegistrationResponseState.Success(result)

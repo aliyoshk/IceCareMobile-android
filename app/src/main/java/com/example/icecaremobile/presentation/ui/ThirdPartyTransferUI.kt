@@ -13,10 +13,6 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,11 +31,13 @@ fun ThirdPartyTransferUI(
     accountNumber: (String) -> Unit,
     accountName: (String) -> Unit,
     description: (String) -> Unit,
-    boxChecked: () -> Unit,
-    submitClicked: () -> Unit
+    isTermsChecked: Boolean,
+    onTermsCheckedChange: (Boolean) -> Unit,
+    submitClicked: () -> Unit,
+    isError: () -> Map<String, String>
 ) {
-    var checked by remember{ mutableStateOf(false) }
     val scroll = rememberScrollState()
+    val errors = isError()
 
     Column(
         modifier = modifier
@@ -53,7 +51,9 @@ fun ThirdPartyTransferUI(
         AppTextField(
             enteredValue = { amount(it) },
             label = "",
-            keyboardType = KeyboardType.Number
+            keyboardType = KeyboardType.Number,
+            isError = errors.containsKey("amount"),
+            errorMessage = errors["amount"]
         )
 
         Spacer(Modifier.height(20.dp))
@@ -62,7 +62,9 @@ fun ThirdPartyTransferUI(
 
         AppTextField(
             enteredValue = { bankName(it) },
-            label = ""
+            label = "",
+            isError = errors.containsKey("bankName"),
+            errorMessage = errors["bankName"]
         )
 
         Spacer(Modifier.height(20.dp))
@@ -72,7 +74,9 @@ fun ThirdPartyTransferUI(
         AppTextField(
             enteredValue = { accountNumber(it) },
             label = "",
-            keyboardType = KeyboardType.Number
+            keyboardType = KeyboardType.Number,
+            isError = errors.containsKey("accountNumber"),
+            errorMessage = errors["accountNumber"]
         )
 
         Spacer(Modifier.height(20.dp))
@@ -81,7 +85,9 @@ fun ThirdPartyTransferUI(
 
         AppTextField(
             enteredValue = { accountName(it) },
-            label = ""
+            label = "",
+            isError = errors.containsKey("accountName"),
+            errorMessage = errors["accountName"]
         )
 
         Spacer(Modifier.height(20.dp))
@@ -90,7 +96,9 @@ fun ThirdPartyTransferUI(
 
         AppTextField(
             enteredValue = { description(it) },
-            label = ""
+            label = "",
+            isError = errors.containsKey("description"),
+            errorMessage = errors["description"]
         )
 
         Spacer(Modifier.weight(1f))
@@ -101,11 +109,8 @@ fun ThirdPartyTransferUI(
         ) {
             Checkbox(
                 colors = CheckboxDefaults.colors(checkedColor = AppGolden),
-                checked = checked,
-                onCheckedChange = {
-                    boxChecked()
-                    checked = it
-                }
+                checked = isTermsChecked,
+                onCheckedChange = onTermsCheckedChange
             )
 
             Text(
@@ -127,5 +132,5 @@ fun ThirdPartyTransferUI(
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun ThirdPartyTransferUIPreview() {
-    ThirdPartyTransferUI(modifier = Modifier, {}, {}, {}, {}, {}, {}, {})
+    ThirdPartyTransferUI(modifier = Modifier, {}, {}, {}, {}, {}, false, {}, {}, { mapOf() })
 }
