@@ -73,10 +73,11 @@ class Screen
     @Serializable
     data class SubmissionScreen(val key: String, val data: String)
 
+    @Serializable
+    object ConverterScreen
 
     object GetHelpScreen
     object FundAccountScreen
     object TransferReceiptScreen
-    object ConverterScreen
     object HistoryScreen
 }

@@ -88,7 +88,7 @@ fun TransferSummaryScreen(
 
 @Composable
 fun RenderTransferState(
-    state: TransferResponseState?, navController: NavHostController,viewModel: PaymentViewModel
+    state: TransferResponseState?, navController: NavHostController, viewModel: PaymentViewModel
 ) {
     var showDialog by remember { mutableStateOf(true) }
     when (state) {

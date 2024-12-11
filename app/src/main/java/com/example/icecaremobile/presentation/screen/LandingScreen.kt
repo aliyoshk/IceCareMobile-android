@@ -8,15 +8,13 @@ import com.example.icecaremobile.presentation.navigator.Screen
 import com.example.icecaremobile.presentation.ui.LandingPageUI
 
 @Composable
-fun LandingScreen(navController: NavHostController)
-{
+fun LandingScreen(navController: NavHostController) {
     LandingPageUI { navController.navigate(Screen.LoginScreen)}
 }
 
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
-fun LandingScreenPreview()
-{
+fun LandingScreenPreview() {
     val navController = rememberNavController()
     LandingScreen(navController)
 }

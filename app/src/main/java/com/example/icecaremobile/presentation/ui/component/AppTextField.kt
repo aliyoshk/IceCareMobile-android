@@ -43,8 +43,7 @@ fun AppTextField(
         label = { Text(label, color = Color.Black) },
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         value = text,
-        onValueChange =
-        {
+        onValueChange = {
             text = it
             enteredValue(text)
         },

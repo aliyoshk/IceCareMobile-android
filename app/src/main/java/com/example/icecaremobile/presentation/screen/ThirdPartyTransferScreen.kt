@@ -79,6 +79,10 @@ fun ThirdPartyTransferScreen(
                     if (!boxCheck)
                         Toast.makeText(context, "You must agree to the terms and conditions to proceed", Toast.LENGTH_SHORT).show()
                     else {
+                        Log.d("OnClickedIssue", request.toString())
+                        Log.d("OnClickedIssue", paymentViewModel.thirdPartyTransfer(request).toString())
+                        paymentViewModel.thirdPartyTransfer(request)
+                        Log.d("OnClickedIssue", request.toString())
                         onSubmitClick.value = true
                     }
                 }
@@ -89,6 +93,7 @@ fun ThirdPartyTransferScreen(
 
         if (onSubmitClick.value) {
             Log.d("OnClickedIssue", transferState.value.toString())
+            RenderTransferState(transferState.value, navController, paymentViewModel)
         }
     }
 }

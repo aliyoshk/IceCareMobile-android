@@ -21,7 +21,7 @@ class GetUseCase @Inject constructor(
     private val repositoryProvider: IRepositoryProvider,  //IRepository
     private val authManager: AuthManager
 ) {
-    val repository = repositoryProvider.provideRepository()
+    private val repository = repositoryProvider.provideRepository()
 
     //Registration block
     suspend operator fun invoke(
@@ -63,13 +63,23 @@ class GetUseCase @Inject constructor(
         repository.transfer(transferRequest, onSuccess, onError)
     }
 
-    //Account transfer loan
+    //Account transfer block
     suspend operator fun invoke(
         accountPaymentRequest : AccountPaymentRequest,
         onSuccess: (TransferResponse) -> Unit,
         onError: (ApiError) -> Unit
     ) {
-        repository.accountTransfer(accountPaymentRequest, onSuccess, onError)
+        repository.accountTransfer(accountPaymentRequest,
+            onSuccess = { response ->
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        onSuccess(response)
+                    } catch (e: Exception) {
+                        onError(ApiError(message = e.message ?: "Error saving login response"))
+                    }
+                }
+            },
+            onError = onError)
     }
 
     //Third party transfer loan

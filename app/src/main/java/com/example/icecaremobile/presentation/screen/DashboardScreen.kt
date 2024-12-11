@@ -15,7 +15,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.icecaremobile.core.utils.Helpers
 import com.example.icecaremobile.data.local.auth.AuthManagerImpl
 import com.example.icecaremobile.domain.model.Response.LoginResponse
 import com.example.icecaremobile.presentation.navigator.Screen
@@ -41,42 +40,30 @@ fun DashboardScreen(navController: NavHostController)
         var acctNumber by remember { mutableStateOf("") }
         var dollarRate by remember { mutableStateOf("") }
         var balance by remember { mutableStateOf("") }
-        var converterClick by remember { mutableStateOf(false) }
-        var remitStatusClick by remember { mutableStateOf(false) }
-        var transferStatusClick by remember { mutableStateOf(false) }
-        var transferMoneyClick by remember { mutableStateOf(false) }
-        var topUpMoneyClick by remember { mutableStateOf(false) }
-        var viewHistoryClick by remember { mutableStateOf(false) }
 
         loginResponse?.let {
             name = it.data.fullName
             acctNumber = it.data.accountNumber
             dollarRate = it.data.dollarRate.toString()
-            balance = it.data.accountBalance.toString()
+            balance = it.data.accountBalance
         }
 
         DashboardUI(
             modifier = Modifier.padding(padding),
             name = name,
             acctNumber = acctNumber,
-            dollarRate = Helpers.appendCurrency(dollarRate, "USD"),
-            balance = Helpers.appendCurrency(balance),
-            onConverterClick = { converterClick = true },
-            onRemitStatusClick =
-            {
-                remitStatusClick = true
+            dollarRate = dollarRate,
+            balance = balance,
+            onConverterClick = { navController.navigate(Screen.ConverterScreen) },
+            onRemitStatusClick = {
                 navController.navigate(Screen.RemitStatusScreen("isRemitStatus"))
             },
             onTransferStatusClick = {
                 navController.navigate(Screen.RemitStatusScreen("isTransferStatus"))
             },
-            onTransferMoneyClick =
-            {
-                transferMoneyClick = true
-                navController.navigate(Screen.SendMoneyScreen)
-            },
-            onTopUpClick = { topUpMoneyClick = true },
-            onViewHistoryClick = { viewHistoryClick = true },
+            onTransferMoneyClick = { navController.navigate(Screen.SendMoneyScreen) },
+            onTopUpClick = { navController.navigate(Screen.SendMoneyScreen) },
+            onViewHistoryClick = {  },
             notification = false
         )
     }

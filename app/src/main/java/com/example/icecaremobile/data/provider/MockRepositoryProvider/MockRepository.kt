@@ -1,8 +1,10 @@
 package com.example.icecaremobile.data.provider.MockRepositoryProvider
 
 import com.example.icecaremobile.data.provider.RepositoryProvider.IRepositoryProvider
+import com.example.icecaremobile.domain.model.Request.AccountPaymentRequest
 import com.example.icecaremobile.domain.model.Request.LoginRequest
 import com.example.icecaremobile.domain.model.Request.RegistrationRequest
+import com.example.icecaremobile.domain.model.Request.ThirdPartyRequest
 import com.example.icecaremobile.domain.model.Request.TransferRequest
 import com.example.icecaremobile.domain.model.Response.CompanyAccounts
 import com.example.icecaremobile.domain.model.Response.LoginResponse
@@ -18,47 +20,6 @@ import javax.inject.Singleton
 @Singleton
 class MockRepository @Inject constructor() : IRepositoryProvider
 {
-    companion object {
-        fun provideMockResponse(): LoginResponse
-        {
-            val mockLoginResponse = LoginResponse(
-                message = "Login Successful",
-                statusCode = 200,
-                status = true,
-                data = Response(
-                    id = 6,
-                    phone = "08034678912",
-                    token = "rfgdssgdygsfguy463634",
-                    status = "Approved",
-                    accountNumber = "012567823",
-                    accountBalance = "567000",
-                    email = "johndoe@gmail.com",
-                    dollarRate = 1500,
-                    fullName = "John Doe",
-                    companyNumber = "0905678934",
-                    companyAccounts = listOf(
-                        CompanyAccounts(
-                            accountNumber = "2134789034",
-                            accountName = "Ice Care Nig Ltd",
-                            bankName = "UBA"
-                        ),
-                        CompanyAccounts(
-                            accountNumber = "0252458264",
-                            accountName = "Ice Care Nig Ltd",
-                            bankName = "Wema Bank"
-                        ),
-                        CompanyAccounts(
-                            accountNumber = "5678902314",
-                            accountName = "Ice Care Nig Ltd",
-                            bankName = "Providus Bank"
-                        )
-                    )
-                )
-            )
-            return mockLoginResponse
-        }
-    }
-
     override fun provideRepository(): IRepository
     {
         return object : IRepository
@@ -101,7 +62,7 @@ class MockRepository @Inject constructor() : IRepositoryProvider
                             accountNumber = "012567823",
                             accountBalance = "567000",
                             email = "johndoe@gmail.com",
-                            dollarRate = 1500,
+                            dollarRate = 1500.0,
                             fullName = "John Doe",
                             companyNumber = "0905678934",
                             companyAccounts = listOf(
@@ -137,6 +98,36 @@ class MockRepository @Inject constructor() : IRepositoryProvider
                     TransferResponse(
                         status = true,
                         message = "You transfer details has been successfully submitted for admin to verified.",
+                        data = true
+                    )
+                )
+            }
+
+            override suspend fun accountTransfer(
+                accountPaymentRequest: AccountPaymentRequest,
+                onSuccess: (TransferResponse) -> Unit,
+                onError: (ApiError) -> Unit
+            ) {
+                delay(2000)
+                onSuccess(
+                    TransferResponse(
+                        status = true,
+                        message = "You request to debit from your account balance has been forwarded for admin to verified.",
+                        data = true
+                    )
+                )
+            }
+
+            override suspend fun thirdPartyTransfer(
+                thirdPartyRequest: ThirdPartyRequest,
+                onSuccess: (TransferResponse) -> Unit,
+                onError: (ApiError) -> Unit
+            ) {
+                delay(2000)
+                onSuccess(
+                    TransferResponse(
+                        status = true,
+                        message = "Your request to move your fund to third party account has been submitted for review",
                         data = true
                     )
                 )

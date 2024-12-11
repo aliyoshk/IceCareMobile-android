@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.icecaremobile.R
+import com.example.icecaremobile.core.utils.Helpers
 import com.example.icecaremobile.ui.theme.AppGolden
 import com.example.icecaremobile.ui.theme.LightGolden
 import com.example.icecaremobile.ui.theme.LightGray
@@ -73,18 +74,16 @@ fun DashboardUI(
             .fillMaxWidth()
             .wrapContentHeight()
             .verticalScroll(scrollState)
-    ){
+    ) {
         Column(
             modifier = Modifier
                 .wrapContentHeight()
                 .wrapContentHeight()
                 .padding(start = 20.dp, end = 20.dp, top = 20.dp)
-        )
-        {
+        ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
-            )
-            {
+            ) {
                 Image(
                     painter = painterResource(id = R.drawable.logo),
                     contentDescription = "Logo",
@@ -93,7 +92,7 @@ fun DashboardUI(
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                Box{
+                Box {
                     Image(
                         painter = painterResource(id = R.drawable.ic_bell),
                         contentDescription = "Logo",
@@ -122,8 +121,8 @@ fun DashboardUI(
         DashboardCard(
             name = name,
             acctNumber = acctNumber,
-            dollarRate = dollarRate,
-            balance = balance
+            dollarRate = Helpers.formatAmountToCurrency(dollarRate.toDoubleOrNull(), "USD"),
+            balance = Helpers.formatAmountToCurrency(balance.toDoubleOrNull())
         )
 
         Spacer(Modifier.height(10.dp))

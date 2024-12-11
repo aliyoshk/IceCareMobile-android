@@ -8,7 +8,6 @@ import android.net.Uri
 import android.util.Base64
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
-import java.text.NumberFormat
 import java.util.Locale
 import java.util.regex.Pattern
 
@@ -37,34 +36,41 @@ object Helpers {
         return Pattern.compile(localPhoneRegex, Pattern.CASE_INSENSITIVE).matcher(phone).matches()
     }
 
-    // Format Amount to Currency without Decimal
-    fun formatAmountToCurrencyWithoutDecimal(currency: String, amount: Double): String {
-        val symbols = formatAmountToCurrency(currency)
-        val amt = amount ?: 0.0
-        val formattedAmount = NumberFormat.getInstance(Locale.US).format(amount)
-        return "$symbols $amount"
-    }
-
     // Append Currency to Amount
-    fun appendCurrency(amount: String, currency: String = "NGN"): String {
-        val symbols = formatAmountToCurrency(currency)
-        val amt = amount.toDoubleOrNull() ?: 0.0
-        val formattedAmount = NumberFormat.getCurrencyInstance(Locale.US).format(amt)
-        return "$symbols$amt"
-    }
-
-    // Format Amount to Currency Symbol
-    private fun formatAmountToCurrency(currency: String): String {
-        return when (currency.uppercase(Locale.ROOT)) {
+    fun formatAmountToCurrency(amount: Double?, currency: String = "NGN"): String {
+        val symbols = when (currency.uppercase()) {
             "NGN" -> "₦"
             "USD" -> "$"
             "GBP" -> "£"
             "EUR" -> "€"
             "JPY" -> "¥"
             "CAD" -> "C$"
-            else -> "NGN"
+            else -> currency
         }
+        if (amount == null) return ""
+        val formattedAmount = String.format(Locale.US, "%,.2f", amount ?: 0.0)
+        return "$symbols$formattedAmount"
     }
+
+    fun getAmountWithoutCommaAndCurrency(amount: String, currency: String = "NGN"): String {
+        val symbols = when (currency.uppercase()) {
+            "NGN" -> "₦"
+            "USD" -> "$"
+            "GBP" -> "£"
+            "EUR" -> "€"
+            "JPY" -> "¥"
+            "CAD" -> "C$"
+            else -> ""
+        }
+
+        val formattedAmount = amount
+            .replace(symbols, "", ignoreCase = true)
+            .replace(",", "")
+            .replace(" ", "")
+
+        return formattedAmount
+    }
+
 
     @SuppressLint("Recycle")
     fun convertUriToBase64(context: Context, uri: Uri): String? {

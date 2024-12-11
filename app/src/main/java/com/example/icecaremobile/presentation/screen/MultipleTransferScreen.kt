@@ -37,8 +37,7 @@ import java.time.LocalDate
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MultipleTransferScreen(navController: NavHostController)
-{
+fun MultipleTransferScreen(navController: NavHostController) {
     val context = LocalContext.current
     val paymentViewModel: PaymentViewModel = hiltViewModel()
     val transferState = paymentViewModel.transferResponse.collectAsState()
