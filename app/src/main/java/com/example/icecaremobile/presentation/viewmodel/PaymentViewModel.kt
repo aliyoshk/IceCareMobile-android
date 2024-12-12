@@ -65,8 +65,4 @@ class PaymentViewModel @Inject constructor(
             )
         }
     }
-
-    fun resetTransferState() {
-        _transferResponse.value = TransferResponseState.Loading
-    }
 }

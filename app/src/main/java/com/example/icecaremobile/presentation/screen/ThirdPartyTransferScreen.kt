@@ -93,7 +93,7 @@ fun ThirdPartyTransferScreen(
 
         if (onSubmitClick.value) {
             Log.d("OnClickedIssue", transferState.value.toString())
-            RenderTransferState(transferState.value, navController, paymentViewModel)
+            RenderTransferState(transferState.value, navController)
         }
     }
 }

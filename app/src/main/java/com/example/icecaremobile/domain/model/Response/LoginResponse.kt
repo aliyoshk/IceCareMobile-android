@@ -17,7 +17,7 @@ data class Response(
     val accountBalance: String,
     val accountNumber: String,
     val dollarRate: Double,
-    val companyNumber: String,
+    val companyNumber: List<CompanyPhones>,
     val companyAccounts: List<CompanyAccounts>
 )
 
@@ -25,5 +25,9 @@ data class CompanyAccounts(
     val bankName: String,
     val accountName: String,
     val accountNumber: String
+)
+
+data class CompanyPhones(
+    val phoneNumber: String
 )
 

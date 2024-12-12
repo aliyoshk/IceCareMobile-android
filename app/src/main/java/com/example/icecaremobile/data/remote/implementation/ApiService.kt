@@ -13,8 +13,8 @@ import retrofit2.Response
 import retrofit2.http.Body
 import javax.inject.Inject
 
-class ApiService @Inject constructor(private val apiService: IApiService)
-{
+class ApiService @Inject constructor(private val apiService: IApiService) {
+
     suspend fun registration(@Body registrationRequest: RegistrationRequest): Response<RegistrationResponse> {
         return apiService.registration(registrationRequest);
     }

@@ -113,7 +113,7 @@ fun MultipleTransferScreen(navController: NavHostController) {
         )
 
         if (onSubmitClick.value) {
-            RenderTransferState(transferState.value, navController, paymentViewModel)
+            RenderTransferState(transferState.value, navController)
         }
     }
 }

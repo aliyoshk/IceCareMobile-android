@@ -20,13 +20,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.icecaremobile.data.local.auth.AuthManagerImpl
-import com.example.icecaremobile.data.remote.entity.TransferResponseState
 import com.example.icecaremobile.domain.model.Request.AccountPaymentRequest
 import com.example.icecaremobile.domain.model.Response.Response
-import com.example.icecaremobile.presentation.navigator.Screen
 import com.example.icecaremobile.presentation.ui.AccountBalanceTransferUI
-import com.example.icecaremobile.presentation.ui.component.AcceptDialog
-import com.example.icecaremobile.presentation.ui.component.AppLoader
 import com.example.icecaremobile.presentation.ui.component.AppTopBar
 import com.example.icecaremobile.presentation.viewmodel.PaymentViewModel
 
@@ -99,42 +95,9 @@ fun AccountBalanceTransferScreen(
 
         if (onSubmitClick.value) {
             Log.d("OnClickedIssue", transferState.value.toString())
-            RenderAccountTransferState(transferState.value, navController, paymentViewModel)
+            RenderTransferState(transferState.value, navController)
             Log.d("OnClickedIssue", transferState.value.toString())
         }
-    }
-}
-
-@Composable
-fun RenderAccountTransferState(
-    state: TransferResponseState?, navController: NavHostController, viewModel: PaymentViewModel
-) {
-    var showDialog by remember { mutableStateOf(true) }
-    when (state) {
-        is TransferResponseState.Loading -> {
-            showDialog = true
-            AppLoader()
-        }
-        is TransferResponseState.Success -> {
-            LaunchedEffect(Unit) {
-                val message = state.transferResponse.message
-                navController.navigate( Screen.SubmissionScreen(data = message, key = Screen.TransferSummaryScreen.toString()))
-                viewModel.resetTransferState()
-            }
-        }
-        is TransferResponseState.Error -> {
-            if (showDialog) {
-                AcceptDialog(
-                    title = "Error",
-                    message = state.message,
-                    buttonText = "Okay",
-                    onButtonClick = { showDialog = false },
-                    onDismissRequest = { showDialog = false }
-                )
-                viewModel.resetTransferState()
-            }
-        }
-        null -> { showDialog = true }
     }
 }
 

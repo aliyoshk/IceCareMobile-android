@@ -3,6 +3,7 @@ package com.example.icecaremobile.presentation.screen
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
@@ -81,14 +82,15 @@ fun TransferSummaryScreen(
         )
 
         if (onSubmitClick.value) {
-            RenderTransferState(transferState.value, navController, paymentViewModel)
+            RenderTransferState(transferState.value, navController)
         }
     }
 }
 
 @Composable
 fun RenderTransferState(
-    state: TransferResponseState?, navController: NavHostController, viewModel: PaymentViewModel
+    state: TransferResponseState,
+    navController: NavHostController
 ) {
     var showDialog by remember { mutableStateOf(true) }
     when (state) {
@@ -100,7 +102,6 @@ fun RenderTransferState(
             LaunchedEffect(Unit) {
                 val message = state.transferResponse.message
                 navController.navigate( Screen.SubmissionScreen(data = message, key = Screen.TransferSummaryScreen.toString()))
-                viewModel.resetTransferState()
             }
         }
         is TransferResponseState.Error -> {
@@ -112,10 +113,8 @@ fun RenderTransferState(
                     onButtonClick = { showDialog = false },
                     onDismissRequest = { showDialog = false }
                 )
-                viewModel.resetTransferState()
             }
         }
-        null -> { showDialog = true }
     }
 }
 

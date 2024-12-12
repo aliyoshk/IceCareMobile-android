@@ -1,10 +1,12 @@
 package com.example.icecaremobile.presentation.screen
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,24 +52,40 @@ fun LoginScreen(navController: NavHostController) {
             }
         )
 
-        if (buttonClick) {
-            when (val currentResponse = response) {
-                is LoginResponseState.Loading -> {
-                    AppLoader()
-                }
-                is LoginResponseState.Success -> {
-                    buttonClick = false
-                    navController.navigate(Screen.DashboardScreen)
-                }
-                is LoginResponseState.Error -> {
-                    AcceptDialog(
-                        title = "Error",
-                        message = currentResponse.message,
-                        buttonText = "Okay",
-                        onButtonClick = { buttonClick = false },
-                        onDismissRequest = { buttonClick = false }
-                    )
-                }
+        if (buttonClick)
+            LoginResponseHandler(response, navController)
+    }
+}
+
+@Composable
+fun LoginResponseHandler(
+    response: LoginResponseState,
+    navController: NavHostController
+) {
+    var showDialog by remember { mutableStateOf(true) }
+    when (response) {
+        is LoginResponseState.Loading -> {
+            showDialog = true
+            AppLoader()
+        }
+        is LoginResponseState.Success -> {
+            LaunchedEffect(Unit) {
+                Log.d("LoginResponseHandler", "Success")
+                Log.d("LoginResponseHandler", response.loginResponse.message)
+                Log.d("LoginResponseHandler", response.loginResponse.toString())
+                val message = response.loginResponse.message
+                navController.navigate( Screen.DashboardScreen )
+            }
+        }
+        is LoginResponseState.Error -> {
+            if (showDialog) {
+                AcceptDialog(
+                    title = "Error",
+                    message = response.message,
+                    buttonText = "Okay",
+                    onButtonClick = { showDialog = false },
+                    onDismissRequest = { showDialog = false }
+                )
             }
         }
     }
@@ -75,8 +93,7 @@ fun LoginScreen(navController: NavHostController) {
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun LoginScreenPreview()
-{
+fun LoginScreenPreview() {
     val navController = rememberNavController()
     LoginScreen(navController)
 }

@@ -120,7 +120,6 @@ class RepositoryImpl @Inject constructor(
                             errorsList.add(errorArray?.getString(i) ?: "")
                         }
                     }
-
                     withContext(Dispatchers.Main) { onError(ApiError(message, response.code(), "Transfer failed", errorsList)) }
                 }
             } catch (e: IOException) {

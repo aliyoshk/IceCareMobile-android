@@ -7,6 +7,7 @@ import com.example.icecaremobile.domain.model.Request.RegistrationRequest
 import com.example.icecaremobile.domain.model.Request.ThirdPartyRequest
 import com.example.icecaremobile.domain.model.Request.TransferRequest
 import com.example.icecaremobile.domain.model.Response.CompanyAccounts
+import com.example.icecaremobile.domain.model.Response.CompanyPhones
 import com.example.icecaremobile.domain.model.Response.LoginResponse
 import com.example.icecaremobile.domain.model.Response.RegistrationResponse
 import com.example.icecaremobile.domain.model.Response.Response
@@ -64,7 +65,11 @@ class MockRepository @Inject constructor() : IRepositoryProvider
                             email = "johndoe@gmail.com",
                             dollarRate = 1500.0,
                             fullName = "John Doe",
-                            companyNumber = "0905678934",
+                            companyNumber = listOf(
+                                CompanyPhones("0905678934"),
+                                CompanyPhones("0803678900"),
+                                CompanyPhones("0807678934")
+                            ),
                             companyAccounts = listOf(
                                 CompanyAccounts(
                                     accountNumber = "2134789034",
