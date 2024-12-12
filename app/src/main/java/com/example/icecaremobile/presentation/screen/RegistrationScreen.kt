@@ -2,20 +2,16 @@ package com.example.icecaremobile.presentation.screen
 
 import android.annotation.SuppressLint
 import android.widget.Toast
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,6 +22,7 @@ import com.example.icecaremobile.data.remote.entity.RegistrationResponseState
 import com.example.icecaremobile.domain.model.Request.RegistrationRequest
 import com.example.icecaremobile.presentation.navigator.Screen
 import com.example.icecaremobile.presentation.ui.RegistrationUI
+import com.example.icecaremobile.presentation.ui.component.AcceptDialog
 import com.example.icecaremobile.presentation.ui.component.AppLoader
 import com.example.icecaremobile.presentation.ui.component.AppTopBar
 import com.example.icecaremobile.presentation.viewmodel.RegistrationViewModel
@@ -65,9 +62,9 @@ fun RegistrationScreen(navController: NavHostController)
             onTermsCheckedChange = { isTermsChecked = it },
             btnSignUp = {
                 val request = RegistrationRequest(
-                    name = name,
+                    fullName = name,
                     email = email,
-                    phoneNumber = phone,
+                    phone = phone,
                     password = password
                 )
                 val errors = validateRegistrationRequest(request).toMutableMap()
@@ -93,19 +90,19 @@ fun RegistrationScreen(navController: NavHostController)
         )
 
         if (buttonClick)
-            RegistrationResponseHandler(response, navController, buttonState = { buttonClick = it } )
+            RegistrationResponseHandler(response, navController)
     }
 }
 
 private fun validateRegistrationRequest(request: RegistrationRequest): Map<String, String> {
     val errors = mutableMapOf<String, String>()
-    if (request.name.isEmpty()) {
+    if (request.fullName.isEmpty()) {
         errors["name"] = "Full name is required."
     }
     if (request.email.isEmpty()) {
         errors["email"] = "Email is required."
     }
-    if (request.phoneNumber.isEmpty()) {
+    if (request.phone.isEmpty()) {
         errors["phoneNumber"] = "Phone number is required."
     }
     if (request.password.isEmpty()) {
@@ -117,44 +114,32 @@ private fun validateRegistrationRequest(request: RegistrationRequest): Map<Strin
 @Composable
 fun RegistrationResponseHandler(
     response: RegistrationResponseState,
-    navController: NavHostController,
-    buttonState: (Boolean) -> Unit
+    navController: NavHostController
 ) {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        when (response) {
-            is RegistrationResponseState.Loading -> {
-                buttonState(true)
-                AppLoader()
+    var showDialog by remember { mutableStateOf(true) }
+    when (response) {
+        is RegistrationResponseState.Loading -> {
+            showDialog = true
+            AppLoader()
+        }
+        is RegistrationResponseState.Success -> {
+            LaunchedEffect(Unit) {
+                val message = response.registrationResponse.data
+                navController.navigate( Screen.SubmissionScreen(data = message, key = Screen.RegistrationScreen.toString()))
             }
-            is RegistrationResponseState.Success -> {
-                buttonState(false)
-                println(response.registrationResponse.message)
-                println(response.registrationResponse.data)
-                val destination = Screen.RegistrationScreen
-                navController.navigate(
-                    Screen.SubmissionScreen(
-                        data = response.registrationResponse.message,
-                        key = destination.toString()
-                    )
-                )
-            }
-            is RegistrationResponseState.Error -> {
-                buttonState(false)
-                AlertDialog(
-                    onDismissRequest = {},
-                    title = { Text(text = "Error") },
-                    text = { Text(text = response.message) },
-                    confirmButton = {
-                        Button(onClick = { /* No action needed */ }) {
-                            Text("OK")
-                        }
-                    }
+        }
+        is RegistrationResponseState.Error -> {
+            if (showDialog) {
+                AcceptDialog(
+                    title = "Error",
+                    message = response.message,
+                    buttonText = "Okay",
+                    onButtonClick = { showDialog = false },
+                    onDismissRequest = { showDialog = false }
                 )
             }
         }
+        null -> { showDialog = true }
     }
 }
 

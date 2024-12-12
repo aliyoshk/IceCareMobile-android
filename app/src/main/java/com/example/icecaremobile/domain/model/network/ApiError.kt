@@ -7,7 +7,9 @@ data class ApiError(
     val errors: List<String>? = null
 ) {
     val concatenatedErrors: String
-        get() = errors?.joinToString("\n") ?: message ?: responseMessage.orEmpty()
+        get() = when {
+            !errors.isNullOrEmpty() -> errors.joinToString("\n")
+            !message.isNullOrEmpty() -> message
+            else -> responseMessage.orEmpty()
+        }
 }
-
-

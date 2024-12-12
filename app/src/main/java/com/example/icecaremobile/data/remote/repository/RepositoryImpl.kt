@@ -1,6 +1,5 @@
 package com.example.icecaremobile.data.remote.repository
 
-import android.util.Log
 import com.example.icecaremobile.data.local.dataSource.TokenManager
 import com.example.icecaremobile.data.remote.implementation.ApiService
 import com.example.icecaremobile.domain.model.Request.AccountPaymentRequest
@@ -41,9 +40,16 @@ class RepositoryImpl @Inject constructor(
                 } else {
                     val errorBody = response.errorBody()?.string()
                     val json = try { JSONObject(errorBody?: "{}") } catch (e: Exception) { JSONObject() }
-                    val message = json.optString("message", "Unknown error")
-
-                    withContext(Dispatchers.Main) { onError(ApiError(message, response.code(), "Registration failed")) }
+                    val message = json.optString("message")
+                    val errorsJson = json.optJSONObject("errors")
+                    val errorsList = mutableListOf<String>()
+                    errorsJson?.keys()?.forEach { key ->
+                        val errorArray = errorsJson.optJSONArray(key)
+                        for (i in 0 until (errorArray?.length() ?: 0)) {
+                            errorsList.add(errorArray?.getString(i) ?: "")
+                        }
+                    }
+                    withContext(Dispatchers.Main) { onError(ApiError(message, response.code(), "Registration failed", errorsList)) }
                 }
             } catch (e: IOException) {
                 withContext(Dispatchers.Main) { onError(ApiError("Network error", 500, e.message)) }
@@ -71,15 +77,17 @@ class RepositoryImpl @Inject constructor(
                 } else {
                     val errorBody = response.errorBody()?.string()
                     val json = try { JSONObject(errorBody?: "{}") } catch (e: Exception) { JSONObject() }
-                    val message = json.optString("message", "Unknown error")
-                    val statusCode = json.optInt("statusCode", response.code())
-                    val status = json.optBoolean("status", false)
-                    val errors = json.optJSONObject("errors")
+                    val message = json.optString("message")
+                    val errorsJson = json.optJSONObject("errors")
+                    val errorsList = mutableListOf<String>()
+                    errorsJson?.keys()?.forEach { key ->
+                        val errorArray = errorsJson.optJSONArray(key)
+                        for (i in 0 until (errorArray?.length() ?: 0)) {
+                            errorsList.add(errorArray?.getString(i) ?: "")
+                        }
+                    }
 
-                    Log.d("LoginResponse", "Error body: $errorBody, $errors")
-
-                    withContext(Dispatchers.Main) { onError(ApiError(message, response.code(), "Login failed")) }
-//                    withContext(Dispatchers.Main) { onError(ApiError(response.message(), response.code(), "Login failed")) }
+                    withContext(Dispatchers.Main) { onError(ApiError(message, response.code(), "Login failed", errorsList)) }
                 }
             } catch (e: IOException) {
                 withContext(Dispatchers.Main) { onError(ApiError(e.message, 500, e.message)) }
@@ -103,9 +111,17 @@ class RepositoryImpl @Inject constructor(
                 } else {
                     val errorBody = response.errorBody()?.string()
                     val json = try { JSONObject(errorBody?: "{}") } catch (e: Exception) { JSONObject() }
-                    val message = json.optString("message", "Unknown error")
+                    val message = json.optString("message")
+                    val errorsJson = json.optJSONObject("errors")
+                    val errorsList = mutableListOf<String>()
+                    errorsJson?.keys()?.forEach { key ->
+                        val errorArray = errorsJson.optJSONArray(key)
+                        for (i in 0 until (errorArray?.length() ?: 0)) {
+                            errorsList.add(errorArray?.getString(i) ?: "")
+                        }
+                    }
 
-                    withContext(Dispatchers.Main) { onError(ApiError(message, response.code(), "Transfer failed")) }
+                    withContext(Dispatchers.Main) { onError(ApiError(message, response.code(), "Transfer failed", errorsList)) }
                 }
             } catch (e: IOException) {
                 withContext(Dispatchers.Main) { onError(ApiError("Network error", 500, e.message)) }
@@ -129,9 +145,17 @@ class RepositoryImpl @Inject constructor(
                 } else {
                     val errorBody = response.errorBody()?.string()
                     val json = try { JSONObject(errorBody?: "{}") } catch (e: Exception) { JSONObject() }
-                    val message = json.optString("message", "Unknown error")
+                    val message = json.optString("message")
+                    val errorsJson = json.optJSONObject("errors")
+                    val errorsList = mutableListOf<String>()
+                    errorsJson?.keys()?.forEach { key ->
+                        val errorArray = errorsJson.optJSONArray(key)
+                        for (i in 0 until (errorArray?.length() ?: 0)) {
+                            errorsList.add(errorArray?.getString(i) ?: "")
+                        }
+                    }
 
-                    withContext(Dispatchers.Main) { onError(ApiError(message, response.code(), "Transfer failed")) }
+                    withContext(Dispatchers.Main) { onError(ApiError(message, response.code(), "Transfer failed", errorsList)) }
                 }
             } catch (e: IOException) {
                 withContext(Dispatchers.Main) { onError(ApiError("Network error", 500, e.message)) }
@@ -155,9 +179,17 @@ class RepositoryImpl @Inject constructor(
                 } else {
                     val errorBody = response.errorBody()?.string()
                     val json = try { JSONObject(errorBody?: "{}") } catch (e: Exception) { JSONObject() }
-                    val message = json.optString("message", "Unknown error")
+                    val message = json.optString("message")
+                    val errorsJson = json.optJSONObject("errors")
+                    val errorsList = mutableListOf<String>()
+                    errorsJson?.keys()?.forEach { key ->
+                        val errorArray = errorsJson.optJSONArray(key)
+                        for (i in 0 until (errorArray?.length() ?: 0)) {
+                            errorsList.add(errorArray?.getString(i) ?: "")
+                        }
+                    }
 
-                    withContext(Dispatchers.Main) { onError(ApiError(message, response.code(), "Transfer failed")) }
+                    withContext(Dispatchers.Main) { onError(ApiError(message, response.code(), "Transfer failed", errorsList)) }
                 }
             } catch (e: IOException) {
                 withContext(Dispatchers.Main) { onError(ApiError("Network error", 500, e.message)) }
