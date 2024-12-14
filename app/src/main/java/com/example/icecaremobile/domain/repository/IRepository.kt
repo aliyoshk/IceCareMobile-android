@@ -10,8 +10,8 @@ import com.example.icecaremobile.domain.model.Response.RegistrationResponse
 import com.example.icecaremobile.domain.model.Response.TransferResponse
 import com.example.icecaremobile.domain.model.network.ApiError
 
-interface IRepository
-{
+interface IRepository {
+
     suspend fun registration(
         registrationRequest: RegistrationRequest,
         onSuccess: (RegistrationResponse) -> Unit,

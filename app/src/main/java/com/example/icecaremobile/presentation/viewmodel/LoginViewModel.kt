@@ -43,11 +43,3 @@ class LoginViewModel @Inject constructor(
     }
 }
 
-//    fun clearError()
-//    {
-//        if (_loginResponse.value is LoginResponseState.Error) {
-//            _loginResponse.value = LoginResponseState.Loading
-//        }
-//    }
-//}
-

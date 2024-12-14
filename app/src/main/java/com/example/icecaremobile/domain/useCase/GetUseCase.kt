@@ -91,15 +91,3 @@ class GetUseCase @Inject constructor(
         repository.thirdPartyTransfer(thirdPartyRequest, onSuccess, onError)
     }
 }
-
-//class GetUseCase @Inject constructor(
-//    private val repository: IRepository
-//) {
-//    suspend operator fun invoke(
-//        loginRequest: LoginRequest,
-//        onSuccess: (LoginResponse) -> Unit,
-//        onError: (ApiError) -> Unit
-//    ) {
-//        repository.login(loginRequest, onSuccess, onError)
-//    }
-//}

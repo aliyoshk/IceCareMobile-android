@@ -1,5 +1,6 @@
 package com.example.icecaremobile.data.remote.repository
 
+import android.util.Log
 import com.example.icecaremobile.data.local.dataSource.TokenManager
 import com.example.icecaremobile.data.remote.implementation.ApiService
 import com.example.icecaremobile.domain.model.Request.AccountPaymentRequest
@@ -139,6 +140,7 @@ class RepositoryImpl @Inject constructor(
         CoroutineScope(Dispatchers.IO).launch{
             try {
                 val response = apiService.accountTransfer(accountPaymentRequest)
+                Log.d("AccountTransfer", "Error body: $response")
                 if (response.isSuccessful) {
                     withContext(Dispatchers.Main) { onSuccess(response.body()!!) }
                 } else {
@@ -153,7 +155,9 @@ class RepositoryImpl @Inject constructor(
                             errorsList.add(errorArray?.getString(i) ?: "")
                         }
                     }
-
+                    Log.d("AccountTransfer", "Error body: $errorBody")
+                    Log.e("AccountTransfer", "Error body: $message")
+                    Log.e("AccountTransfer", "Error body: $errorsList")
                     withContext(Dispatchers.Main) { onError(ApiError(message, response.code(), "Transfer failed", errorsList)) }
                 }
             } catch (e: IOException) {

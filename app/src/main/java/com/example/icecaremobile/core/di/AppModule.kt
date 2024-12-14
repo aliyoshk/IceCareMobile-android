@@ -8,7 +8,6 @@ import com.example.icecaremobile.core.utils.Urls
 import com.example.icecaremobile.data.local.auth.AuthManagerImpl
 import com.example.icecaremobile.data.local.dataSource.AuthInterceptor
 import com.example.icecaremobile.data.local.dataSource.TokenManager
-import com.example.icecaremobile.data.provider.MockRepositoryProvider.MockRepository
 import com.example.icecaremobile.data.provider.RemoteRepositoryProvider.RemoteRepository
 import com.example.icecaremobile.data.provider.RepositoryProvider.IRepositoryProvider
 import com.example.icecaremobile.data.remote.dataSource.IApiService
@@ -21,10 +20,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -33,6 +29,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
     @Provides
     @Singleton
     fun provideApplicationContext(@ApplicationContext context: Context): Context = context
@@ -46,6 +43,7 @@ object AppModule {
     @Provides
     @Singleton
     fun provideTokenManager(sharedPreferences: SharedPreferences): TokenManager {
+        Log.d("Token preference", sharedPreferences.toString())
         return TokenManager(sharedPreferences)
     }
 
@@ -59,24 +57,10 @@ object AppModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(authInterceptor: AuthInterceptor): OkHttpClient {
-        // Create logging interceptor for debugging
-        val loggingInterceptor = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
-
+        Log.d("Initializing OkHttpClient", "Initializing OkHttpClient with $authInterceptor")
         return OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor) // Logs request and response bodies
-            .addInterceptor(authInterceptor)    // Handles authentication
-            .addNetworkInterceptor(object : Interceptor {
-                override fun intercept(chain: Interceptor.Chain): Response {
-                    val request: Request = chain.request().newBuilder()
-                        .addHeader("Accept", "application/json")
-                        .addHeader("Content-Type", "application/json")
-                        .addHeader("Connection", "close")
-                        .build()
-                    return chain.proceed(request)
-                }
-            })
+            .addInterceptor(authInterceptor)
+            .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
             .build()
     }
 
@@ -86,8 +70,8 @@ object AppModule {
         val isDebug = BuildConfig.DEBUG
         val useMockData = BuildConfig.USE_MOCK_DATA
         return if (isDebug && useMockData) {
-            MockRepository()
-            //RemoteRepository(tokenManager)
+            //MockRepository()
+            RemoteRepository(tokenManager)
         } else {
             RemoteRepository(tokenManager) // Assuming RemoteRepository needs Context
         }
@@ -100,14 +84,16 @@ object AppModule {
     @Provides
     @Singleton
     fun provideApi(retrofit: Retrofit): IApiService {
+        Log.e("Tukunnan", "OkHttpClient being used $retrofit")
         return retrofit.create(IApiService::class.java)
     }
 
     @Provides
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+        Log.e("OkHttpClient", "OkHttpClient being used $okHttpClient")
         return Retrofit.Builder()
-            .baseUrl(provideBaseUrl())
+            .baseUrl("https://ice-care-mobile-backend-d5fwe4asg9cwbnbd.southafricanorth-01.azurewebsites.net/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()
