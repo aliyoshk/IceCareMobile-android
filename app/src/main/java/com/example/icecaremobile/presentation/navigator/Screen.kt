@@ -55,7 +55,8 @@ class Screen
         val amount: String?,
         val dollarAmount: String?,
         val email: String? = null,
-        val dollarRate: String? = null
+        val dollarRate: String? = null,
+        val description: String? = null
     )
 
     @Serializable

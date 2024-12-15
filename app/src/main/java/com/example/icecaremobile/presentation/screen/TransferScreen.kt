@@ -70,7 +70,8 @@ fun TransferScreen(navController: NavHostController)
                                 selectedBankDetails?.accountNumber,
                                 enteredNairaAmount, enteredDollarAmount,
                                 email = userData?.email,
-                                dollarRate = userData?.dollarRate.toString()
+                                dollarRate = userData?.dollarRate.toString(),
+                                description = enteredPurpose
                             )
                         )
                     }

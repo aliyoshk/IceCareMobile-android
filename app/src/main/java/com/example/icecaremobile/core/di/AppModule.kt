@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import com.example.icecaremobile.BuildConfig
-import com.example.icecaremobile.core.utils.Urls
 import com.example.icecaremobile.data.local.auth.AuthManagerImpl
 import com.example.icecaremobile.data.local.dataSource.AuthInterceptor
 import com.example.icecaremobile.data.local.dataSource.TokenManager
@@ -37,27 +36,48 @@ object AppModule {
     @Provides
     @Singleton
     fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
+        Log.d("App Module Execution", "provideSharedPreferences ${context.getSharedPreferences("token_prefs", Context.MODE_PRIVATE)} ")
         return context.getSharedPreferences("token_prefs", Context.MODE_PRIVATE)
     }
 
     @Provides
     @Singleton
     fun provideTokenManager(sharedPreferences: SharedPreferences): TokenManager {
-        Log.d("Token preference", sharedPreferences.toString())
+        Log.d("App Module Execution", "provideTokenManager $sharedPreferences")
         return TokenManager(sharedPreferences)
     }
 
     @Provides
     @Singleton
     fun provideAuthInterceptor(tokenManager: TokenManager): AuthInterceptor {
-        Log.d("AuthInterceptor", tokenManager.toString())
+        Log.d("App Module Execution", "provideAuthInterceptor $tokenManager")
         return AuthInterceptor(tokenManager)
     }
 
     @Provides
     @Singleton
+    fun provideRepositoryProvider(apiService: ApiService, tokenManager: TokenManager): IRepositoryProvider {
+        val isDebug = BuildConfig.DEBUG
+        val useMockData = BuildConfig.USE_MOCK_DATA
+        return if (isDebug && useMockData) {
+            //MockRepository()
+            RemoteRepository(apiService, tokenManager)
+        } else {
+            RemoteRepository(apiService, tokenManager) // Assuming RemoteRepository needs Context
+        }
+    }
+
+    @Provides
+    @Singleton
+    fun provideApi(retrofit: Retrofit): IApiService {
+        Log.d("App Module Execution", "provideApi $retrofit")
+        return retrofit.create(IApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
     fun provideOkHttpClient(authInterceptor: AuthInterceptor): OkHttpClient {
-        Log.d("Initializing OkHttpClient", "Initializing OkHttpClient with $authInterceptor")
+        Log.d("App Module Execution", "provideOkHttpClient $authInterceptor")
         return OkHttpClient.Builder()
             .addInterceptor(authInterceptor)
             .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
@@ -66,32 +86,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRepositoryProvider(tokenManager: TokenManager): IRepositoryProvider {
-        val isDebug = BuildConfig.DEBUG
-        val useMockData = BuildConfig.USE_MOCK_DATA
-        return if (isDebug && useMockData) {
-            //MockRepository()
-            RemoteRepository(tokenManager)
-        } else {
-            RemoteRepository(tokenManager) // Assuming RemoteRepository needs Context
-        }
-    }
-
-    @Provides
-    @Singleton
-    fun provideBaseUrl() = Urls.BASE_URL
-
-    @Provides
-    @Singleton
-    fun provideApi(retrofit: Retrofit): IApiService {
-        Log.e("Tukunnan", "OkHttpClient being used $retrofit")
-        return retrofit.create(IApiService::class.java)
-    }
-
-    @Provides
-    @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        Log.e("OkHttpClient", "OkHttpClient being used $okHttpClient")
+        Log.d("App Module Execution", "provideRetrofit $okHttpClient")
         return Retrofit.Builder()
             .baseUrl("https://ice-care-mobile-backend-d5fwe4asg9cwbnbd.southafricanorth-01.azurewebsites.net/api/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -102,18 +98,21 @@ object AppModule {
     @Provides
     @Singleton
     fun provideRepository(apiService: ApiService, tokenManager: TokenManager): IRepository {
+        Log.d("App Module Execution", "provideRepository $apiService $tokenManager")
         return RepositoryImpl(apiService, tokenManager)
     }
 
     @Provides
     @Singleton
     fun provideApiService(api: IApiService): ApiService {
+        Log.d("App Module Execution", "provideApiService $api")
         return ApiService(api)
     }
 
     @Provides
     @Singleton
     fun provideAuthManager(@ApplicationContext context: Context): AuthManager {
+        Log.d("App Module Execution", "provideAuthManager $context")
         return AuthManagerImpl(context)
     }
 }
