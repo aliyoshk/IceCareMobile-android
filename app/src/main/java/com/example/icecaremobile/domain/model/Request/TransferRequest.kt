@@ -12,7 +12,9 @@ data class TransferRequest(
 
 data class BankDetail(
     val bankName: String,
-    val transferredAmount: Double
+    val transferredAmount: Double,
+    val accountName: String,
+    val accountNumber: String
 )
 
 data class TransferEvidence(

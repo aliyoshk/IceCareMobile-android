@@ -87,7 +87,9 @@ fun MultipleTransferScreen(navController: NavHostController) {
                     val bankDetails = selectedBanks.map { bank ->
                         BankDetail(
                             bankName = bank.bankName,
-                            transferredAmount = bankAmounts[bank.bankName]?.toDoubleOrNull() ?: 0.0
+                            transferredAmount = bankAmounts[bank.bankName]?.toDoubleOrNull() ?: 0.0,
+                            accountName = bank.accountName,
+                            accountNumber = bank.accountNumber
                         )
                     }
                     val transferEvidence = uploadedReceipts.mapNotNull { uri ->

@@ -3,7 +3,6 @@ package com.example.icecaremobile.presentation.screen
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Build
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
@@ -71,6 +70,8 @@ fun TransferSummaryScreen(
                             BankDetail(
                                 bankName = accounts.bankName ?: "",
                                 transferredAmount = accounts.amount?.toDoubleOrNull() ?: 0.0,
+                                accountNumber = accounts.accountNumber ?: "",
+                                accountName = accounts.accountName ?: ""
                             )
                         ),
                         transferEvidence = listOfNotNull(TransferEvidence(convertUriToBase64(context, receipt!!) ?: ""))
