@@ -121,12 +121,12 @@ class RepositoryImpl @Inject constructor(
                             errorsList.add(errorArray?.getString(i) ?: "")
                         }
                     }
-                    withContext(Dispatchers.Main) { onError(ApiError(message, response.code(), "Transfer failed", errorsList)) }
+                    withContext(Dispatchers.Main) { onError(ApiError(message, response.code(), "${response.code()}\n${response.message()}", errorsList)) }
                 }
             } catch (e: IOException) {
-                withContext(Dispatchers.Main) { onError(ApiError("Network error", 500, e.message)) }
+                withContext(Dispatchers.Main) { onError(ApiError(e.message, 500, "Network error")) }
             } catch (e: HttpException) {
-                withContext(Dispatchers.Main) { onError(ApiError("Server error", e.code(), e.message)) }
+                withContext(Dispatchers.Main) { onError(ApiError(e.message, e.code(), "Server error")) }
             }
         }
     }
