@@ -16,6 +16,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.icecaremobile.data.local.auth.AuthManagerImpl
 import com.example.icecaremobile.domain.model.Response.Response
+import com.example.icecaremobile.presentation.navigator.Screen
 import com.example.icecaremobile.presentation.ui.ConverterUI
 import com.example.icecaremobile.presentation.ui.component.AppTopBar
 
@@ -24,6 +25,14 @@ fun ConverterScreen(navController: NavHostController) {
 
     val authManager = AuthManagerImpl(LocalContext.current)
     var userData by remember { mutableStateOf<Response?>(null) }
+    var enteredAmount by remember { mutableStateOf("") }
+    val totalAmount by remember(enteredAmount) {
+        mutableStateOf(
+            if (enteredAmount.isNotEmpty()) {
+                enteredAmount.toDouble() * (userData?.dollarRate ?: 0.0)
+            } else 0.0
+        )
+    }
 
     LaunchedEffect(Unit) {
         userData = authManager.getLoginResponse()?.data
@@ -34,8 +43,15 @@ fun ConverterScreen(navController: NavHostController) {
         topBar = { AppTopBar("Calculator") }
     ) { padding ->
 
+
+
         ConverterUI(
-            modifier = Modifier.padding(padding)
+            modifier = Modifier.padding(padding),
+            dollarRate = userData?.dollarRate.toString(),
+            amountEntered = { enteredAmount = it },
+            onCancelPress = { navController.navigateUp() },
+            onProceedClick = { navController.navigate(Screen.SendMoneyScreen) },
+            total = totalAmount
         )
     }
 }

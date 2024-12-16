@@ -27,7 +27,7 @@ import com.example.icecaremobile.ui.theme.AppGolden
 @Composable
 fun AppTextField(
     enteredValue: (String) -> Unit,
-    label: String,
+    label: String = "",
     startIcon: Painter? = null,
     endIcon: Painter? = null,
     keyboardType: KeyboardType = KeyboardType.Text,

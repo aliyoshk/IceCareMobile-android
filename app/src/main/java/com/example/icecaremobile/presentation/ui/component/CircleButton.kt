@@ -16,8 +16,7 @@ import com.example.icecaremobile.ui.theme.AppGolden
 import com.example.icecaremobile.ui.theme.IceCareMobileTheme
 
 @Composable
-fun CircleButton(onClick: () -> Unit)
-{
+fun CircleButton(onClick: () -> Unit) {
     Image(
         painter = painterResource(id = R.drawable.ic_arrow_forward),
         contentDescription = null,
