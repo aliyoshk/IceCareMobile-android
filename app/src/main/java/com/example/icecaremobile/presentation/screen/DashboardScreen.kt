@@ -55,15 +55,11 @@ fun DashboardScreen(navController: NavHostController)
             dollarRate = dollarRate,
             balance = balance,
             onConverterClick = { navController.navigate(Screen.ConverterScreen) },
-            onRemitStatusClick = {
-                navController.navigate(Screen.RemitStatusScreen("isRemitStatus"))
-            },
-            onTransferStatusClick = {
-                navController.navigate(Screen.RemitStatusScreen("isTransferStatus"))
-            },
+            onRemitStatusClick = { navController.navigate(Screen.RemitStatusScreen("isRemitStatus")) },
+            onTransferStatusClick = { navController.navigate(Screen.StatusScreen) },
             onTransferMoneyClick = { navController.navigate(Screen.SendMoneyScreen) },
             onTopUpClick = { navController.navigate(Screen.SendMoneyScreen) },
-            onViewHistoryClick = {  },
+            onViewHistoryClick = { navController.navigate(Screen.TransactionHistoryScreen)  },
             notification = false
         )
     }

@@ -39,8 +39,7 @@ fun RegistrationScreen(navController: NavHostController)
         topBar = {
             AppTopBar(title = "")
         }
-    )
-    { padding ->
+    ) { padding ->
         val context = LocalContext.current
         var buttonClick by remember { mutableStateOf(false) }
         var name by remember { mutableStateOf("") }

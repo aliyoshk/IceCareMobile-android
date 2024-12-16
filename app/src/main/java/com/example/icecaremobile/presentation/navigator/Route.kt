@@ -17,8 +17,10 @@ import com.example.icecaremobile.presentation.screen.MultipleTransferScreen
 import com.example.icecaremobile.presentation.screen.RegistrationScreen
 import com.example.icecaremobile.presentation.screen.RemitStatusScreen
 import com.example.icecaremobile.presentation.screen.SendMoneyScreen
+import com.example.icecaremobile.presentation.screen.StatusScreen
 import com.example.icecaremobile.presentation.screen.SubmissionScreen
 import com.example.icecaremobile.presentation.screen.ThirdPartyTransferScreen
+import com.example.icecaremobile.presentation.screen.TransactionHistoryScreen
 import com.example.icecaremobile.presentation.screen.TransferScreen
 import com.example.icecaremobile.presentation.screen.TransferSummaryScreen
 
@@ -76,6 +78,12 @@ fun Route()
         }
         composable<Screen.ConverterScreen> {
             ConverterScreen(navController)
+        }
+        composable<Screen.TransactionHistoryScreen> {
+            TransactionHistoryScreen(navController)
+        }
+        composable<Screen.StatusScreen> {
+            StatusScreen(navController)
         }
     }
 }

@@ -563,7 +563,7 @@ fun DashboardSection5(onViewHistoryClick: () -> Unit)
                     .align(Alignment.Center)
             ){
                 Image(
-                    painter = painterResource(R.drawable.ic_history),
+                    painter = painterResource(R.drawable.ic_transfer_history),
                     contentDescription = null
                 )
 
