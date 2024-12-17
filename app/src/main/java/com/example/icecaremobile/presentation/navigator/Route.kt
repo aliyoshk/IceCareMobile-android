@@ -14,6 +14,7 @@ import com.example.icecaremobile.presentation.screen.DashboardScreen
 import com.example.icecaremobile.presentation.screen.LandingScreen
 import com.example.icecaremobile.presentation.screen.LoginScreen
 import com.example.icecaremobile.presentation.screen.MultipleTransferScreen
+import com.example.icecaremobile.presentation.screen.ReceiptScreen
 import com.example.icecaremobile.presentation.screen.RegistrationScreen
 import com.example.icecaremobile.presentation.screen.RemitStatusScreen
 import com.example.icecaremobile.presentation.screen.SendMoneyScreen
@@ -84,6 +85,9 @@ fun Route()
         }
         composable<Screen.StatusScreen> {
             StatusScreen(navController)
+        }
+        composable<Screen.ReceiptScreen> {
+            ReceiptScreen(navController)
         }
     }
 }

@@ -125,8 +125,9 @@ fun HistoryListItem(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .padding(top = 4.dp, bottom = 5.dp)
-            .background(color = Color.LightGray.copy(0.4f), shape = RoundedCornerShape(8.dp))
+            .padding(top = 5.dp, bottom = 5.dp)
+            .background(color = Color.Gray.copy(0.1f), shape = RoundedCornerShape(8.dp))
+            .padding(top = 10.dp, bottom = 10.dp)
             .clickable { onclick() }
     ) {
         ConstraintLayout(
@@ -144,7 +145,8 @@ fun HistoryListItem(
                 modifier = Modifier
                     .size(30.dp)
                     .constrainAs(image) {
-                        top.linkTo(parent.top, 20.dp)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
                         start.linkTo(parent.start, margin = 5.dp)
                     },
                 colorFilter = ColorFilter.tint(DarkGolden)
@@ -154,7 +156,7 @@ fun HistoryListItem(
                 text = headings,
                 Modifier.constrainAs(heading) {
                     top.linkTo(parent.top, 5.dp)
-                    start.linkTo(image.end, margin = 15.dp)
+                    start.linkTo(image.end, margin = 20.dp)
                     end.linkTo(amount.start, margin = 10.dp)
                     width = androidx.constraintlayout.compose.Dimension.fillToConstraints
                 },
@@ -166,8 +168,9 @@ fun HistoryListItem(
                 text = amounts,
                 Modifier.constrainAs(amount) {
                     top.linkTo(parent.top, 5.dp)
-                    start.linkTo(heading.end)
+                    start.linkTo(heading.end, 70.dp)
                     end.linkTo(parent.end, margin = 10.dp)
+                    width = androidx.constraintlayout.compose.Dimension.fillToConstraints
                 },
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold
@@ -176,7 +179,7 @@ fun HistoryListItem(
             Text(
                 text = descriptions,
                 Modifier.constrainAs(desc) {
-                    top.linkTo(heading.bottom)
+                    top.linkTo(heading.bottom, 10.dp)
                     start.linkTo(heading.start)
                     end.linkTo(heading.end)
                     width = androidx.constraintlayout.compose.Dimension.fillToConstraints
@@ -188,7 +191,7 @@ fun HistoryListItem(
             Text(
                 text = dates,
                 Modifier.constrainAs(date) {
-                    top.linkTo(amount.bottom)
+                    top.linkTo(amount.bottom, 10.dp)
                     start.linkTo(amount.start)
                     end.linkTo(parent.end, 10.dp)
                     width = androidx.constraintlayout.compose.Dimension.fillToConstraints

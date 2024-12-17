@@ -38,7 +38,7 @@ fun StatusUI(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        var x = "Pendin"
+        var x = "Pending"
         if (x == "Pending") {
 
             Spacer(Modifier.weight(1f))

@@ -7,25 +7,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.example.icecaremobile.presentation.navigator.Screen
-import com.example.icecaremobile.presentation.ui.TransactionHistoryUI
+import com.example.icecaremobile.presentation.ui.ReceiptUI
 import com.example.icecaremobile.presentation.ui.component.AppTopBar
 
+
 @Composable
-fun TransactionHistoryScreen(
+fun ReceiptScreen(
     navController: NavController
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            AppTopBar(title = "Transaction History", navigateBack = { navController.navigateUp() })
+            AppTopBar(navigateBack = { navController.navigateUp() })
         }
     ) { padding ->
 
-        TransactionHistoryUI(
+        ReceiptUI(
             modifier = Modifier.padding(padding),
-            searchText = {},
-            selectedItem = {},
-            onClick = { navController.navigate(Screen.ReceiptScreen) }
+            goToDashboard = { navController.navigate(Screen.DashboardScreen) },
+            downloadReceipt = {}
         )
     }
 }

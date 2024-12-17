@@ -83,6 +83,9 @@ class Screen
     @Serializable
     object StatusScreen
 
+    @Serializable
+    object ReceiptScreen
+
     object GetHelpScreen
     object FundAccountScreen
     object TransferReceiptScreen
