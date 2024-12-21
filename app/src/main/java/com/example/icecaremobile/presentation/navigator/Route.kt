@@ -3,8 +3,10 @@ package com.example.icecaremobile.presentation.navigator
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -42,10 +44,11 @@ fun Route() {
                 navController = navController
             )
         }
-    ) {
+    ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.LandingScreen
+            startDestination = Screen.LandingScreen,
+            modifier = Modifier.padding(innerPadding)
         ) {
             composable<Screen.LandingScreen> {
                 LandingScreen(navController)

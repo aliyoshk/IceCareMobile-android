@@ -47,7 +47,7 @@ fun ChatUI(
         Spacer(Modifier.height(50.dp))
 
         Text(
-            text = "Coming Soon",
+            text = "Not available at the moment",
             color = DarkGolden,
             fontSize = 25.sp
         )

@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.icecaremobile.R
 import com.example.icecaremobile.core.utils.Helpers
+import com.example.icecaremobile.domain.model.Response.AccountDetails
 import com.example.icecaremobile.domain.model.Response.TransactionHistory
 import com.example.icecaremobile.presentation.ui.component.AppButton
 import com.example.icecaremobile.ui.theme.DarkGolden
@@ -48,8 +49,7 @@ fun ReceiptUI(
     Column(
         modifier = modifier
             .padding(10.dp)
-            .fillMaxSize()
-            .padding(bottom = 50.dp),
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
@@ -80,21 +80,21 @@ fun ReceiptUI(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(end = 10.dp)
+                .padding(end = 5.dp)
                 .background(LightGolden.copy(0.3f))
-                .padding(20.dp),
+                .padding(15.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = "Transaction Date:",
-                fontSize = 16.sp,
+                fontSize = 14.sp,
                 color = DarkGolden
             )
 
             Text(
                 text = data?.transactionDate ?: "",
-                fontSize = 16.sp,
+                fontSize = 14.sp,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -134,7 +134,7 @@ fun ReceiptUI(
             textAlign = TextAlign.Center
         )
 
-        Spacer(Modifier.height(20.dp))
+        Spacer(Modifier.height(15.dp))
     }
 }
 
@@ -201,7 +201,7 @@ fun ReceiptListItem(
         Text(
             modifier = Modifier
                 .constrainAs(amountInWordsTextRef) {
-                    top.linkTo(amountTextRef.bottom, 20.dp)
+                    top.linkTo(amountRef.bottom, 20.dp)
                     start.linkTo(parent.start)
                 },
             text = "Amount in words:",
@@ -222,7 +222,7 @@ fun ReceiptListItem(
         Text(
             modifier = Modifier
                 .constrainAs(acctNumberTextRef) {
-                    top.linkTo(amountInWordsTextRef.bottom, 20.dp)
+                    top.linkTo(amountInWordsRef.bottom, 20.dp)
                     start.linkTo(parent.start)
                 },
             text = "Account Number:",
@@ -243,7 +243,7 @@ fun ReceiptListItem(
         Text(
             modifier = Modifier
                 .constrainAs(acctNameTextRef) {
-                    top.linkTo(acctNumberTextRef.bottom, 20.dp)
+                    top.linkTo(acctNumberRef.bottom, 20.dp)
                     start.linkTo(parent.start)
                 },
             text = "Account Name:",
@@ -264,7 +264,7 @@ fun ReceiptListItem(
         Text(
             modifier = Modifier
                 .constrainAs(bankNameTextRef) {
-                    top.linkTo(acctNameTextRef.bottom, 20.dp)
+                    top.linkTo(acctNameRef.bottom, 20.dp)
                     start.linkTo(parent.start)
                 },
             text = "Bank:",
@@ -277,7 +277,6 @@ fun ReceiptListItem(
                     top.linkTo(acctNameRef.bottom, 20.dp)
                     start.linkTo(acctNameRef.start)
                     end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom, 25.dp)
                     width = androidx.constraintlayout.compose.Dimension.fillToConstraints
                 },
             text = bankName
@@ -289,5 +288,25 @@ fun ReceiptListItem(
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
 fun ReceiptUIPreview() {
-    ReceiptUI(data = null, goToDashboard = {}, downloadReceipt = {})
+    var data = TransactionHistory(
+        totalAmount = "+50000",
+        description = "0221345675",
+        transactionDate = "04/Dec/2023",
+        category = "Fund Account",
+        accountDetails = listOf(
+            AccountDetails(
+                amount = "1100000000000",
+                accountNumber = "0221345675",
+                accountName = "Ice Care Nig Ltd",
+                bankName = "Providus Bank"
+            ),
+            AccountDetails(
+                amount = "50000",
+                accountNumber = "21342213211",
+                accountName = "Ice Care Nig Ltd",
+                bankName = "United bank For Africa"
+            )
+        )
+    )
+    ReceiptUI(data = data, goToDashboard = {}, downloadReceipt = {})
 }

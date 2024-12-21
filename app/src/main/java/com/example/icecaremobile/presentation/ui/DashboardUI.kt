@@ -255,70 +255,6 @@ fun DashboardCard(
                         }
                 )
             }
-
-            /*Column(
-                modifier = Modifier.wrapContentHeight()
-            ) {
-                Row {
-                    Text(
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 22.sp,
-                        text = "Hi, $name",
-                    )
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    Text(
-                        modifier = Modifier
-                            .padding(end = 20.dp),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 22.sp,
-                        text = "Dollar Rate",
-                    )
-                }
-
-                Row(
-                    modifier = Modifier
-                        .padding(top = 5.dp)
-                        .fillMaxWidth()
-                ) {
-                    Text(
-                        modifier = Modifier
-                            .wrapContentWidth(),
-                        fontWeight = FontWeight.Light,
-                        fontSize = 18.sp,
-                        text = acctNumber,
-                    )
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    Text(
-                        modifier = Modifier
-                            .wrapContentWidth(Alignment.Start),
-                        fontWeight = FontWeight.Light,
-                        fontSize = 18.sp,
-                        text = "N$dollarRate",
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                Text(
-                    modifier = Modifier.padding(end = 50.dp),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 22.sp,
-                    text = "Balance",
-                )
-
-                Spacer(modifier = Modifier.height(5.dp))
-
-                Text(
-                    modifier = Modifier.padding(end = 50.dp),
-                    fontWeight = FontWeight.Light,
-                    fontSize = 18.sp,
-                    text = "N$balance",
-                )
-            }*/
         }
     }
 }
@@ -574,7 +510,6 @@ fun DashboardSection5(onViewHistoryClick: () -> Unit)
                 )
             }
         }
-
     }
 }
 
@@ -596,11 +531,4 @@ fun DashboardUIPreview()
         onRemitStatusClick = {},
         onViewHistoryClick = {}
     )
-
-//    DashboardCard(
-//        name = "Isa",
-//        acctNumber = "01234567890",
-//        dollarRate = 1375.54,
-//        balance = 756983.0
-//    )
 }

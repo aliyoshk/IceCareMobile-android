@@ -8,27 +8,20 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.icecaremobile.domain.model.Response.TransactionHistory
 import com.example.icecaremobile.presentation.navigator.Screen
 import com.example.icecaremobile.presentation.ui.ReceiptUI
-import com.example.icecaremobile.presentation.ui.component.AppTopBar
 import com.example.icecaremobile.presentation.ui.component.generateReceiptPDF
-import com.example.icecaremobile.presentation.viewmodel.TransactionViewModel
 
 
 @Composable
 fun ReceiptScreen(
     navController: NavController,
-    viewModel: TransactionViewModel = hiltViewModel(),
     transactionHistory: TransactionHistory
 ) {
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            AppTopBar(navigateBack = { navController.navigateUp() })
-        }
+        modifier = Modifier.fillMaxSize()
     ) { padding ->
         val context = LocalContext.current
 
