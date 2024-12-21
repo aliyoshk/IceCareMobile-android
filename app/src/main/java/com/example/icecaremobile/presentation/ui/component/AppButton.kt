@@ -35,8 +35,7 @@ fun AppButton(title: String, onClick: () -> Unit, painterResource: Int = 0)
             .fillMaxWidth()
             .height(90.dp)
             .padding(20.dp)
-    )
-    {
+    ) {
         Text(
             text = title,
             fontSize = 16.sp,

@@ -10,6 +10,7 @@ import com.example.icecaremobile.domain.model.Request.ThirdPartyRequest
 import com.example.icecaremobile.domain.model.Request.TransferRequest
 import com.example.icecaremobile.domain.model.Response.LoginResponse
 import com.example.icecaremobile.domain.model.Response.RegistrationResponse
+import com.example.icecaremobile.domain.model.Response.TransactionHistoryResponse
 import com.example.icecaremobile.domain.model.Response.TransferResponse
 import com.example.icecaremobile.domain.model.network.ApiError
 import com.example.icecaremobile.domain.repository.IRepository
@@ -25,8 +26,8 @@ import javax.inject.Inject
 class RepositoryImpl @Inject constructor(
     private val apiService: ApiService,
     private val tokenManager: TokenManager
-) : IRepository
-{
+) : IRepository {
+
     // Registration block
     override suspend fun registration(
         registrationRequest: RegistrationRequest,
@@ -193,6 +194,71 @@ class RepositoryImpl @Inject constructor(
                     }
 
                     withContext(Dispatchers.Main) { onError(ApiError(message, response.code(), "Transfer failed", errorsList)) }
+                }
+            } catch (e: IOException) {
+                withContext(Dispatchers.Main) { onError(ApiError("Network error", 500, e.message)) }
+            } catch (e: HttpException) {
+                withContext(Dispatchers.Main) { onError(ApiError("Server error", e.code(), e.message)) }
+            }
+        }
+    }
+
+    override suspend fun getTransferStatus(
+        email: String,
+        onSuccess: (TransferResponse) -> Unit,
+        onError: (ApiError) -> Unit
+    ) {
+        CoroutineScope(Dispatchers.IO).launch{
+            try {
+                val response = apiService.getTransferStatus(email)
+                if (response.isSuccessful) {
+                    withContext(Dispatchers.Main) { onSuccess(response.body()!!) }
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    val json = try { JSONObject(errorBody?: "{}") } catch (e: Exception) { JSONObject() }
+                    val message = json.optString("message")
+                    val errorsJson = json.optJSONObject("errors")
+                    val errorsList = mutableListOf<String>()
+                    errorsJson?.keys()?.forEach { key ->
+                        val errorArray = errorsJson.optJSONArray(key)
+                        for (i in 0 until (errorArray?.length() ?: 0)) {
+                            errorsList.add(errorArray?.getString(i) ?: "")
+                        }
+                    }
+
+                    withContext(Dispatchers.Main) { onError(ApiError(message, response.code(), "Failed to fetch records", errorsList)) }
+                }
+            } catch (e: IOException) {
+                withContext(Dispatchers.Main) { onError(ApiError("Network error", 500, e.message)) }
+            } catch (e: HttpException) {
+                withContext(Dispatchers.Main) { onError(ApiError("Server error", e.code(), e.message)) }
+            }
+        }
+    }
+
+    override suspend fun getTransactionHistory(
+        email: String,
+        onSuccess: (TransactionHistoryResponse) -> Unit,
+        onError: (ApiError) -> Unit
+    ) {
+        CoroutineScope(Dispatchers.IO).launch{
+            try {
+                val response = apiService.getTransactionHistory(email)
+                if (response.isSuccessful) {
+                    withContext(Dispatchers.Main) { onSuccess(response.body()!!) }
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    val json = try { JSONObject(errorBody?: "{}") } catch (e: Exception) { JSONObject() }
+                    val message = json.optString("message")
+                    val errorsJson = json.optJSONObject("errors")
+                    val errorsList = mutableListOf<String>()
+                    errorsJson?.keys()?.forEach { key ->
+                        val errorArray = errorsJson.optJSONArray(key)
+                        for (i in 0 until (errorArray?.length() ?: 0)) {
+                            errorsList.add(errorArray?.getString(i) ?: "")
+                        }
+                    }
+                    withContext(Dispatchers.Main) { onError(ApiError(message, response.code(), "Failed to fetch records", errorsList)) }
                 }
             } catch (e: IOException) {
                 withContext(Dispatchers.Main) { onError(ApiError("Network error", 500, e.message)) }

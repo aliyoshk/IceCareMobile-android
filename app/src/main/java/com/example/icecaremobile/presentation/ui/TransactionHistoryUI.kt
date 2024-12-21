@@ -39,16 +39,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.icecaremobile.R
+import com.example.icecaremobile.core.utils.Helpers
+import com.example.icecaremobile.domain.model.Response.TransactionHistory
 import com.example.icecaremobile.ui.theme.DarkGolden
 
 @Composable
 fun TransactionHistoryUI(
     modifier: Modifier = Modifier,
     searchText: (String) -> Unit,
-    selectedItem: (String) -> Unit,
-    onClick: () -> Unit
+    onItemSelection: (TransactionHistory) -> Unit,
+    historyData: List<TransactionHistory>
 ) {
     var searchQuery by remember { mutableStateOf(TextFieldValue()) }
+    val filteredHistory = remember(historyData, searchQuery.text) {
+        historyData.filter { transaction ->
+            transaction.category.lowercase().contains(searchQuery.text.lowercase()) ||
+                    transaction.description.lowercase().contains(searchQuery.text.lowercase()) ||
+                    transaction.totalAmount.lowercase().contains(searchQuery.text.lowercase()) ||
+                    transaction.transactionDate.lowercase().contains(searchQuery.text.lowercase())
+        }
+    }
 
     Column(
         modifier = modifier
@@ -89,24 +99,16 @@ fun TransactionHistoryUI(
 
         Spacer(Modifier.height(20.dp))
 
-        val items = listOf(
-            Triple("Third Party Transfer", "UBA | 0123456789", "-78000"),
-            Triple("Fund Account", "0221345675", "+50000"),
-            Triple("Fund Transfer", "01834634643 - Ice Care Nig ltd", "+50000"),
-        )
-
         LazyColumn {
-            items(items.count()
+            items(filteredHistory.count()
             ) { index ->
+                val item = filteredHistory[index]
                 HistoryListItem(
-                    headings = items[index].first,
-                    descriptions = items[index].second,
-                    amounts = items[index].third,
-                    dates = "04/Mar/2023",
-                    onclick = {
-                        onClick()
-                        selectedItem(items[index].second)
-                    }
+                    headings = item.category,
+                    descriptions = item.description,
+                    amounts = item.totalAmount,
+                    dates = item.transactionDate,
+                    onSelect = { onItemSelection(item) }
                 )
             }
         }
@@ -119,7 +121,7 @@ fun HistoryListItem(
     descriptions: String,
     amounts: String,
     dates: String,
-    onclick: () -> Unit
+    onSelect: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -128,7 +130,7 @@ fun HistoryListItem(
             .padding(top = 5.dp, bottom = 5.dp)
             .background(color = Color.Gray.copy(0.1f), shape = RoundedCornerShape(8.dp))
             .padding(top = 10.dp, bottom = 10.dp)
-            .clickable { onclick() }
+            .clickable { onSelect() }
     ) {
         ConstraintLayout(
             modifier = Modifier
@@ -165,7 +167,7 @@ fun HistoryListItem(
             )
 
             Text(
-                text = amounts,
+                text = Helpers.formatAmountToCurrency(amounts.toDouble()),
                 Modifier.constrainAs(amount) {
                     top.linkTo(parent.top, 5.dp)
                     start.linkTo(heading.end, 70.dp)
@@ -173,7 +175,8 @@ fun HistoryListItem(
                     width = androidx.constraintlayout.compose.Dimension.fillToConstraints
                 },
                 style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = if (amounts.toDouble() < 0) Color.Red else Color.Green,
             )
 
             Text(
@@ -206,5 +209,5 @@ fun HistoryListItem(
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
 fun TransactionHistoryUIPreview() {
-    TransactionHistoryUI(searchText = {}, selectedItem = {}, onClick = {})
+    TransactionHistoryUI(searchText = {}, onItemSelection = {}, historyData = listOf())
 }

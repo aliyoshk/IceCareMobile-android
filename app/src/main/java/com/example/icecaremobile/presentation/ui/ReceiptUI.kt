@@ -30,6 +30,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.icecaremobile.R
+import com.example.icecaremobile.core.utils.Helpers
+import com.example.icecaremobile.domain.model.Response.TransactionHistory
 import com.example.icecaremobile.presentation.ui.component.AppButton
 import com.example.icecaremobile.ui.theme.DarkGolden
 import com.example.icecaremobile.ui.theme.LightGolden
@@ -38,6 +40,7 @@ import com.example.icecaremobile.ui.theme.LightGolden
 @Composable
 fun ReceiptUI(
     modifier: Modifier = Modifier,
+    data: TransactionHistory?,
     goToDashboard: () -> Unit,
     downloadReceipt: () -> Unit
 ) {
@@ -90,7 +93,7 @@ fun ReceiptUI(
             )
 
             Text(
-                text = "03-Jan-2022",
+                text = data?.transactionDate ?: "",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -98,24 +101,23 @@ fun ReceiptUI(
 
         Spacer(Modifier.height(20.dp))
 
-        val items = listOf(
-            Triple("Third Party Transfer", "UBA | 0123456789", "-78000"),
-            Triple("Fund Account", "0221345675", "+50000"),
-            Triple("Fund Transfer", "01834634643 - Ice Care Nig ltd", "+50000"),
-        )
 
-        LazyColumn(
-            modifier = Modifier.weight(1f)
-        ) {
-            items(items.count()
-            ) { index ->
-                ReceiptListItem(
-                    "NGN 50,000.00",
-                    "",
-                    "",
-                    "",
-                    ""
-                )
+        if (data?.accountDetails?.size!! > 0) {
+            LazyColumn(
+                modifier = Modifier.weight(1f)
+            ) {
+                items(
+                    data.accountDetails.count()
+                ) { index ->
+                    val item = data.accountDetails[index]
+                    ReceiptListItem(
+                        item.amount,
+                        item.amount,
+                        item.accountNumber,
+                        item.accountName,
+                        item.bankName
+                    )
+                }
             }
         }
 
@@ -193,7 +195,7 @@ fun ReceiptListItem(
                     end.linkTo(parent.end)
                     width = androidx.constraintlayout.compose.Dimension.fillToConstraints
                 },
-            text = "NGN 50,000.00"
+            text = Helpers.formatAmountToCurrency(amount.toDouble())
         )
 
         Text(
@@ -214,7 +216,7 @@ fun ReceiptListItem(
                     end.linkTo(parent.end)
                     width = androidx.constraintlayout.compose.Dimension.fillToConstraints
                 },
-            text = "Fifty Thousand Naira Only"
+            text = Helpers.convertAmountToWords(amountInWords.toDouble())
         )
 
         Text(
@@ -235,7 +237,7 @@ fun ReceiptListItem(
                     end.linkTo(parent.end)
                     width = androidx.constraintlayout.compose.Dimension.fillToConstraints
                 },
-            text = "21342213211"
+            text = acctNumber
         )
 
         Text(
@@ -256,7 +258,7 @@ fun ReceiptListItem(
                     end.linkTo(parent.end)
                     width = androidx.constraintlayout.compose.Dimension.fillToConstraints
                 },
-            text = "Ice Care Nig Ltd"
+            text = acctName
         )
 
         Text(
@@ -278,7 +280,7 @@ fun ReceiptListItem(
                     bottom.linkTo(parent.bottom, 25.dp)
                     width = androidx.constraintlayout.compose.Dimension.fillToConstraints
                 },
-            text = "United bank For Africa"
+            text = bankName
         )
     }
 }
@@ -287,5 +289,5 @@ fun ReceiptListItem(
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
 fun ReceiptUIPreview() {
-    ReceiptUI(goToDashboard = {}, downloadReceipt = {})
+    ReceiptUI(data = null, goToDashboard = {}, downloadReceipt = {})
 }

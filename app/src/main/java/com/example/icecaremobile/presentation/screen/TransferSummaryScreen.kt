@@ -39,7 +39,9 @@ import java.time.LocalDate
 fun TransferSummaryScreen(
     navController: NavHostController, accounts: Screen.TransferSummaryScreen
 ) {
-    Scaffold(topBar = { AppTopBar(title = "Transfer Summary") }) { padding ->
+    Scaffold(
+        topBar = { AppTopBar(title = "Transfer Summary"){ navController.navigateUp() }}
+    ) { padding ->
 
         val context = LocalContext.current
         val paymentViewModel: PaymentViewModel = hiltViewModel()

@@ -7,10 +7,13 @@ import com.example.icecaremobile.domain.model.Request.ThirdPartyRequest
 import com.example.icecaremobile.domain.model.Request.TransferRequest
 import com.example.icecaremobile.domain.model.Response.LoginResponse
 import com.example.icecaremobile.domain.model.Response.RegistrationResponse
+import com.example.icecaremobile.domain.model.Response.TransactionHistoryResponse
 import com.example.icecaremobile.domain.model.Response.TransferResponse
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface IApiService
 {
@@ -28,5 +31,14 @@ interface IApiService
 
     @POST("user/thirdPartyPayment")
     suspend fun thirdPartyTransfer(@Body thirdPartyRequest: ThirdPartyRequest): Response<TransferResponse>
+
+    @GET("user/checkTransferStatus")
+    suspend fun checkTransferStatus(@Query("email") email: String): Response<TransferResponse>
+
+    @GET("user/getTransactionHistory")
+    suspend fun getTransactionHistory(@Query("email") email: String): Response<TransactionHistoryResponse>
+
+//    @GET("User/CheckRemitStatus/email={email}")
+//    suspend fun checkRemitStatus(@Path("email") email: String): Response<TransferResponse>
 }
 

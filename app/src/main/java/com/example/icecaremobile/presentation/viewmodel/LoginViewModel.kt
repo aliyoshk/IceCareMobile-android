@@ -19,15 +19,8 @@ class LoginViewModel @Inject constructor(
     private val _loginResponse = MutableStateFlow<LoginResponseState>(LoginResponseState.Loading)
     val loginResponse: StateFlow<LoginResponseState> = _loginResponse
 
-    fun login(loginRequest: LoginRequest) {
-        if (loginRequest.email.isEmpty() || loginRequest.password.isEmpty()) {
-            _loginResponse.value = LoginResponseState.Error("All fields are required.")
-            return
-        }
-        proceedToLogin(loginRequest)
-    }
 
-    private fun proceedToLogin(loginRequest: LoginRequest) {
+    fun login(loginRequest: LoginRequest) {
         viewModelScope.launch {
             _loginResponse.value = LoginResponseState.Loading
             getLoginUseCase(

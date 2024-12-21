@@ -1,7 +1,6 @@
 package com.example.icecaremobile.presentation.screen
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -17,13 +16,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.icecaremobile.core.utils.Helpers
 import com.example.icecaremobile.data.remote.entity.LoginResponseState
 import com.example.icecaremobile.domain.model.Request.LoginRequest
 import com.example.icecaremobile.presentation.navigator.Screen
 import com.example.icecaremobile.presentation.ui.LoginUI
 import com.example.icecaremobile.presentation.ui.component.AcceptDialog
 import com.example.icecaremobile.presentation.ui.component.AppLoader
-import com.example.icecaremobile.presentation.ui.component.AppTopBar
 import com.example.icecaremobile.presentation.viewmodel.LoginViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -35,9 +34,10 @@ fun LoginScreen(navController: NavHostController) {
     var buttonClick by remember { mutableStateOf(false) }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var fieldErrors by remember { mutableStateOf(mapOf<String, String>()) }
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(), topBar = { AppTopBar(title = "Login") }
+        modifier = Modifier.fillMaxSize()
     ) { padding ->
 
         LoginUI(
@@ -47,14 +47,34 @@ fun LoginScreen(navController: NavHostController) {
             onSignUpClick = { navController.navigate(Screen.RegistrationScreen) },
             onForgotPasswordClick = {},
             btnLogin = {
-                viewModel.login(LoginRequest(email, password))
-                buttonClick = true
-            }
+                val request = LoginRequest(email, password)
+                val errors = validateRequest(request).toMutableMap()
+                if (errors.isEmpty()) {
+                    viewModel.login(request)
+                    buttonClick = true
+                } else
+                    fieldErrors = errors
+            },
+            isError = { fieldErrors }
         )
 
         if (buttonClick)
             LoginResponseHandler(response, navController)
     }
+}
+
+private fun validateRequest(request: LoginRequest): Map<String, String> {
+    val errors = mutableMapOf<String, String>()
+    if (request.email.isEmpty()) {
+        errors["email"] = "Email is required."
+    }
+    if (request.email.isNotEmpty() && Helpers.validateEmail(request.email).not()) {
+        errors["email"] = "Enter a valid email"
+    }
+    if (request.password.isEmpty()) {
+        errors["password"] = "Password is required."
+    }
+    return errors
 }
 
 @Composable
@@ -70,10 +90,6 @@ fun LoginResponseHandler(
         }
         is LoginResponseState.Success -> {
             LaunchedEffect(Unit) {
-                Log.d("LoginResponseHandler", "Success")
-                Log.d("LoginResponseHandler", response.loginResponse.message)
-                Log.d("LoginResponseHandler", response.loginResponse.toString())
-                val message = response.loginResponse.message
                 navController.navigate( Screen.DashboardScreen )
             }
         }

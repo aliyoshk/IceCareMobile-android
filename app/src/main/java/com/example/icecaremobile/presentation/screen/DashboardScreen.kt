@@ -1,6 +1,7 @@
 package com.example.icecaremobile.presentation.screen
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -16,7 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.icecaremobile.data.local.auth.AuthManagerImpl
-import com.example.icecaremobile.domain.model.Response.LoginResponse
+import com.example.icecaremobile.domain.model.Response.LoginResponseData
 import com.example.icecaremobile.presentation.navigator.Screen
 import com.example.icecaremobile.presentation.ui.DashboardUI
 
@@ -26,42 +27,38 @@ import com.example.icecaremobile.presentation.ui.DashboardUI
 fun DashboardScreen(navController: NavHostController)
 {
     val authManager = AuthManagerImpl(LocalContext.current)
-    var loginResponse by remember { mutableStateOf<LoginResponse?>(null) }
+    var loginResponse by remember { mutableStateOf<LoginResponseData?>(null) }
 
     LaunchedEffect(Unit) {
-        loginResponse = authManager.getLoginResponse()
+        loginResponse = authManager.getLoginResponse()?.data
     }
 
     Scaffold(
         Modifier.fillMaxSize()
     ){ padding ->
 
-        var name by remember { mutableStateOf("") }
-        var acctNumber by remember { mutableStateOf("") }
-        var dollarRate by remember { mutableStateOf("") }
-        var balance by remember { mutableStateOf("") }
+        Log.e("DashboardScreen", "Dashboard launched successful")
 
-        loginResponse?.let {
-            name = it.data.fullName
-            acctNumber = it.data.accountNumber
-            dollarRate = it.data.dollarRate.toString()
-            balance = it.data.accountBalance
+        if (loginResponse == null) {
+            Log.e("DashboardScreen", "Login response is null")
+            return@Scaffold
         }
-
-        DashboardUI(
-            modifier = Modifier.padding(padding),
-            name = name,
-            acctNumber = acctNumber,
-            dollarRate = dollarRate,
-            balance = balance,
-            onConverterClick = { navController.navigate(Screen.ConverterScreen) },
-            onRemitStatusClick = { navController.navigate(Screen.RemitStatusScreen("isRemitStatus")) },
-            onTransferStatusClick = { navController.navigate(Screen.StatusScreen) },
-            onTransferMoneyClick = { navController.navigate(Screen.SendMoneyScreen) },
-            onTopUpClick = { navController.navigate(Screen.SendMoneyScreen) },
-            onViewHistoryClick = { navController.navigate(Screen.TransactionHistoryScreen)  },
-            notification = false
-        )
+        else {
+            DashboardUI(
+                modifier = Modifier.padding(padding),
+                name = loginResponse?.fullName ?: "",
+                acctNumber = loginResponse?.accountNumber ?: "",
+                dollarRate = loginResponse?.dollarRate.toString() ?: "",
+                balance = loginResponse?.accountBalance ?: "",
+                onConverterClick = { navController.navigate(Screen.ConverterScreen) },
+                onRemitStatusClick = { navController.navigate(Screen.RemitStatusScreen("isRemitStatus")) },
+                onTransferStatusClick = { navController.navigate(Screen.StatusScreen) },
+                onTransferMoneyClick = { navController.navigate(Screen.SendMoneyScreen) },
+                onTopUpClick = { navController.navigate(Screen.SendMoneyScreen) },
+                onViewHistoryClick = { navController.navigate(Screen.TransactionHistoryScreen) },
+                notification = false
+            )
+        }
     }
 }
 

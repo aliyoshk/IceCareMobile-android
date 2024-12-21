@@ -5,10 +5,12 @@ import com.example.icecaremobile.domain.auth.AuthManager
 import com.example.icecaremobile.domain.model.Request.AccountPaymentRequest
 import com.example.icecaremobile.domain.model.Request.LoginRequest
 import com.example.icecaremobile.domain.model.Request.RegistrationRequest
+import com.example.icecaremobile.domain.model.Request.StatusRequest
 import com.example.icecaremobile.domain.model.Request.ThirdPartyRequest
 import com.example.icecaremobile.domain.model.Request.TransferRequest
 import com.example.icecaremobile.domain.model.Response.LoginResponse
 import com.example.icecaremobile.domain.model.Response.RegistrationResponse
+import com.example.icecaremobile.domain.model.Response.TransactionHistoryResponse
 import com.example.icecaremobile.domain.model.Response.TransferResponse
 import com.example.icecaremobile.domain.model.network.ApiError
 import kotlinx.coroutines.CoroutineScope
@@ -82,12 +84,30 @@ class GetUseCase @Inject constructor(
             onError = onError)
     }
 
-    //Third party transfer loan
+    //Third party transfer block
     suspend operator fun invoke(
         thirdPartyRequest: ThirdPartyRequest,
         onSuccess: (TransferResponse) -> Unit,
         onError: (ApiError) -> Unit
     ) {
         repository.thirdPartyTransfer(thirdPartyRequest, onSuccess, onError)
+    }
+
+    //Transfer Status block
+    suspend operator fun  invoke(
+        statusRequest: StatusRequest,
+        onSuccess: (TransferResponse) -> Unit,
+        onError: (ApiError) -> Unit
+    ) {
+        repository.getTransferStatus(statusRequest.email, onSuccess, onError)
+    }
+
+    //Transaction history Status block
+    suspend operator fun  invoke(
+        email: String,
+        onSuccess: (TransactionHistoryResponse) -> Unit,
+        onError: (ApiError) -> Unit
+    ) {
+        repository.getTransactionHistory(email, onSuccess, onError)
     }
 }

@@ -101,4 +101,87 @@ object Helpers {
             null
         }
     }
+
+    fun convertAmountToWords(amount: Double, currency: String = "NGN"): String {
+        if (amount == 0.0) return "Zero ${getCurrencySuffix(0, currency, isWhole = true)}"
+
+        val numberToWordsMap = mapOf(
+            1 to "one", 2 to "two", 3 to "three", 4 to "four", 5 to "five",
+            6 to "six", 7 to "seven", 8 to "eight", 9 to "nine", 10 to "ten",
+            11 to "eleven", 12 to "twelve", 13 to "thirteen", 14 to "fourteen",
+            15 to "fifteen", 16 to "sixteen", 17 to "seventeen", 18 to "eighteen",
+            19 to "nineteen"
+        )
+
+        val tensMap = mapOf(
+            20 to "twenty", 30 to "thirty", 40 to "forty", 50 to "fifty",
+            60 to "sixty", 70 to "seventy", 80 to "eighty", 90 to "ninety"
+        )
+
+        val units = listOf("", "thousand", "million", "billion", "trillion")
+
+        fun convertLessThanOneThousand(amount: Int): String {
+            return when {
+                amount == 0 -> ""
+                amount < 20 -> numberToWordsMap[amount] ?: ""
+                amount < 100 -> {
+                    val tens = amount / 10 * 10
+                    val units = amount % 10
+                    "${tensMap[tens]}${if (units != 0) " " + convertLessThanOneThousand(units) else ""}"
+                }
+                else -> {
+                    val hundreds = amount / 100
+                    val remainder = amount % 100
+                    "${numberToWordsMap[hundreds]} hundred${if (remainder != 0) " and " + convertLessThanOneThousand(remainder) else ""}"
+                }
+            }
+        }
+
+        fun convertWholeNumber(amount: Long): String {
+            if (amount == 0L) return ""
+            var wordRepresentation = ""
+            var currentAmount = amount
+            var unitIndex = 0
+
+            while (currentAmount > 0) {
+                val chunk = (currentAmount % 1000).toInt()
+                if (chunk != 0) {
+                    val chunkWords = convertLessThanOneThousand(chunk)
+                    wordRepresentation = "$chunkWords ${units[unitIndex]} ${wordRepresentation.trim()}"
+                }
+                currentAmount /= 1000
+                unitIndex++
+            }
+            return wordRepresentation.trim()
+        }
+
+        val wholeAmount = amount.toLong()
+        val fractionalAmount = ((amount - wholeAmount) * 100).toInt()
+
+        val wholeWords = if (wholeAmount > 0) {
+            "${convertWholeNumber(wholeAmount)} ${getCurrencySuffix(wholeAmount.toInt(), currency, isWhole = true)}"
+        } else ""
+
+        val fractionalWords = if (fractionalAmount > 0) {
+            "${convertLessThanOneThousand(fractionalAmount)} ${getCurrencySuffix(fractionalAmount, currency, isWhole = false)}"
+        } else ""
+
+        return when {
+            wholeWords.isNotEmpty() && fractionalWords.isNotEmpty() -> {
+                "$wholeWords and $fractionalWords only".replaceFirstChar { it.uppercase() }
+            }
+            wholeWords.isNotEmpty() -> "$wholeWords only".replaceFirstChar { it.uppercase() }
+            fractionalWords.isNotEmpty() -> "$fractionalWords only".replaceFirstChar { it.uppercase() }
+            else -> ""
+        }
+    }
+    fun getCurrencySuffix(amount: Int, currency: String, isWhole: Boolean): String {
+        return when (currency.uppercase()) {
+            "NGN" -> if (isWhole) "Naira" else "Kobo"
+            "USD" -> if (isWhole) "dollar" else "cents"
+            "EUR" -> if (isWhole) "Euro" else "cents"
+            "GBP" -> if (isWhole) "Pound Sterling" else "cents"
+            else -> if (isWhole) "units" else "sub-units"
+        }
+    }
 }

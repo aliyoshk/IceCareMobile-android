@@ -17,7 +17,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.icecaremobile.data.local.auth.AuthManagerImpl
 import com.example.icecaremobile.domain.model.Response.CompanyAccounts
-import com.example.icecaremobile.domain.model.Response.Response
+import com.example.icecaremobile.domain.model.Response.LoginResponseData
 import com.example.icecaremobile.presentation.navigator.Screen
 import com.example.icecaremobile.presentation.ui.TransferUI
 import com.example.icecaremobile.presentation.ui.component.AppTopBar
@@ -28,14 +28,14 @@ import com.example.icecaremobile.presentation.ui.component.AppTopBar
 fun TransferScreen(navController: NavHostController)
 {
     val authManager = AuthManagerImpl(LocalContext.current)
-    var userData by remember { mutableStateOf<Response?>(null) }
+    var userData by remember { mutableStateOf<LoginResponseData?>(null) }
 
     LaunchedEffect(Unit) {
         userData = authManager.getLoginResponse()?.data
     }
 
     Scaffold(
-        topBar = { AppTopBar(title = "Transfer") }
+        topBar = { AppTopBar(title = "Transfer"){ navController.navigateUp() }}
     ) { padding ->
 
         val context = LocalContext.current

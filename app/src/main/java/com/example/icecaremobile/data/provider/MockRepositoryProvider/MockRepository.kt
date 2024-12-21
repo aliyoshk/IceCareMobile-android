@@ -6,11 +6,14 @@ import com.example.icecaremobile.domain.model.Request.LoginRequest
 import com.example.icecaremobile.domain.model.Request.RegistrationRequest
 import com.example.icecaremobile.domain.model.Request.ThirdPartyRequest
 import com.example.icecaremobile.domain.model.Request.TransferRequest
+import com.example.icecaremobile.domain.model.Response.AccountDetails
 import com.example.icecaremobile.domain.model.Response.CompanyAccounts
 import com.example.icecaremobile.domain.model.Response.CompanyPhones
 import com.example.icecaremobile.domain.model.Response.LoginResponse
 import com.example.icecaremobile.domain.model.Response.RegistrationResponse
-import com.example.icecaremobile.domain.model.Response.Response
+import com.example.icecaremobile.domain.model.Response.LoginResponseData
+import com.example.icecaremobile.domain.model.Response.TransactionHistory
+import com.example.icecaremobile.domain.model.Response.TransactionHistoryResponse
 import com.example.icecaremobile.domain.model.Response.TransferResponse
 import com.example.icecaremobile.domain.model.network.ApiError
 import com.example.icecaremobile.domain.repository.IRepository
@@ -55,7 +58,7 @@ class MockRepository @Inject constructor() : IRepositoryProvider
                         message = "Login Successful",
                         statusCode = 200,
                         status = true,
-                        data = Response(
+                        data = LoginResponseData(
                             id = 6,
                             phone = "08034678912",
                             token = "rfgdssgdygsfguy463634",
@@ -134,6 +137,74 @@ class MockRepository @Inject constructor() : IRepositoryProvider
                         status = true,
                         message = "Your request to move your fund to third party account has been submitted for review",
                         data = true
+                    )
+                )
+            }
+
+            override suspend fun getTransferStatus(
+                email: String,
+                onSuccess: (TransferResponse) -> Unit,
+                onError: (ApiError) -> Unit
+            ) {
+                delay(2000)
+                onSuccess(
+                    TransferResponse(
+                        status = true,
+                        message = "You don’t have any pending transfer that required attention.\n" +
+                                "Check transaction history to view all confirmed transfer receipts",
+//                        message = "Once your transfer is confirmed, you will be redirected to view and " +
+//                                "download transaction(s) related documents.",
+                        data = true
+                    )
+                )
+            }
+
+            override suspend fun getTransactionHistory(
+                email: String,
+                onSuccess: (TransactionHistoryResponse) -> Unit,
+                onError: (ApiError) -> Unit
+            ) {
+                delay(2000)
+                onSuccess(
+                    TransactionHistoryResponse(
+                        success = true,
+                        message = "Record fetched successful",
+                        data = listOf(
+                            TransactionHistory(
+                                totalAmount = "-78000",
+                                description = "UBA | 0123456789",
+                                transactionDate = "04/Mar/2023",
+                                category = "Third Party Transfer ",
+                                accountDetails = listOf(
+                                    AccountDetails(
+                                        amount = "50000",
+                                        accountNumber = "21342213211",
+                                        accountName = "Ice Care Nig Ltd",
+                                        bankName = "United bank For Africa"
+                                    )
+                                )
+                            ),
+                            TransactionHistory(
+                                totalAmount = "+50000",
+                                description = "0221345675",
+                                transactionDate = "04/Dec/2023",
+                                category = "Fund Account",
+                                accountDetails = listOf(
+                                    AccountDetails(
+                                        amount = "10000",
+                                        accountNumber = "0221345675",
+                                        accountName = "Ice Care Nig Ltd",
+                                        bankName = "Providus Bank"
+                                    ),
+                                    AccountDetails(
+                                        amount = "50000",
+                                        accountNumber = "21342213211",
+                                        accountName = "Ice Care Nig Ltd",
+                                        bankName = "United bank For Africa"
+                                    )
+                                )
+                            )
+                        )
                     )
                 )
             }

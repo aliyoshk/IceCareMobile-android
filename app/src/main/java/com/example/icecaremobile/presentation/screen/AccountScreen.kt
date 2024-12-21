@@ -38,7 +38,7 @@ fun AccountScreen(navController: NavHostController)
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { AppTopBar(title = "Available Account") }
+        topBar = { AppTopBar(title = "Available Account") { navController.navigateUp() }}
     ) { paddingValues ->
 
         AccountUI(

@@ -29,7 +29,8 @@ import com.example.icecaremobile.ui.theme.LightGray
 @Composable
 fun StatusUI(
     modifier: Modifier = Modifier,
-    onButtonClick: () -> Unit
+    onButtonClick: () -> Unit,
+    status: String
 ) {
     Column(
         modifier = modifier
@@ -38,8 +39,7 @@ fun StatusUI(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        var x = "Pending"
-        if (x == "Pending") {
+        if (status.lowercase().contains("pending")) {
 
             Spacer(Modifier.weight(1f))
 
@@ -73,7 +73,7 @@ fun StatusUI(
                     .background(LightGray.copy(alpha = 0.4f), RoundedCornerShape(8.dp))
                     .padding(top = 20.dp, bottom = 20.dp, start = 10.dp, end = 10.dp),
                 color = DarkGolden,
-                text = "Once your transfer is confirmed, you will be redirected to view and download transaction(s) related documents.",
+                text = status,
                 fontSize = 14.sp
             )
 
@@ -83,13 +83,12 @@ fun StatusUI(
 
             Spacer(Modifier.weight(1f))
         }  else {
-            val message = "You don’t have any pending transfer that required attention.\nCheck transaction history to view all confirmed transfer receipts";
             AcceptDialog(
                 title = "Notification",
-                message = message,
+                message = status,
                 buttonText = "Ok",
                 onButtonClick = { onButtonClick() },
-                onDismissRequest = { onButtonClick() }
+                onDismissRequest = { }
             )
         }
     }
@@ -132,5 +131,5 @@ fun PendingUI() {
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
 fun StatusUIPreview() {
-    StatusUI(onButtonClick = {})
+    StatusUI(onButtonClick = {}, status = "pending")
 }

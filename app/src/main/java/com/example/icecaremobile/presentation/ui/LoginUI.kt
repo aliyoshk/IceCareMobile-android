@@ -6,11 +6,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
@@ -37,27 +37,27 @@ fun LoginUI(
     password: (String) -> Unit,
     onSignUpClick: () -> Unit,
     onForgotPasswordClick: () -> Unit,
-    btnLogin: () -> Unit
+    btnLogin: () -> Unit,
+    isError: () -> Map<String, String>
 ) {
     val scrollState = rememberScrollState()
+    val errors = isError()
+
     Column(
         modifier = modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
+            .fillMaxSize()
             .padding(30.dp)
             .verticalScroll(scrollState),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween
-    )
-    {
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Image(
             painter = painterResource(R.drawable.circle_logo),
             contentDescription = null,
             contentScale = ContentScale.Inside,
-            modifier = Modifier.size(200.dp)
+            modifier = Modifier.size(150.dp)
         )
 
-        Spacer(Modifier.height(20.dp))
+        Spacer(Modifier.height(10.dp))
 
         Text(
             text = "Welcome Back",
@@ -65,7 +65,6 @@ fun LoginUI(
             fontSize = 28.sp
         )
 
-        Spacer(Modifier.height(1.dp))
 
         Text(
             text = "sign in to access your account",
@@ -79,7 +78,9 @@ fun LoginUI(
             enteredValue = { username(it) },
             label = "Enter your email",
             startIcon = null,
-            endIcon = painterResource(R.drawable.ic_email)
+            endIcon = painterResource(R.drawable.ic_email),
+            isError = errors.containsKey("email"),
+            errorMessage = errors["email"]
         )
 
         Spacer(Modifier.height(20.dp))
@@ -88,7 +89,9 @@ fun LoginUI(
             enteredValue = { password(it) },
             label = "Password",
             startIcon = null,
-            endIcon = painterResource(R.drawable.ic_password)
+            endIcon = painterResource(R.drawable.ic_password),
+            isError = errors.containsKey("password"),
+            errorMessage = errors["password"]
         )
 
         Row(
@@ -132,5 +135,5 @@ fun LoginUI(
 fun LoginUIPreview()
 {
     LoginUI(username = {}, password = {}, btnLogin = {},
-        onSignUpClick = {}, onForgotPasswordClick = {})
+        onSignUpClick = {}, onForgotPasswordClick = {}, isError = { mapOf() })
 }

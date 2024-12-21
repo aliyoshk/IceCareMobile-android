@@ -4,10 +4,10 @@ data class LoginResponse(
     val status : Boolean,
     val message: String,
     val statusCode: Int,
-    val data: Response
+    val data: LoginResponseData
 )
 
-data class Response(
+data class LoginResponseData(
     val id: Int,
     val fullName: String,
     val email: String,
@@ -30,4 +30,3 @@ data class CompanyAccounts(
 data class CompanyPhones(
     val phoneNumber: String
 )
-

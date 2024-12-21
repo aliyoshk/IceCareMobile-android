@@ -15,7 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.icecaremobile.data.local.auth.AuthManagerImpl
-import com.example.icecaremobile.domain.model.Response.Response
+import com.example.icecaremobile.domain.model.Response.LoginResponseData
 import com.example.icecaremobile.presentation.navigator.Screen
 import com.example.icecaremobile.presentation.ui.ConverterUI
 import com.example.icecaremobile.presentation.ui.component.AppTopBar
@@ -24,7 +24,7 @@ import com.example.icecaremobile.presentation.ui.component.AppTopBar
 fun ConverterScreen(navController: NavHostController) {
 
     val authManager = AuthManagerImpl(LocalContext.current)
-    var userData by remember { mutableStateOf<Response?>(null) }
+    var userData by remember { mutableStateOf<LoginResponseData?>(null) }
     var enteredAmount by remember { mutableStateOf("") }
     val totalAmount by remember(enteredAmount) {
         mutableStateOf(
@@ -40,7 +40,7 @@ fun ConverterScreen(navController: NavHostController) {
 
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
-        topBar = { AppTopBar("Calculator") }
+        topBar = { AppTopBar("Calculator"){ navController.navigateUp() }}
     ) { padding ->
 
 

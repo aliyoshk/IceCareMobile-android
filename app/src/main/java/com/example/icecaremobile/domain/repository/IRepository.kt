@@ -7,6 +7,7 @@ import com.example.icecaremobile.domain.model.Request.ThirdPartyRequest
 import com.example.icecaremobile.domain.model.Request.TransferRequest
 import com.example.icecaremobile.domain.model.Response.LoginResponse
 import com.example.icecaremobile.domain.model.Response.RegistrationResponse
+import com.example.icecaremobile.domain.model.Response.TransactionHistoryResponse
 import com.example.icecaremobile.domain.model.Response.TransferResponse
 import com.example.icecaremobile.domain.model.network.ApiError
 
@@ -39,6 +40,18 @@ interface IRepository {
     suspend fun thirdPartyTransfer(
         thirdPartyRequest: ThirdPartyRequest,
         onSuccess: (TransferResponse) -> Unit,
+        onError: (ApiError) -> Unit
+    )
+
+    suspend fun getTransferStatus(
+        email: String,
+        onSuccess: (TransferResponse) -> Unit,
+        onError: (ApiError) -> Unit
+    )
+
+    suspend fun getTransactionHistory(
+        email: String,
+        onSuccess: (TransactionHistoryResponse) -> Unit,
         onError: (ApiError) -> Unit
     )
 }

@@ -21,7 +21,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.icecaremobile.data.local.auth.AuthManagerImpl
 import com.example.icecaremobile.domain.model.Request.ThirdPartyRequest
-import com.example.icecaremobile.domain.model.Response.Response
+import com.example.icecaremobile.domain.model.Response.LoginResponseData
 import com.example.icecaremobile.presentation.ui.ThirdPartyTransferUI
 import com.example.icecaremobile.presentation.ui.component.AppTopBar
 import com.example.icecaremobile.presentation.viewmodel.PaymentViewModel
@@ -35,7 +35,7 @@ fun ThirdPartyTransferScreen(
 ) {
     val transferState = paymentViewModel.transferResponse.collectAsState()
     val authManager = AuthManagerImpl(LocalContext.current)
-    var userData by remember { mutableStateOf<Response?>(null) }
+    var userData by remember { mutableStateOf<LoginResponseData?>(null) }
 
     LaunchedEffect(Unit) {
         userData = authManager.getLoginResponse()?.data
@@ -43,7 +43,7 @@ fun ThirdPartyTransferScreen(
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { AppTopBar(title = "Transfer to third party") }
+        topBar = { AppTopBar(title = "Transfer to third party"){ navController.navigateUp() }}
     ) { padding ->
 
         val context = LocalContext.current

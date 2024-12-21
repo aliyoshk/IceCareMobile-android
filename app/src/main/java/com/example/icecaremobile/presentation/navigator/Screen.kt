@@ -1,5 +1,6 @@
 package com.example.icecaremobile.presentation.navigator
 
+import com.example.icecaremobile.domain.model.Response.TransactionHistory
 import kotlinx.serialization.Serializable
 
 //sealed class Screen(val route: String)
@@ -84,7 +85,12 @@ class Screen
     object StatusScreen
 
     @Serializable
-    object ReceiptScreen
+    data class ReceiptScreen(
+        val data: TransactionHistory,
+    )
+
+    @Serializable
+    object ChatScreen
 
     object GetHelpScreen
     object FundAccountScreen

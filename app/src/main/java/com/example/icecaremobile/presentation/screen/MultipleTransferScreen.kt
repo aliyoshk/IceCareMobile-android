@@ -26,7 +26,7 @@ import com.example.icecaremobile.domain.model.Request.BankDetail
 import com.example.icecaremobile.domain.model.Request.TransferEvidence
 import com.example.icecaremobile.domain.model.Request.TransferRequest
 import com.example.icecaremobile.domain.model.Response.CompanyAccounts
-import com.example.icecaremobile.domain.model.Response.Response
+import com.example.icecaremobile.domain.model.Response.LoginResponseData
 import com.example.icecaremobile.presentation.navigator.Screen
 import com.example.icecaremobile.presentation.ui.MultipleTransferUI
 import com.example.icecaremobile.presentation.ui.component.AppTopBar
@@ -43,7 +43,7 @@ fun MultipleTransferScreen(navController: NavHostController) {
     val transferState = paymentViewModel.transferResponse.collectAsState()
 
     val authManager = AuthManagerImpl(LocalContext.current)
-    var userData by remember { mutableStateOf<Response?>(null) }
+    var userData by remember { mutableStateOf<LoginResponseData?>(null) }
     var bankList by remember { mutableStateOf<List<CompanyAccounts>?>(null) }
 
     val destination = Screen.TransferSummaryScreen
@@ -57,7 +57,7 @@ fun MultipleTransferScreen(navController: NavHostController) {
 
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
-        topBar = { AppTopBar("Multiple Transfer") }
+        topBar = { AppTopBar("Multiple Transfer") { navController.navigateUp() }}
     ) { padding ->
 
         var selectedBanks by remember { mutableStateOf<List<CompanyAccounts>>(emptyList()) }

@@ -21,7 +21,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.icecaremobile.data.local.auth.AuthManagerImpl
 import com.example.icecaremobile.domain.model.Request.AccountPaymentRequest
-import com.example.icecaremobile.domain.model.Response.Response
+import com.example.icecaremobile.domain.model.Response.LoginResponseData
 import com.example.icecaremobile.presentation.ui.AccountBalanceTransferUI
 import com.example.icecaremobile.presentation.ui.component.AppTopBar
 import com.example.icecaremobile.presentation.viewmodel.PaymentViewModel
@@ -35,7 +35,7 @@ fun AccountBalanceTransferScreen(
 ) {
     val transferState = paymentViewModel.transferResponse.collectAsState()
     val authManager = AuthManagerImpl(LocalContext.current)
-    var userData by remember { mutableStateOf<Response?>(null) }
+    var userData by remember { mutableStateOf<LoginResponseData?>(null) }
 
     LaunchedEffect(Unit) {
         userData = authManager.getLoginResponse()?.data
@@ -44,7 +44,7 @@ fun AccountBalanceTransferScreen(
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
-        topBar = { AppTopBar(title = "Pay from account balance")}
+        topBar = { AppTopBar("Pay from account balance") { navController.navigateUp() }}
     ) { padding ->
 
         val context = LocalContext.current

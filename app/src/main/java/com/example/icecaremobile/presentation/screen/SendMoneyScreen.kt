@@ -25,9 +25,7 @@ fun SendMoneyScreen(navController: NavHostController)
 {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = {
-            AppTopBar(title = "Send Money")
-        }
+        topBar = { AppTopBar(title = "Send Money"){ navController.navigateUp() }}
     ) { padding ->
 
         val context = LocalContext.current

@@ -18,13 +18,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.icecaremobile.core.utils.Helpers
 import com.example.icecaremobile.data.remote.entity.RegistrationResponseState
 import com.example.icecaremobile.domain.model.Request.RegistrationRequest
 import com.example.icecaremobile.presentation.navigator.Screen
 import com.example.icecaremobile.presentation.ui.RegistrationUI
 import com.example.icecaremobile.presentation.ui.component.AcceptDialog
 import com.example.icecaremobile.presentation.ui.component.AppLoader
-import com.example.icecaremobile.presentation.ui.component.AppTopBar
 import com.example.icecaremobile.presentation.viewmodel.RegistrationViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -35,10 +35,7 @@ fun RegistrationScreen(navController: NavHostController)
     val response by viewModel.registrationResponse.collectAsState()
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            AppTopBar(title = "")
-        }
+        modifier = Modifier.fillMaxSize()
     ) { padding ->
         val context = LocalContext.current
         var buttonClick by remember { mutableStateOf(false) }
@@ -67,9 +64,6 @@ fun RegistrationScreen(navController: NavHostController)
                     password = password
                 )
                 val errors = validateRegistrationRequest(request).toMutableMap()
-
-                if (phone.isEmpty())
-                    errors["phone"] = "Phone number is required"
                 if (confirmPassword.isEmpty())
                     errors["confirmPassword"] = "Confirm password is required"
                 else if (password != confirmPassword)
@@ -101,8 +95,14 @@ private fun validateRegistrationRequest(request: RegistrationRequest): Map<Strin
     if (request.email.isEmpty()) {
         errors["email"] = "Email is required."
     }
+    if (request.email.isNotEmpty() && Helpers.validateEmail(request.email).not()) {
+        errors["email"] = "Email enter a valid email"
+    }
     if (request.phone.isEmpty()) {
-        errors["phoneNumber"] = "Phone number is required."
+        errors["phone"] = "Phone number is required."
+    }
+    if (request.phone.isNotEmpty() && Helpers.isLocalPhoneNumberValid(request.phone).not()) {
+        errors["phone"] = "Enter a valid phone number"
     }
     if (request.password.isEmpty()) {
         errors["password"] = "Password is required."
