@@ -14,11 +14,12 @@ import androidx.navigation.toRoute
 import com.example.icecaremobile.domain.model.Response.TransactionHistory
 import com.example.icecaremobile.presentation.screen.AccountBalanceTransferScreen
 import com.example.icecaremobile.presentation.screen.AccountScreen
-import com.example.icecaremobile.presentation.screen.ChatScreen
+import com.example.icecaremobile.presentation.screen.CallScreen
 import com.example.icecaremobile.presentation.screen.ConverterScreen
 import com.example.icecaremobile.presentation.screen.DashboardScreen
 import com.example.icecaremobile.presentation.screen.LandingScreen
 import com.example.icecaremobile.presentation.screen.LoginScreen
+import com.example.icecaremobile.presentation.screen.MoreScreen
 import com.example.icecaremobile.presentation.screen.MultipleTransferScreen
 import com.example.icecaremobile.presentation.screen.ReceiptScreen
 import com.example.icecaremobile.presentation.screen.RegistrationScreen
@@ -65,6 +66,9 @@ fun Route() {
             composable<Screen.SendMoneyScreen> {
                 SendMoneyScreen(navController)
             }
+            composable<Screen.NavSendMoneyScreen> {
+                SendMoneyScreen(navController)
+            }
             composable<Screen.AccountScreen> {
                 AccountScreen(navController)
             }
@@ -107,8 +111,11 @@ fun Route() {
                 val args = it.toRoute<Screen.ReceiptScreen>()
                 ReceiptScreen(navController, transactionHistory = args.data)
             }
-            composable<Screen.ChatScreen> {
-                ChatScreen(navController)
+            composable<Screen.MoreScreen> {
+                MoreScreen(navController)
+            }
+            composable<Screen.CallScreen> {
+                CallScreen(navController)
             }
         }
     }

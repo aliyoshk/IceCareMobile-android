@@ -27,7 +27,6 @@ import com.example.icecaremobile.domain.model.Request.TransferEvidence
 import com.example.icecaremobile.domain.model.Request.TransferRequest
 import com.example.icecaremobile.domain.model.Response.CompanyAccounts
 import com.example.icecaremobile.domain.model.Response.LoginResponseData
-import com.example.icecaremobile.presentation.navigator.Screen
 import com.example.icecaremobile.presentation.ui.MultipleTransferUI
 import com.example.icecaremobile.presentation.ui.component.AppTopBar
 import com.example.icecaremobile.presentation.viewmodel.PaymentViewModel
@@ -46,7 +45,6 @@ fun MultipleTransferScreen(navController: NavHostController) {
     var userData by remember { mutableStateOf<LoginResponseData?>(null) }
     var bankList by remember { mutableStateOf<List<CompanyAccounts>?>(null) }
 
-    val destination = Screen.TransferSummaryScreen
     var fieldErrors by remember { mutableStateOf(mapOf<String, String>()) }
     val onSubmitClick = remember { mutableStateOf(false) }
 

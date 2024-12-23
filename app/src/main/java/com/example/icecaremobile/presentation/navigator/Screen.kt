@@ -43,6 +43,9 @@ class Screen
     object SendMoneyScreen
 
     @Serializable
+    object NavSendMoneyScreen
+
+    @Serializable
     object AccountScreen
 
     @Serializable
@@ -90,7 +93,10 @@ class Screen
     )
 
     @Serializable
-    object ChatScreen
+    object MoreScreen
+
+    @Serializable
+    object CallScreen
 
     object GetHelpScreen
     object FundAccountScreen

@@ -59,7 +59,7 @@ fun DashboardUI(
     onTopUpClick: () -> Unit,
     onViewHistoryClick: () -> Unit,
     notification: Boolean = false
-){
+) {
     val scrollState = rememberScrollState()
 
     Box(
@@ -67,19 +67,9 @@ fun DashboardUI(
             .fillMaxWidth()
             .height(150.dp)
             .background(color = LightGolden.copy(alpha = 0.4f))
-    )
-
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .verticalScroll(scrollState)
     ) {
         Column(
-            modifier = Modifier
-                .wrapContentHeight()
-                .wrapContentHeight()
-                .padding(start = 20.dp, end = 20.dp, top = 20.dp)
+            modifier = Modifier.padding(10.dp)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
@@ -98,7 +88,7 @@ fun DashboardUI(
                         contentDescription = "Logo",
                         modifier = Modifier.size(35.dp)
                     )
-                    if (notification){
+                    if (notification) {
                         Box(
                             modifier = Modifier
                                 .padding(start = 10.dp)
@@ -117,6 +107,15 @@ fun DashboardUI(
                 fontStyle = FontStyle.Italic
             )
         }
+    }
+
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(top = 80.dp)
+            .verticalScroll(scrollState)
+    ) {
 
         DashboardCard(
             name = name,
@@ -169,7 +168,7 @@ fun DashboardCard(
                     color = Color.White,
                     shape = RoundedCornerShape(20.dp)
                 )
-                .padding(20.dp)
+                .padding(10.dp)
         ) {
             ConstraintLayout(
                 modifier = Modifier
@@ -184,7 +183,7 @@ fun DashboardCard(
 
                 Text(
                     fontWeight = FontWeight.Bold,
-                    fontSize = 22.sp,
+                    fontSize = 20.sp,
                     text = "Hi, $name",
                     modifier = Modifier
                         .constrainAs(nameValue)
@@ -196,7 +195,7 @@ fun DashboardCard(
 
                 Text(
                     fontWeight = FontWeight.Bold,
-                    fontSize = 22.sp,
+                    fontSize = 20.sp,
                     text = "Dollar Rate",
                     modifier = Modifier
                         .constrainAs(dollarRateText)
@@ -209,7 +208,7 @@ fun DashboardCard(
 
                 Text(
                     fontWeight = FontWeight.Light,
-                    fontSize = 18.sp,
+                    fontSize = 16.sp,
                     text = acctNumber,
                     modifier = Modifier
                         .constrainAs(acctNumberValue)
@@ -221,7 +220,7 @@ fun DashboardCard(
 
                 Text(
                     fontWeight = FontWeight.Light,
-                    fontSize = 18.sp,
+                    fontSize = 16.sp,
                     text = dollarRate,
                     modifier = Modifier
                         .constrainAs(dollarRateValue)
@@ -233,7 +232,7 @@ fun DashboardCard(
 
                 Text(
                     fontWeight = FontWeight.Bold,
-                    fontSize = 22.sp,
+                    fontSize = 20.sp,
                     text = "Balance",
                     modifier = Modifier
                         .constrainAs(balanceText)
@@ -245,7 +244,7 @@ fun DashboardCard(
 
                 Text(
                     fontWeight = FontWeight.Light,
-                    fontSize = 18.sp,
+                    fontSize = 16.sp,
                     text = balance,
                     modifier = Modifier
                         .constrainAs(balanceValue)
@@ -342,17 +341,16 @@ fun DashboardSection3(onTransferStatusClick: () -> Unit) {
     ){
         Image(
             modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(),
+                .fillMaxSize(),
             painter = painterResource(R.drawable.bg_status),
             contentDescription = null,
-            contentScale = ContentScale.FillWidth,
+            contentScale = ContentScale.FillBounds,
         )
 
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 20.dp, bottom = 20.dp, start = 20.dp, end = 20.dp),
+                .padding(top = 20.dp, bottom = 20.dp, start = 10.dp, end = 20.dp),
             verticalAlignment = Alignment.CenterVertically
         ){
             Image(
@@ -366,7 +364,7 @@ fun DashboardSection3(onTransferStatusClick: () -> Unit) {
                 modifier = Modifier
                     .wrapContentWidth()
                     .wrapContentHeight()
-                    .padding(start = 20.dp)
+                    .padding(start = 10.dp)
             ){
                 Text(
                     text = "Transfer Status",
@@ -375,10 +373,7 @@ fun DashboardSection3(onTransferStatusClick: () -> Unit) {
 
                 Spacer(Modifier.height(5.dp))
 
-                Text(
-                    text = "Check if your transfer has been confirmed",
-                    maxLines = 1
-                )
+                Text("Check if your transfer has been confirmed")
             }
 
             Spacer(Modifier.weight(1f))

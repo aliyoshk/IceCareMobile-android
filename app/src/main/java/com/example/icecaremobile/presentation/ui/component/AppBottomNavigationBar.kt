@@ -22,8 +22,8 @@ fun AppBottomNavigationBar(
 ) {
     val screens = listOf(
         Triple(Screen.DashboardScreen, R.drawable.ic_home, "Dashboard"),
-        Triple(Screen.SendMoneyScreen, R.drawable.ic_add, "Send Money"),
-        Triple(Screen.ChatScreen, R.drawable.ic_chat, "Chat")
+        Triple(Screen.NavSendMoneyScreen, R.drawable.ic_add, "Send Money"),
+        Triple(Screen.MoreScreen, R.drawable.ic_more, "More")
     )
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination

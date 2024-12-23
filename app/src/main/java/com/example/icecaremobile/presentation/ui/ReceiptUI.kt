@@ -121,8 +121,6 @@ fun ReceiptUI(
             }
         }
 
-        Spacer(Modifier.height(20.dp))
-
         AppButton("Go to Dashboard", { goToDashboard() })
 
         Text(
@@ -133,8 +131,6 @@ fun ReceiptUI(
             textDecoration = TextDecoration.Underline,
             textAlign = TextAlign.Center
         )
-
-        Spacer(Modifier.height(15.dp))
     }
 }
 

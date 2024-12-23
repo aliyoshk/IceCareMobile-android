@@ -10,10 +10,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.icecaremobile.R
 import com.example.icecaremobile.presentation.navigator.Screen
 import com.example.icecaremobile.presentation.ui.SendMoneyUI
 import com.example.icecaremobile.presentation.ui.component.AppTopBar
@@ -28,12 +28,19 @@ fun SendMoneyScreen(navController: NavHostController)
         topBar = { AppTopBar(title = "Send Money"){ navController.navigateUp() }}
     ) { padding ->
 
-        val context = LocalContext.current
         var titleOption by remember { mutableStateOf("") }
         var onClicked by remember { mutableStateOf(false) }
 
+        val items = listOf(
+            Triple(R.drawable.ic_hands, "To Single Account", "Transfer to one company account"),
+            Triple(R.drawable.ic_wallet, "To Multiple Accounts", "Transfer to multiple company account"),
+            Triple(R.drawable.ic_world, "From Account Balance", "Nudge admin to Remit from your balance"),
+            Triple(R.drawable.ic_world, "To Third Party Account", "Nudge to Withdraw balance to third party")
+        )
+
         SendMoneyUI(
             modifier = Modifier.padding(padding),
+            items = items,
             optionTitle = { titleOption = it },
             onClick = { onClicked = true },
         )

@@ -15,6 +15,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.icecaremobile.presentation.navigator.Screen
 import com.example.icecaremobile.presentation.ui.RemitStatusUI
+import com.example.icecaremobile.presentation.ui.component.AcceptDialog
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -36,6 +37,18 @@ fun RemitStatusScreen(
     Scaffold(
         modifier = Modifier.fillMaxWidth()
     ) { padding ->
+
+
+        if (key == "isRemitStatus") {
+            AcceptDialog(
+                title = "Notification",
+                message = "You don't have any pending remittance",
+                buttonText = "Ok",
+                onButtonClick = { navController.navigate(Screen.DashboardScreen) },
+                onDismissRequest = { }
+            )
+            return@Scaffold;
+        }
 
         RemitStatusUI(
             modifier = Modifier.padding(padding),

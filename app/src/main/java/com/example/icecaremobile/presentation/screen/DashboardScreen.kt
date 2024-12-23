@@ -46,9 +46,9 @@ fun DashboardScreen(navController: NavHostController)
         else {
             DashboardUI(
                 modifier = Modifier.padding(padding),
-                name = loginResponse?.fullName ?: "",
+                name = loginResponse?.fullName?.split(" ")?.firstOrNull() ?: "",
                 acctNumber = loginResponse?.accountNumber ?: "",
-                dollarRate = loginResponse?.dollarRate.toString() ?: "",
+                dollarRate = loginResponse?.dollarRate.toString(),
                 balance = loginResponse?.accountBalance ?: "",
                 onConverterClick = { navController.navigate(Screen.ConverterScreen) },
                 onRemitStatusClick = { navController.navigate(Screen.RemitStatusScreen("isRemitStatus")) },
