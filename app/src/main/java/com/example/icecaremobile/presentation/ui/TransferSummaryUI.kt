@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.AsyncImage
 import com.example.icecaremobile.R
+import com.example.icecaremobile.core.utils.Helpers
 import com.example.icecaremobile.presentation.ui.component.AppButton
 import com.example.icecaremobile.ui.theme.DarkGolden
 import com.example.icecaremobile.ui.theme.LightGray
@@ -134,17 +135,20 @@ fun TransferSummaryUI(
                         {
                             start.linkTo(verticalGuideline, margin = 35.dp)
                             start.linkTo(parent.start)
-                            top.linkTo(parent.top, margin = 5.dp)
+                            top.linkTo(amountSentValue.top)
                         }
                 )
 
                 Text(
-                    text = amountSent,
+                    text = Helpers.formatAmountToCurrency(amountSent.toDouble()),
                     modifier = Modifier
+                        .fillMaxWidth()
                         .constrainAs(amountSentValue)
                         {
                             top.linkTo(parent.top, margin = 5.dp)
                             start.linkTo(verticalGuideline, margin = 50.dp)
+                            end.linkTo(parent.end)
+                            width = androidx.constraintlayout.compose.Dimension.fillToConstraints
                         },
                 )
 
@@ -155,18 +159,19 @@ fun TransferSummaryUI(
                     modifier = Modifier
                         .constrainAs(dollarEquivalentText)
                         {
-                            top.linkTo(amountSentText.bottom, margin = 10.dp)
+                            bottom.linkTo(dollarEquivalentValue.bottom)
                             start.linkTo(amountSentText.start)
                         }
                 )
 
                 Text(
-                    text = dollarEquivalent,
+                    text = Helpers.formatAmountToCurrency(dollarEquivalent.toDouble(), "USD"),
                     modifier = Modifier
                         .constrainAs(dollarEquivalentValue)
                         {
                             top.linkTo(amountSentValue.bottom, margin = 10.dp)
                             start.linkTo(amountSentValue.start)
+                            width = androidx.constraintlayout.compose.Dimension.fillToConstraints
                         },
                 )
 
@@ -177,7 +182,7 @@ fun TransferSummaryUI(
                     modifier = Modifier
                         .constrainAs(bankNameText)
                         {
-                            top.linkTo(dollarEquivalentText.bottom, margin = 10.dp)
+                            top.linkTo(dollarEquivalentValue.bottom, margin = 10.dp)
                             start.linkTo(amountSentText.start)
                         }
                 )

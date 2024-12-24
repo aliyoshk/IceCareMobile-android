@@ -19,6 +19,7 @@ import com.example.icecaremobile.domain.model.Response.LoginResponseData
 import com.example.icecaremobile.presentation.navigator.Screen
 import com.example.icecaremobile.presentation.ui.ConverterUI
 import com.example.icecaremobile.presentation.ui.component.AppTopBar
+import java.math.BigDecimal
 
 @Composable
 fun ConverterScreen(navController: NavHostController) {
@@ -29,8 +30,8 @@ fun ConverterScreen(navController: NavHostController) {
     val totalAmount by remember(enteredAmount) {
         mutableStateOf(
             if (enteredAmount.isNotEmpty()) {
-                enteredAmount.toDouble() * (userData?.dollarRate ?: 0.0)
-            } else 0.0
+                BigDecimal(enteredAmount).multiply(BigDecimal(userData?.dollarRate!!))
+            } else BigDecimal.ZERO
         )
     }
 
@@ -42,8 +43,6 @@ fun ConverterScreen(navController: NavHostController) {
         modifier = Modifier.fillMaxWidth(),
         topBar = { AppTopBar("Calculator"){ navController.navigateUp() }}
     ) { padding ->
-
-
 
         ConverterUI(
             modifier = Modifier.padding(padding),

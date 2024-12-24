@@ -35,6 +35,7 @@ import com.example.icecaremobile.presentation.ui.component.AppButton
 import com.example.icecaremobile.presentation.ui.component.AppTextField
 import com.example.icecaremobile.ui.theme.AppGolden
 import com.example.icecaremobile.ui.theme.DarkGolden
+import java.math.BigDecimal
 
 
 @Composable
@@ -43,7 +44,7 @@ fun ConverterUI(
     dollarRate: String = "0.0",
     amountEntered: (String) -> Unit,
     onCancelPress: () -> Unit,
-    total: Double = 0.0,
+    total: BigDecimal = BigDecimal.ZERO,
     onProceedClick: () -> Unit
 ) {
     val scrollState = rememberScrollState()
@@ -168,6 +169,6 @@ fun ConverterUI(
 fun ConverterUIPreview() {
     ConverterUI(
         amountEntered = {}, onCancelPress = {},
-        total = 0.0, onProceedClick = {}
+        total = BigDecimal.ZERO, onProceedClick = {}
     )
 }

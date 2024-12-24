@@ -25,8 +25,10 @@ import com.example.icecaremobile.presentation.ui.component.AppTopBar
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun AccountScreen(navController: NavHostController)
-{
+fun AccountScreen(
+    navController: NavHostController,
+    key: String
+) {
     val context = LocalContext.current
     val authManager = AuthManagerImpl(LocalContext.current)
     var bankList by remember { mutableStateOf<List<CompanyAccounts>?>(null) }
@@ -50,8 +52,12 @@ fun AccountScreen(navController: NavHostController)
             onButtonClick = {
                 if (!boxChecked)
                     Toast.makeText(context, "Please check the box to proceed", Toast.LENGTH_SHORT).show()
-                else
-                    navController.navigate(Screen.MultipleTransferScreen)
+                else {
+                    if (key == "isTopUpAccount")
+                        navController.navigate(Screen.TopUpAccountScreen)
+                    else
+                        navController.navigate(Screen.MultipleTransferScreen)
+                }
             }
         )
     }
@@ -61,5 +67,5 @@ fun AccountScreen(navController: NavHostController)
 @Composable
 fun AccountScreenPreview() {
     val navController = rememberNavController()
-    AccountScreen(navController)
+    AccountScreen(navController, "")
 }

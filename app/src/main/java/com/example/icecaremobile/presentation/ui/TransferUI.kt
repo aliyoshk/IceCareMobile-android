@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.icecaremobile.core.utils.Helpers
 import com.example.icecaremobile.domain.model.Response.CompanyAccounts
 import com.example.icecaremobile.presentation.ui.component.AccountListCard
 import com.example.icecaremobile.presentation.ui.component.AppButton
@@ -28,13 +29,14 @@ import com.example.icecaremobile.presentation.ui.component.AppDropdownMenu
 import com.example.icecaremobile.presentation.ui.component.AppTextField
 import com.example.icecaremobile.ui.theme.AppGolden
 import com.example.icecaremobile.ui.theme.DarkGolden
+import java.math.BigDecimal
 
 
 @Composable
 fun TransferUI(
     modifier: Modifier = Modifier,
     accounts: List<CompanyAccounts>,
-    dollarAmount: (String) -> Unit,
+    dollarEquivalence: BigDecimal,
     nairaAmount: (String) -> Unit,
     purpose: (String) -> Unit,
     selectedBank: (CompanyAccounts) -> Unit,
@@ -55,22 +57,7 @@ fun TransferUI(
     ) {
         var selectedBankDetails by remember { mutableStateOf<CompanyAccounts?>(null) }
 
-        Text("Dollar Amount ($)")
-
-        AppTextField(
-            enteredValue = dollarAmount,
-            label = "",
-            startIcon = null,
-            endIcon = null,
-            keyboardType = KeyboardType.Number,
-            isError = errors.containsKey("dollarAmount"),
-            errorMessage = errors["dollarAmount"]
-        )
-
-        Spacer(Modifier.height(20.dp))
-
         Text("Amount transferred (Naira)")
-
         AppTextField(
             enteredValue = nairaAmount,
             label = "",
@@ -83,8 +70,19 @@ fun TransferUI(
 
         Spacer(Modifier.height(20.dp))
 
-        Text("Purpose of payment")
+        Text("Dollar Amount ($)")
+        AppTextField(
+            enteredValue = { },
+            label = Helpers.formatAmountToCurrency(dollarEquivalence.toDouble(), "USD"),
+            startIcon = null,
+            endIcon = null,
+            keyboardType = KeyboardType.Number,
+            enableField = false
+        )
 
+        Spacer(Modifier.height(20.dp))
+
+        Text("Purpose of payment")
         AppTextField(
             enteredValue = purpose,
             label = "",
@@ -97,7 +95,6 @@ fun TransferUI(
         Spacer(Modifier.height(20.dp))
 
         Text("Choose bank to transfer")
-
         AppDropdownMenu(
             accounts = accounts,
             label = "",
@@ -111,11 +108,9 @@ fun TransferUI(
 
         selectedBankDetails?.let {
 
+            Spacer(Modifier.height(20.dp))
 
-        Spacer(Modifier.height(20.dp))
-
-        Text("Account Details")
-
+            Text("Account Details")
             AccountListCard(
                 modifier = Modifier
                     .padding(top = 15.dp, bottom = 15.dp),
@@ -164,7 +159,7 @@ fun TransferUIPreview() {
         ),
         isTermsChecked = false,
         onTermsCheckedChange = {},
-        dollarAmount = {},
+        dollarEquivalence = BigDecimal.ZERO,
         nairaAmount = {},
         purpose = {},
         selectedBank = {  },

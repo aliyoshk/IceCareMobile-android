@@ -39,7 +39,7 @@ fun StatusUI(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        if (status.lowercase().contains("pending")) {
+        if (status.lowercase().contains("related documents")) {
 
             Spacer(Modifier.weight(1f))
 
@@ -82,7 +82,7 @@ fun StatusUI(
             AppButton("Go to Dashboard", { onButtonClick() })
 
             Spacer(Modifier.weight(1f))
-        }  else {
+        }  else { //no pending
             AcceptDialog(
                 title = "Notification",
                 message = status,
@@ -93,40 +93,6 @@ fun StatusUI(
         }
     }
 }
-
-@Composable
-fun PendingUI() {
-    Image(
-        painter = painterResource(R.drawable.ic_pending),
-        contentDescription = null,
-        modifier = Modifier
-            .background(LightGolden.copy(alpha = 0.3f), RoundedCornerShape(5.dp))
-            .padding(15.dp)
-    )
-
-    Text(
-        text = "Thank You!",
-        color = DarkGolden
-    )
-
-    Text("Your transaction is being processed.")
-
-    Text(
-        textAlign = TextAlign.Center,
-        letterSpacing = 2.sp,
-        lineHeight = 18.sp,
-        modifier = Modifier
-            .padding(start = 20.dp, end = 20.dp)
-            .background(LightGray.copy(alpha = 0.4f), RoundedCornerShape(8.dp))
-            .padding(top = 20.dp, bottom = 20.dp, start = 10.dp, end = 10.dp),
-        color = DarkGolden,
-        text = "Once your transfer is confirmed, you will be redirected to view and download transaction(s) related documents.",
-        fontSize = 14.sp
-    )
-
-    AppButton("Go to Dashboard", {})
-}
-
 
 @Composable
 @Preview(showBackground = true, showSystemUi = true)

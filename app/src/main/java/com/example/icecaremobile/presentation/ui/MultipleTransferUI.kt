@@ -53,19 +53,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.icecaremobile.R
+import com.example.icecaremobile.core.utils.Helpers
 import com.example.icecaremobile.domain.model.Response.CompanyAccounts
 import com.example.icecaremobile.presentation.ui.component.AppButton
 import com.example.icecaremobile.presentation.ui.component.AppTextField
+import java.math.BigDecimal
 
 @Composable
 fun MultipleTransferUI(
     modifier: Modifier = Modifier,
     banks: List<CompanyAccounts>,
-    dollarAmount: (String) -> Unit,
+    dollarAmount: BigDecimal,
     purpose: (String) -> Unit,
     selectedBanks: (List<CompanyAccounts>) -> Unit,
     enteredAmounts: (Map<String, String>) -> Unit,
     receiptUploaded: (List<Uri>) -> Unit,
+    totalAmount: BigDecimal,
     onSubmitClick: () -> Unit,
     isError: () -> Map<String, String>
 ) {
@@ -78,15 +81,37 @@ fun MultipleTransferUI(
             .padding(10.dp)
             .verticalScroll(scrollState),
     ) {
-        Text("Dollar Amount ($)")
+        Spacer(Modifier.height(10.dp))
+
+        PopulateBanks(
+            bankList = banks,
+            onBankSelectionChanged = selectedBanks,
+            onAmountEntered = enteredAmounts,
+            errors = errors
+        )
+
+        Spacer(Modifier.height(10.dp))
+
+        Text("Total Amount (Naira)")
         AppTextField(
-            enteredValue = dollarAmount,
-            label = "",
+            enteredValue = { },
+            label = Helpers.formatAmountToCurrency(totalAmount.toDouble(), "NGN"),
             startIcon = null,
             endIcon = null,
             keyboardType = KeyboardType.Number,
-            isError = errors.containsKey("dollarAmount"),
-            errorMessage = errors["dollarAmount"]
+            enableField = false
+        )
+
+        Spacer(Modifier.height(20.dp))
+
+        Text("Dollar Amount ($)")
+        AppTextField(
+            enteredValue = { },
+            label = Helpers.formatAmountToCurrency(dollarAmount.toDouble(), "USD"),
+            startIcon = null,
+            endIcon = null,
+            keyboardType = KeyboardType.Number,
+            enableField = false
         )
 
         Spacer(Modifier.height(20.dp))
@@ -102,25 +127,6 @@ fun MultipleTransferUI(
         )
 
         Spacer(Modifier.height(20.dp))
-
-//        PopulateBanks(
-//            bankList = banks,
-//            onBankSelectionChanged =
-//            { selected ->
-//                selectedBanks(selected)
-//            },
-//            onAmountEntered = { amounts ->
-//                enteredAmounts(amounts)
-//            },
-//            errors = errors
-//        )
-
-        PopulateBanks(
-            bankList = banks,
-            onBankSelectionChanged = selectedBanks,
-            onAmountEntered = enteredAmounts,
-            errors = errors
-        )
 
         ReceiptUploadField(
             onReceiptsChanged = receiptUploaded, errors = errors
@@ -141,7 +147,8 @@ fun PopulateBanks(
     bankList: List<CompanyAccounts>,
     onBankSelectionChanged: (List<CompanyAccounts>) -> Unit,
     onAmountEntered: (Map<String, String>) -> Unit,
-    errors: Map<String, String>
+    errors: Map<String, String>,
+    selectedCurrency: String = "Naira"
 ) {
     val banks = bankList.takeIf { it.isNotEmpty() } ?: return
     val checkedStates = remember { mutableStateListOf<Boolean>().apply { addAll(List(banks.size) { false }) } }
@@ -217,7 +224,7 @@ fun PopulateBanks(
     banks.forEachIndexed { index, bankName ->
         if (checkedStates.getOrNull(index) == true) {
             Text(
-                text = "Amount transferred to ${bankName.bankName}",
+                text = "Amount transferred to ${bankName.bankName} ($selectedCurrency)",
                 modifier = Modifier.padding(vertical = 4.dp)
             )
             AppTextField(
@@ -360,11 +367,12 @@ fun MultipleTransferUIPreview() {
     )
     MultipleTransferUI(
         banks = banks,
-        dollarAmount = {},
+        dollarAmount = BigDecimal.ZERO,
         purpose = {},
         selectedBanks = {},
         enteredAmounts = {},
         receiptUploaded = {},
+        totalAmount = BigDecimal.ZERO,
         onSubmitClick = {},
         isError = { mapOf() }
     )

@@ -46,7 +46,7 @@ class Screen
     object NavSendMoneyScreen
 
     @Serializable
-    object AccountScreen
+    data class AccountScreen(val key: String? = null)
 
     @Serializable
     object TransferScreen
@@ -71,6 +71,9 @@ class Screen
 
     @Serializable
     object ThirdPartyTransferScreen
+
+    @Serializable
+    object TopUpAccountScreen
 
     @Serializable
     data class RemitStatusScreen(val key: String)

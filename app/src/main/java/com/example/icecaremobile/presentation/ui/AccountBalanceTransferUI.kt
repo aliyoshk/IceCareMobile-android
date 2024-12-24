@@ -67,7 +67,7 @@ fun AccountBalanceTransferUI(
 
         AppTextField(
             enteredValue = { },
-            label = dollarEquivalence ?: "",
+            label = "$$dollarEquivalence" ?: "",
             startIcon = null,
             endIcon  = null,
             keyboardType = KeyboardType.Number,

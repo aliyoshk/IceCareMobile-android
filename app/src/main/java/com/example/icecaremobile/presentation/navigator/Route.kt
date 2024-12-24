@@ -28,6 +28,7 @@ import com.example.icecaremobile.presentation.screen.SendMoneyScreen
 import com.example.icecaremobile.presentation.screen.StatusScreen
 import com.example.icecaremobile.presentation.screen.SubmissionScreen
 import com.example.icecaremobile.presentation.screen.ThirdPartyTransferScreen
+import com.example.icecaremobile.presentation.screen.TopUpAccountScreen
 import com.example.icecaremobile.presentation.screen.TransactionHistoryScreen
 import com.example.icecaremobile.presentation.screen.TransferScreen
 import com.example.icecaremobile.presentation.screen.TransferSummaryScreen
@@ -70,7 +71,8 @@ fun Route() {
                 SendMoneyScreen(navController)
             }
             composable<Screen.AccountScreen> {
-                AccountScreen(navController)
+                val args = it.toRoute<Screen.AccountScreen>()
+                AccountScreen(navController, args.key ?: "")
             }
             composable<Screen.TransferScreen> {
                 TransferScreen(navController)
@@ -87,6 +89,9 @@ fun Route() {
             }
             composable<Screen.ThirdPartyTransferScreen> {
                 ThirdPartyTransferScreen(navController)
+            }
+            composable<Screen.TopUpAccountScreen> {
+                TopUpAccountScreen(navController)
             }
             composable<Screen.RemitStatusScreen> {
                 val args = it.toRoute<Screen.RemitStatusScreen>()
