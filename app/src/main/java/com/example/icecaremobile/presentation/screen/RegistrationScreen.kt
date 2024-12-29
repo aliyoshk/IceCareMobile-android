@@ -52,8 +52,8 @@ fun RegistrationScreen(navController: NavHostController)
             fullName = { name = it },
             email = { email = it },
             phoneNumber = { phone = it },
-            password = { password = it},
-            confirmPassword = { confirmPassword = it},
+            password = { password = it },
+            confirmPassword = { confirmPassword = it },
             isTermsChecked = isTermsChecked,
             onTermsCheckedChange = { isTermsChecked = it },
             btnSignUp = {
@@ -103,6 +103,9 @@ private fun validateRegistrationRequest(request: RegistrationRequest): Map<Strin
     }
     if (request.phone.isNotEmpty() && Helpers.isLocalPhoneNumberValid(request.phone).not()) {
         errors["phone"] = "Enter a valid phone number"
+    }
+    if (Helpers.isPasswordValid(request.password).not()) {
+        errors["password"] = "Password must contain an upper case, a special character and a number (8 digits or more)"
     }
     if (request.password.isEmpty()) {
         errors["password"] = "Password is required."

@@ -10,8 +10,8 @@ import com.example.icecaremobile.domain.model.Response.AccountDetails
 import com.example.icecaremobile.domain.model.Response.CompanyAccounts
 import com.example.icecaremobile.domain.model.Response.CompanyPhones
 import com.example.icecaremobile.domain.model.Response.LoginResponse
-import com.example.icecaremobile.domain.model.Response.RegistrationResponse
 import com.example.icecaremobile.domain.model.Response.LoginResponseData
+import com.example.icecaremobile.domain.model.Response.RegistrationResponse
 import com.example.icecaremobile.domain.model.Response.TransactionHistory
 import com.example.icecaremobile.domain.model.Response.TransactionHistoryResponse
 import com.example.icecaremobile.domain.model.Response.TransferResponse
@@ -33,8 +33,7 @@ class MockRepository @Inject constructor() : IRepositoryProvider
                 onSuccess: (RegistrationResponse) -> Unit,
                 onError: (ApiError) -> Unit
             ) {
-                val message = "Thank you for registering with us! We have received your details and they are currently under review by our admin team. \n" +
-                        "\n" +
+                val message = "Thank you for registering with us! We have received your details and they are currently under review by our admin team.\n\n" +
                         "Please check back later to access your account and start using our services. We appreciate your patience and look forward to welcoming you on board!"
                 delay(2000)
                 onSuccess(
