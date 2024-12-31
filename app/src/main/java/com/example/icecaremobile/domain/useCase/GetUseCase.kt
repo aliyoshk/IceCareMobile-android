@@ -7,6 +7,7 @@ import com.example.icecaremobile.domain.model.Request.LoginRequest
 import com.example.icecaremobile.domain.model.Request.RegistrationRequest
 import com.example.icecaremobile.domain.model.Request.StatusRequest
 import com.example.icecaremobile.domain.model.Request.ThirdPartyRequest
+import com.example.icecaremobile.domain.model.Request.TopUpRequest
 import com.example.icecaremobile.domain.model.Request.TransferRequest
 import com.example.icecaremobile.domain.model.Response.LoginResponse
 import com.example.icecaremobile.domain.model.Response.RegistrationResponse
@@ -91,6 +92,15 @@ class GetUseCase @Inject constructor(
         onError: (ApiError) -> Unit
     ) {
         repository.thirdPartyTransfer(thirdPartyRequest, onSuccess, onError)
+    }
+
+    //Account Top up block
+    suspend operator fun invoke(
+        topUpRequest: TopUpRequest,
+        onSuccess: (TransferResponse) -> Unit,
+        onError: (ApiError) -> Unit
+    ) {
+        repository.accountTopUp(topUpRequest, onSuccess, onError)
     }
 
     //Transfer Status block

@@ -34,8 +34,7 @@ fun SendMoneyScreen(navController: NavHostController)
         val items = listOf(
             Triple(R.drawable.ic_hands, "To Single Account", "Transfer to one company account"),
             Triple(R.drawable.ic_wallet, "To Multiple Accounts", "Transfer to multiple company account"),
-            Triple(R.drawable.ic_world, "From Account Balance", "Nudge admin to Remit from your balance"),
-            Triple(R.drawable.ic_world, "To Third Party Account", "Nudge to Withdraw balance to third party")
+            Triple(R.drawable.ic_world, "From Account Balance", "Nudge admin to Remit from your balance")
         )
 
         SendMoneyUI(
@@ -54,8 +53,6 @@ fun SendMoneyScreen(navController: NavHostController)
                 navController.navigate(Screen.AccountScreen())
             else if (titleOption.contains("from", ignoreCase = true))
                 navController.navigate(Screen.AccountBalanceTransferScreen)
-            else if (titleOption.contains("third", ignoreCase = true))
-                navController.navigate(Screen.ThirdPartyTransferScreen)
         }
     }
 }

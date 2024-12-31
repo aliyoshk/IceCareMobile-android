@@ -5,6 +5,7 @@ import com.example.icecaremobile.domain.model.Request.AccountPaymentRequest
 import com.example.icecaremobile.domain.model.Request.LoginRequest
 import com.example.icecaremobile.domain.model.Request.RegistrationRequest
 import com.example.icecaremobile.domain.model.Request.ThirdPartyRequest
+import com.example.icecaremobile.domain.model.Request.TopUpRequest
 import com.example.icecaremobile.domain.model.Request.TransferRequest
 import com.example.icecaremobile.domain.model.Response.AccountDetails
 import com.example.icecaremobile.domain.model.Response.CompanyAccounts
@@ -135,6 +136,21 @@ class MockRepository @Inject constructor() : IRepositoryProvider
                     TransferResponse(
                         status = true,
                         message = "Your request to move your fund to third party account has been submitted for review",
+                        data = true
+                    )
+                )
+            }
+
+            override suspend fun accountTopUp(
+                topUpRequest: TopUpRequest,
+                onSuccess: (TransferResponse) -> Unit,
+                onError: (ApiError) -> Unit
+            ) {
+                delay(2000)
+                onSuccess(
+                    TransferResponse(
+                        status = true,
+                        message = "Your account top up request has been submitted for review",
                         data = true
                     )
                 )

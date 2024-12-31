@@ -19,8 +19,6 @@ import com.example.icecaremobile.domain.model.Response.LoginResponseData
 import com.example.icecaremobile.presentation.navigator.Screen
 import com.example.icecaremobile.presentation.ui.TransferUI
 import com.example.icecaremobile.presentation.ui.component.AppTopBar
-import java.math.BigDecimal
-import java.math.RoundingMode
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -40,23 +38,23 @@ fun TransferScreen(navController: NavHostController)
 
         val context = LocalContext.current
         var selectedBankDetails by remember { mutableStateOf<CompanyAccounts?>(null) }
-        //var enteredDollarAmount by remember { mutableStateOf("") }
+        var enteredDollarAmount by remember { mutableStateOf("") }
         var enteredNairaAmount by remember { mutableStateOf("") }
-        val calculatedDollarEquivalence by remember(enteredNairaAmount) {
-            mutableStateOf(
-                if (enteredNairaAmount.isNotEmpty()) {
-                    try {
-                        BigDecimal(enteredNairaAmount).divide(
-                            BigDecimal(userData?.dollarRate ?: 1.0),
-                            3,
-                            RoundingMode.HALF_UP
-                        )
-                    } catch (e: Exception) {
-                        BigDecimal.ZERO
-                    }
-                } else BigDecimal.ZERO
-            )
-        }
+//        val calculatedDollarEquivalence by remember(enteredNairaAmount) {
+//            mutableStateOf(
+//                if (enteredNairaAmount.isNotEmpty()) {
+//                    try {
+//                        BigDecimal(enteredNairaAmount).divide(
+//                            BigDecimal(userData?.dollarRate ?: 1.0),
+//                            3,
+//                            RoundingMode.HALF_UP
+//                        )
+//                    } catch (e: Exception) {
+//                        BigDecimal.ZERO
+//                    }
+//                } else BigDecimal.ZERO
+//            )
+//        }
         var enteredPurpose by remember { mutableStateOf("") }
         var boxCheck by remember { mutableStateOf(false) }
         var fieldErrors by remember { mutableStateOf(mapOf<String, String>()) }
@@ -64,7 +62,7 @@ fun TransferScreen(navController: NavHostController)
         TransferUI(
             modifier = Modifier.padding(padding),
             accounts = userData?.companyAccounts ?: emptyList(),
-            dollarEquivalence = calculatedDollarEquivalence,
+            enteredDollar = { enteredDollarAmount = it },
             nairaAmount = { enteredNairaAmount = it },
             purpose = { enteredPurpose = it },
             selectedBank = { selectedBankDetails = it },
@@ -83,7 +81,7 @@ fun TransferScreen(navController: NavHostController)
                                 selectedBankDetails?.bankName,
                                 selectedBankDetails?.accountName,
                                 selectedBankDetails?.accountNumber,
-                                enteredNairaAmount, calculatedDollarEquivalence.toString(),
+                                enteredNairaAmount, enteredDollarAmount,
                                 email = userData?.email,
                                 dollarRate = userData?.dollarRate.toString(),
                                 description = enteredPurpose

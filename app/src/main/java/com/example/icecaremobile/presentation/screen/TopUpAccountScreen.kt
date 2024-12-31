@@ -1,7 +1,6 @@
 package com.example.icecaremobile.presentation.screen
 
 import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -19,6 +18,7 @@ import androidx.navigation.NavHostController
 import com.example.icecaremobile.core.utils.Helpers
 import com.example.icecaremobile.data.local.auth.AuthManagerImpl
 import com.example.icecaremobile.domain.model.Request.BankDetail
+import com.example.icecaremobile.domain.model.Request.TopUpRequest
 import com.example.icecaremobile.domain.model.Request.TransferEvidence
 import com.example.icecaremobile.domain.model.Response.CompanyAccounts
 import com.example.icecaremobile.domain.model.Response.LoginResponseData
@@ -64,11 +64,6 @@ fun TopUpAccountScreen(
             enteredAmounts = { bankAmounts = it },
             receiptUploaded = { uploadedReceipts = it },
             onSubmitClick = {
-                Log.d("TopUpAccountScreen", "selectedBanks: $selectedBanks")
-                Log.d("TopUpAccountScreen", "bankAmounts: $bankAmounts")
-                Log.d("TopUpAccountScreen", "purposeOfPayment: $purposeOfPayment")
-                Log.d("TopUpAccountScreen", "uploadedReceipts: $uploadedReceipts")
-
                 val errors = validateFields(
                     bankAmounts = bankAmounts,
                     purposeOfPayment = purposeOfPayment,
@@ -90,16 +85,16 @@ fun TopUpAccountScreen(
                             TransferEvidence(receipts = base64String)
                         }
                     }
-//                    val transferRequest = TransferRequest(
-//                        transactionDate = LocalDate.now().toString(),
-//                        description = purposeOfPayment,
-//                        dollarAmount = dollarAmount.toDoubleOrNull() ?: 0.0,
-//                        dollarRate = userData?.dollarRate?.toDouble() ?: 0.0,
-//                        customerEmail = userData?.email ?: "",
-//                        bankDetails = bankDetails,
-//                        transferEvidence = transferEvidence
-//                    )
-//                    paymentViewModel.fundTransfer(transferRequest)
+                    val request = TopUpRequest(
+                        description = purposeOfPayment,
+                        currency = "Naira",
+                        accountNo = userData?.accountNumber ?: "",
+                        email = userData?.email ?: "",
+                        phone = userData?.phone ?: "",
+                        bankDetails = bankDetails,
+                        transferEvidence = transferEvidence
+                    )
+                    viewModel.accountTopUp(request)
                     onSubmitClick.value = true
                 }
                 else fieldErrors = errors

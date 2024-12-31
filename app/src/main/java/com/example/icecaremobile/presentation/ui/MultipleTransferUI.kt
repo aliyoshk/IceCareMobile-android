@@ -63,7 +63,7 @@ import java.math.BigDecimal
 fun MultipleTransferUI(
     modifier: Modifier = Modifier,
     banks: List<CompanyAccounts>,
-    dollarAmount: BigDecimal,
+    dollarAmount: (String) -> Unit,
     purpose: (String) -> Unit,
     selectedBanks: (List<CompanyAccounts>) -> Unit,
     enteredAmounts: (Map<String, String>) -> Unit,
@@ -106,12 +106,11 @@ fun MultipleTransferUI(
 
         Text("Dollar Amount ($)")
         AppTextField(
-            enteredValue = { },
-            label = Helpers.formatAmountToCurrency(dollarAmount.toDouble(), "USD"),
+            enteredValue = dollarAmount,
+            label = "",
             startIcon = null,
             endIcon = null,
             keyboardType = KeyboardType.Number,
-            enableField = false
         )
 
         Spacer(Modifier.height(20.dp))
@@ -367,7 +366,7 @@ fun MultipleTransferUIPreview() {
     )
     MultipleTransferUI(
         banks = banks,
-        dollarAmount = BigDecimal.ZERO,
+        dollarAmount = { },
         purpose = {},
         selectedBanks = {},
         enteredAmounts = {},

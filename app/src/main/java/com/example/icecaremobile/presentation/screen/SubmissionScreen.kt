@@ -31,10 +31,16 @@ fun SubmissionScreen(
             textColor = color,
             onButtonClick =
             {
-                if (route == Screen.RegistrationScreen.toString())
-                    navController.navigate(Screen.LoginScreen)
-                else
-                    navController.navigate(Screen.DashboardScreen)
+                if (route == Screen.RegistrationScreen.toString()) {
+                    navController.navigate((Screen.LoginScreen),
+                        builder = { popUpTo(Screen.LandingScreen) { inclusive = true } }
+                    )
+                }
+                else {
+                    navController.navigate(
+                        (Screen.DashboardScreen), builder = { popUpTo(Screen.DashboardScreen) { inclusive = true } }
+                    )
+                }
             }
         )
     }

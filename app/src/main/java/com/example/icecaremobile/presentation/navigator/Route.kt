@@ -67,9 +67,6 @@ fun Route() {
             composable<Screen.SendMoneyScreen> {
                 SendMoneyScreen(navController)
             }
-            composable<Screen.NavSendMoneyScreen> {
-                SendMoneyScreen(navController)
-            }
             composable<Screen.AccountScreen> {
                 val args = it.toRoute<Screen.AccountScreen>()
                 AccountScreen(navController, args.key ?: "")

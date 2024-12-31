@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.icecaremobile.core.utils.Helpers
 import com.example.icecaremobile.domain.model.Response.CompanyAccounts
 import com.example.icecaremobile.presentation.ui.component.AccountListCard
 import com.example.icecaremobile.presentation.ui.component.AppButton
@@ -29,14 +28,13 @@ import com.example.icecaremobile.presentation.ui.component.AppDropdownMenu
 import com.example.icecaremobile.presentation.ui.component.AppTextField
 import com.example.icecaremobile.ui.theme.AppGolden
 import com.example.icecaremobile.ui.theme.DarkGolden
-import java.math.BigDecimal
 
 
 @Composable
 fun TransferUI(
     modifier: Modifier = Modifier,
     accounts: List<CompanyAccounts>,
-    dollarEquivalence: BigDecimal,
+    enteredDollar: (String) -> Unit,
     nairaAmount: (String) -> Unit,
     purpose: (String) -> Unit,
     selectedBank: (CompanyAccounts) -> Unit,
@@ -72,12 +70,11 @@ fun TransferUI(
 
         Text("Dollar Amount ($)")
         AppTextField(
-            enteredValue = { },
-            label = Helpers.formatAmountToCurrency(dollarEquivalence.toDouble(), "USD"),
+            enteredValue = enteredDollar,
+            label = "",
             startIcon = null,
             endIcon = null,
-            keyboardType = KeyboardType.Number,
-            enableField = false
+            keyboardType = KeyboardType.Number
         )
 
         Spacer(Modifier.height(20.dp))
@@ -159,7 +156,7 @@ fun TransferUIPreview() {
         ),
         isTermsChecked = false,
         onTermsCheckedChange = {},
-        dollarEquivalence = BigDecimal.ZERO,
+        enteredDollar = { },
         nairaAmount = {},
         purpose = {},
         selectedBank = {  },

@@ -4,6 +4,7 @@ import com.example.icecaremobile.domain.model.Request.AccountPaymentRequest
 import com.example.icecaremobile.domain.model.Request.LoginRequest
 import com.example.icecaremobile.domain.model.Request.RegistrationRequest
 import com.example.icecaremobile.domain.model.Request.ThirdPartyRequest
+import com.example.icecaremobile.domain.model.Request.TopUpRequest
 import com.example.icecaremobile.domain.model.Request.TransferRequest
 import com.example.icecaremobile.domain.model.Response.LoginResponse
 import com.example.icecaremobile.domain.model.Response.RegistrationResponse
@@ -28,6 +29,9 @@ interface IApiService
 
     @POST("user/accountBalancePayment")
     suspend fun accountTransfer(@Body accountPaymentRequest: AccountPaymentRequest): Response<TransferResponse>
+
+    @POST("user/accountTopUp")
+    suspend fun accountTopUp(@Body topUpRequest: TopUpRequest): Response<TransferResponse>
 
     @POST("user/thirdPartyPayment")
     suspend fun thirdPartyTransfer(@Body thirdPartyRequest: ThirdPartyRequest): Response<TransferResponse>

@@ -104,7 +104,11 @@ fun RenderTransferState(
         is TransferResponseState.Success -> {
             LaunchedEffect(Unit) {
                 val message = state.transferResponse.message
-                navController.navigate( Screen.SubmissionScreen(data = message, key = Screen.TransferSummaryScreen.toString()))
+                navController.navigate( Screen.SubmissionScreen(data = message, key = Screen.TransferSummaryScreen.toString()),
+                    builder = {
+                        popUpTo(Screen.DashboardScreen) { inclusive = true }
+                    }
+                )
             }
         }
         is TransferResponseState.Error -> {

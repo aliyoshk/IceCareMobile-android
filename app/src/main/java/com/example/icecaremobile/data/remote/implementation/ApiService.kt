@@ -5,6 +5,7 @@ import com.example.icecaremobile.domain.model.Request.AccountPaymentRequest
 import com.example.icecaremobile.domain.model.Request.LoginRequest
 import com.example.icecaremobile.domain.model.Request.RegistrationRequest
 import com.example.icecaremobile.domain.model.Request.ThirdPartyRequest
+import com.example.icecaremobile.domain.model.Request.TopUpRequest
 import com.example.icecaremobile.domain.model.Request.TransferRequest
 import com.example.icecaremobile.domain.model.Response.LoginResponse
 import com.example.icecaremobile.domain.model.Response.RegistrationResponse
@@ -34,10 +35,13 @@ class ApiService @Inject constructor(private val apiService: IApiService) {
         return apiService.thirdPartyTransfer(thirdPartyRequest)
     }
 
+    suspend fun accountTopUp(@Body topUpRequest: TopUpRequest): Response<TransferResponse> {
+        return apiService.accountTopUp(topUpRequest)
+    }
+
     suspend fun getTransferStatus(email: String): Response<TransferResponse> {
         return apiService.checkTransferStatus(email)
     }
-
 
     suspend fun getTransactionHistory(email: String): Response<TransactionHistoryResponse> {
         return apiService.getTransactionHistory(email)

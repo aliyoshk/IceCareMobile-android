@@ -7,6 +7,7 @@ import com.example.icecaremobile.domain.model.Request.AccountPaymentRequest
 import com.example.icecaremobile.domain.model.Request.LoginRequest
 import com.example.icecaremobile.domain.model.Request.RegistrationRequest
 import com.example.icecaremobile.domain.model.Request.ThirdPartyRequest
+import com.example.icecaremobile.domain.model.Request.TopUpRequest
 import com.example.icecaremobile.domain.model.Request.TransferRequest
 import com.example.icecaremobile.domain.model.Response.LoginResponse
 import com.example.icecaremobile.domain.model.Response.RegistrationResponse
@@ -194,6 +195,39 @@ class RepositoryImpl @Inject constructor(
                     }
 
                     withContext(Dispatchers.Main) { onError(ApiError(message, response.code(), "Transfer failed", errorsList)) }
+                }
+            } catch (e: IOException) {
+                withContext(Dispatchers.Main) { onError(ApiError("Network error", 500, e.message)) }
+            } catch (e: HttpException) {
+                withContext(Dispatchers.Main) { onError(ApiError("Server error", e.code(), e.message)) }
+            }
+        }
+    }
+
+    override suspend fun accountTopUp(
+        topUpRequest: TopUpRequest,
+        onSuccess: (TransferResponse) -> Unit,
+        onError: (ApiError) -> Unit
+    ) {
+        CoroutineScope(Dispatchers.IO).launch{
+            try {
+                val response = apiService.accountTopUp(topUpRequest)
+                if (response.isSuccessful) {
+                    withContext(Dispatchers.Main) { onSuccess(response.body()!!) }
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    val json = try { JSONObject(errorBody?: "{}") } catch (e: Exception) { JSONObject() }
+                    val message = json.optString("message")
+                    val errorsJson = json.optJSONObject("errors")
+                    val errorsList = mutableListOf<String>()
+                    errorsJson?.keys()?.forEach { key ->
+                        val errorArray = errorsJson.optJSONArray(key)
+                        for (i in 0 until (errorArray?.length() ?: 0)) {
+                            errorsList.add(errorArray?.getString(i) ?: "")
+                        }
+                    }
+
+                    withContext(Dispatchers.Main) { onError(ApiError(message, response.code(), "Top up failed", errorsList)) }
                 }
             } catch (e: IOException) {
                 withContext(Dispatchers.Main) { onError(ApiError("Network error", 500, e.message)) }

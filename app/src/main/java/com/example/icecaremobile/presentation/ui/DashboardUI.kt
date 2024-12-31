@@ -434,7 +434,7 @@ fun DashboardSection4(
         )
 
         Text(
-            text = "Transfer Money",
+            text = "Send Money",
             fontWeight = FontWeight.Bold,
             modifier = Modifier
                 .constrainAs(transferText)

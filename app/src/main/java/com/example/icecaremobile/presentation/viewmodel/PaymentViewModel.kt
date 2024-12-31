@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.icecaremobile.data.remote.entity.TransferResponseState
 import com.example.icecaremobile.domain.model.Request.AccountPaymentRequest
 import com.example.icecaremobile.domain.model.Request.ThirdPartyRequest
+import com.example.icecaremobile.domain.model.Request.TopUpRequest
 import com.example.icecaremobile.domain.model.Request.TransferRequest
 import com.example.icecaremobile.domain.useCase.GetUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -56,6 +57,21 @@ class PaymentViewModel @Inject constructor(
             _transferResponse.value = TransferResponseState.Loading
             getUseCase(
                 thirdPartyRequest = thirdPartyRequest,
+                onSuccess = { result ->
+                    _transferResponse.value = TransferResponseState.Success(result)
+                },
+                onError = { error ->
+                    _transferResponse.value = TransferResponseState.Error(error.concatenatedErrors)
+                }
+            )
+        }
+    }
+
+    fun accountTopUp(topUpRequest: TopUpRequest) {
+        viewModelScope.launch {
+            _transferResponse.value = TransferResponseState.Loading
+            getUseCase(
+                topUpRequest = topUpRequest,
                 onSuccess = { result ->
                     _transferResponse.value = TransferResponseState.Success(result)
                 },

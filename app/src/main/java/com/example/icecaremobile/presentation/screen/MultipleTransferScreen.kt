@@ -29,7 +29,6 @@ import com.example.icecaremobile.presentation.ui.MultipleTransferUI
 import com.example.icecaremobile.presentation.ui.component.AppTopBar
 import com.example.icecaremobile.presentation.viewmodel.PaymentViewModel
 import java.math.BigDecimal
-import java.math.RoundingMode
 import java.time.LocalDate
 
 
@@ -61,30 +60,31 @@ fun MultipleTransferScreen(navController: NavHostController) {
         var selectedBanks by remember { mutableStateOf<List<CompanyAccounts>>(emptyList()) }
         var bankAmounts by remember { mutableStateOf<Map<String, String>>(emptyMap()) }
         var purposeOfPayment by remember { mutableStateOf("") }
-        var dollarAmounts by remember { mutableStateOf<Map<String, String>>(emptyMap()) }
-        var dollarAmount by remember { mutableStateOf(BigDecimal.ZERO) }
+//        var dollarAmounts by remember { mutableStateOf<Map<String, String>>(emptyMap()) }
+//        var dollarAmount by remember { mutableStateOf(BigDecimal.ZERO) }
+        var dollarAmount by remember { mutableStateOf("") }
         val totalAmount = bankAmounts.values.fold(BigDecimal.ZERO) { acc, amount -> acc.add(amount.toBigDecimal()) }
         var uploadedReceipts by remember { mutableStateOf<List<Uri>>(emptyList()) }
 
-        LaunchedEffect(bankAmounts) {
-            dollarAmounts = bankAmounts.mapValues { (bankName, nairaAmount) ->
-                try {
-                    if (nairaAmount.isNotEmpty()) {
-                        BigDecimal(nairaAmount).divide(
-                            BigDecimal(userData?.dollarRate ?: 1.0), 3, RoundingMode.HALF_UP
-                        ).toPlainString()
-                    } else "0.00"
-                } catch (e: Exception) {
-                    "0.00"
-                }
-            }
-            dollarAmount = dollarAmounts.values.fold(BigDecimal.ZERO) { acc, amount -> acc.add(amount.toBigDecimal()) }
-        }
+//        LaunchedEffect(bankAmounts) {
+//            dollarAmounts = bankAmounts.mapValues { (bankName, nairaAmount) ->
+//                try {
+//                    if (nairaAmount.isNotEmpty()) {
+//                        BigDecimal(nairaAmount).divide(
+//                            BigDecimal(userData?.dollarRate ?: 1.0), 3, RoundingMode.HALF_UP
+//                        ).toPlainString()
+//                    } else "0.00"
+//                } catch (e: Exception) {
+//                    "0.00"
+//                }
+//            }
+//            dollarAmount = dollarAmounts.values.fold(BigDecimal.ZERO) { acc, amount -> acc.add(amount.toBigDecimal()) }
+//        }
 
         MultipleTransferUI(
             modifier = Modifier.padding(padding),
             banks = bankList ?: emptyList(),
-            dollarAmount = dollarAmount,
+            dollarAmount = { dollarAmount = it },
             purpose = { purposeOfPayment = it },
             selectedBanks = { selectedBanks = it },
             enteredAmounts = { bankAmounts = it },
