@@ -50,8 +50,10 @@ fun AccountScreen(
             onCheck = { boxChecked = true },
             banks = bankList ?: emptyList(),
             onButtonClick = {
-                if (!boxChecked)
-                    Toast.makeText(context, "Please check the box to proceed", Toast.LENGTH_SHORT).show()
+                if (bankList!!.isEmpty())
+                    Toast.makeText(context, "Unable to fetch, please try again later", Toast.LENGTH_SHORT).show()
+                else if (!boxChecked)
+                        Toast.makeText(context, "Please check the box to proceed", Toast.LENGTH_SHORT).show()
                 else {
                     if (key == "isTopUpAccount")
                         navController.navigate(Screen.TopUpAccountScreen)

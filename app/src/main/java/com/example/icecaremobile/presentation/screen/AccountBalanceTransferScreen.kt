@@ -77,9 +77,8 @@ fun AccountBalanceTransferScreen(
             onTermsCheckedChange = { boxCheck = it },
             buttonClicked = {
                 val accountPaymentRequest = AccountPaymentRequest(
-                    dollarAmount = calculatedDollarEquivalence.toDouble(),
                     customerEmail = userData?.email ?: "",
-                    nairaAmount = if (enteredNairaAmount.isNotEmpty()) enteredNairaAmount.toDouble() else 0.0,
+                    amount = if (enteredNairaAmount.isNotEmpty()) enteredNairaAmount.toDouble() else 0.0,
                     description = enteredDescription
                 )
                 val errors = validateFields(accountPaymentRequest).toMutableMap()
@@ -111,7 +110,7 @@ fun AccountBalanceTransferScreen(
 private fun validateFields(request: AccountPaymentRequest): Map<String, String> {
     val errors = mutableMapOf<String, String>()
 
-    if (request.dollarAmount <= 0)
+    if (request.amount <= 0)
         errors["nairaAmount"] = "Amount in Naira is required."
     if (request.description.isEmpty())
         errors["description"] = "Enter transfer description"
