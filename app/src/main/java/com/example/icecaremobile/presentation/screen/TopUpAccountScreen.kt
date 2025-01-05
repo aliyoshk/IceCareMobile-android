@@ -40,7 +40,7 @@ fun TopUpAccountScreen(
     var bankList by remember { mutableStateOf<List<CompanyAccounts>?>(null) }
 
     var fieldErrors by remember { mutableStateOf(mapOf<String, String>()) }
-    val onSubmitClick = remember { mutableStateOf(false) }
+
 
     LaunchedEffect(Unit) {
         userData = authManager.getLoginResponse()?.data
@@ -55,6 +55,7 @@ fun TopUpAccountScreen(
         var bankAmounts by remember { mutableStateOf<Map<String, String>>(emptyMap()) }
         var purposeOfPayment by remember { mutableStateOf("") }
         var uploadedReceipts by remember { mutableStateOf<List<Uri>>(emptyList()) }
+        val onSubmitClick = remember { mutableStateOf(false) }
 
         TopUpAccountUI(
             modifier = Modifier.padding(padding),

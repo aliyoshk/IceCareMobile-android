@@ -43,9 +43,7 @@ fun MultipleTransferScreen(navController: NavHostController) {
     val authManager = AuthManagerImpl(LocalContext.current)
     var userData by remember { mutableStateOf<LoginResponseData?>(null) }
     var bankList by remember { mutableStateOf<List<CompanyAccounts>?>(null) }
-
     var fieldErrors by remember { mutableStateOf(mapOf<String, String>()) }
-    val onSubmitClick = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         userData = authManager.getLoginResponse()?.data
@@ -65,6 +63,7 @@ fun MultipleTransferScreen(navController: NavHostController) {
         var dollarAmount by remember { mutableStateOf("") }
         val totalAmount = bankAmounts.values.fold(BigDecimal.ZERO) { acc, amount -> acc.add(amount.toBigDecimal()) }
         var uploadedReceipts by remember { mutableStateOf<List<Uri>>(emptyList()) }
+        val onSubmitClick = remember { mutableStateOf(false) }
 
 //        LaunchedEffect(bankAmounts) {
 //            dollarAmounts = bankAmounts.mapValues { (bankName, nairaAmount) ->

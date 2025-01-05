@@ -1,7 +1,6 @@
 package com.example.icecaremobile.presentation.screen
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -15,10 +14,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.icecaremobile.data.local.auth.AuthManagerImpl
 import com.example.icecaremobile.domain.model.Request.ThirdPartyRequest
 import com.example.icecaremobile.domain.model.Response.LoginResponseData
@@ -79,10 +76,7 @@ fun ThirdPartyTransferScreen(
                     if (!boxCheck)
                         Toast.makeText(context, "You must agree to the terms and conditions to proceed", Toast.LENGTH_SHORT).show()
                     else {
-                        Log.d("OnClickedIssue", request.toString())
-                        Log.d("OnClickedIssue", paymentViewModel.thirdPartyTransfer(request).toString())
                         paymentViewModel.thirdPartyTransfer(request)
-                        Log.d("OnClickedIssue", request.toString())
                         onSubmitClick.value = true
                     }
                 }
@@ -91,10 +85,8 @@ fun ThirdPartyTransferScreen(
             isError = { fieldErrors }
         )
 
-        if (onSubmitClick.value) {
-            Log.d("OnClickedIssue", transferState.value.toString())
+        if (onSubmitClick.value)
             RenderTransferState(transferState.value, navController)
-        }
     }
 }
 
@@ -105,20 +97,12 @@ private fun validateFields(request: ThirdPartyRequest): Map<String, String> {
         errors["amount"] = "Amount is required."
     if (request.bankName.isEmpty())
         errors["bankName"] = "Bank is required."
-    if (request.accountNumber.isEmpty())
-        errors["accountNumber"] = "Account Number is required."
+    if (request.accountNumber.isEmpty() || request.accountNumber.length != 10)
+        errors["accountNumber"] = "Account Number should be 10 digits long"
     if (request.accountName.isEmpty())
         errors["accountName"] = "Account Name is required."
     if (request.description.isEmpty())
         errors["description"] = "Enter transfer description"
 
     return errors
-}
-
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun ThirdPartyTransferScreenPreview()
-{
-    val navController = rememberNavController()
-    ThirdPartyTransferScreen(navController)
 }
