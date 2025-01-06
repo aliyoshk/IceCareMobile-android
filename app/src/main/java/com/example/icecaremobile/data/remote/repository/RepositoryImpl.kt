@@ -13,6 +13,7 @@ import com.example.icecaremobile.domain.model.Response.LoginResponse
 import com.example.icecaremobile.domain.model.Response.RegistrationResponse
 import com.example.icecaremobile.domain.model.Response.TransactionHistoryResponse
 import com.example.icecaremobile.domain.model.Response.TransferResponse
+import com.example.icecaremobile.domain.model.Response.UserAccount
 import com.example.icecaremobile.domain.model.network.ApiError
 import com.example.icecaremobile.domain.repository.IRepository
 import kotlinx.coroutines.CoroutineScope
@@ -204,6 +205,7 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
+    //Account top up block
     override suspend fun accountTopUp(
         topUpRequest: TopUpRequest,
         onSuccess: (TransferResponse) -> Unit,
@@ -237,6 +239,41 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
+    //Refresh Account block
+    override suspend fun refreshAccount(
+        email: String,
+        onSuccess: (UserAccount) -> Unit,
+        onError: (ApiError) -> Unit
+    ) {
+        CoroutineScope(Dispatchers.IO).launch{
+            try {
+                val response = apiService.refreshAccount(email)
+                if (response.isSuccessful) {
+                    withContext(Dispatchers.Main) { onSuccess(response.body()!!) }
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    val json = try { JSONObject(errorBody?: "{}") } catch (e: Exception) { JSONObject() }
+                    val message = json.optString("message")
+                    val errorsJson = json.optJSONObject("errors")
+                    val errorsList = mutableListOf<String>()
+                    errorsJson?.keys()?.forEach { key ->
+                        val errorArray = errorsJson.optJSONArray(key)
+                        for (i in 0 until (errorArray?.length() ?: 0)) {
+                            errorsList.add(errorArray?.getString(i) ?: "")
+                        }
+                    }
+
+                    withContext(Dispatchers.Main) { onError(ApiError(message, response.code(), "Failed to fetch records", errorsList)) }
+                }
+            } catch (e: IOException) {
+                withContext(Dispatchers.Main) { onError(ApiError("Network error", 500, e.message)) }
+            } catch (e: HttpException) {
+                withContext(Dispatchers.Main) { onError(ApiError("Server error", e.code(), e.message)) }
+            }
+        }
+    }
+
+    //Get Transaction status block
     override suspend fun getTransferStatus(
         email: String,
         onSuccess: (TransferResponse) -> Unit,
@@ -270,6 +307,7 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
+    //Get transaction history block
     override suspend fun getTransactionHistory(
         email: String,
         onSuccess: (TransactionHistoryResponse) -> Unit,

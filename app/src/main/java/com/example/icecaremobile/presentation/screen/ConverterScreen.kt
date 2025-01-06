@@ -30,7 +30,7 @@ fun ConverterScreen(navController: NavHostController) {
     val totalAmount by remember(enteredAmount) {
         mutableStateOf(
             if (enteredAmount.isNotEmpty()) {
-                BigDecimal(enteredAmount).multiply(BigDecimal(userData?.dollarRate!!))
+                BigDecimal(enteredAmount).multiply(BigDecimal(userData?.userAccount?.dollarRate!!))
             } else BigDecimal.ZERO
         )
     }
@@ -46,7 +46,7 @@ fun ConverterScreen(navController: NavHostController) {
 
         ConverterUI(
             modifier = Modifier.padding(padding),
-            dollarRate = userData?.dollarRate.toString(),
+            dollarRate = userData?.userAccount?.dollarRate.toString(),
             amountEntered = { enteredAmount = it },
             onCancelPress = { navController.navigateUp() },
             onProceedClick = { navController.navigate(Screen.SendMoneyScreen) },

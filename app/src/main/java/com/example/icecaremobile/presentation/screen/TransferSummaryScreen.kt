@@ -16,13 +16,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.icecaremobile.core.utils.Helpers.convertUriToBase64
+import com.example.icecaremobile.data.local.auth.AuthManagerImpl
 import com.example.icecaremobile.data.remote.entity.TransferResponseState
+import com.example.icecaremobile.data.remote.entity.UserAccountState
+import com.example.icecaremobile.domain.auth.AuthManager
 import com.example.icecaremobile.domain.model.Request.BankDetail
+import com.example.icecaremobile.domain.model.Request.StatusRequest
 import com.example.icecaremobile.domain.model.Request.TransferEvidence
 import com.example.icecaremobile.domain.model.Request.TransferRequest
 import com.example.icecaremobile.presentation.navigator.Screen
@@ -30,6 +32,7 @@ import com.example.icecaremobile.presentation.ui.TransferSummaryUI
 import com.example.icecaremobile.presentation.ui.component.AcceptDialog
 import com.example.icecaremobile.presentation.ui.component.AppLoader
 import com.example.icecaremobile.presentation.ui.component.AppTopBar
+import com.example.icecaremobile.presentation.viewmodel.LoginViewModel
 import com.example.icecaremobile.presentation.viewmodel.PaymentViewModel
 import java.time.LocalDate
 
@@ -37,8 +40,12 @@ import java.time.LocalDate
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun TransferSummaryScreen(
-    navController: NavHostController, accounts: Screen.TransferSummaryScreen
+    navController: NavHostController,
+    accounts: Screen.TransferSummaryScreen,
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
+    val authManager = AuthManagerImpl(LocalContext.current)
+
     Scaffold(
         topBar = { AppTopBar(title = "Transfer Summary"){ navController.navigateUp() }}
     ) { padding ->
@@ -84,31 +91,69 @@ fun TransferSummaryScreen(
             }
         )
 
-        if (onSubmitClick.value) {
-            RenderTransferState(transferState.value, navController)
-        }
+        if (onSubmitClick.value)
+            RenderTransferState(transferState.value, navController, authManager, viewModel)
     }
 }
 
 @Composable
 fun RenderTransferState(
     state: TransferResponseState,
-    navController: NavHostController
+    navController: NavHostController,
+    authManager: AuthManager,
+    loginViewModel: LoginViewModel = hiltViewModel()
 ) {
     var showDialog by remember { mutableStateOf(true) }
+    var isRefreshing by remember { mutableStateOf(false) }
+    val refreshResponse by loginViewModel.userAccountResponse.collectAsState()
+
     when (state) {
         is TransferResponseState.Loading -> {
             showDialog = true
             AppLoader()
         }
         is TransferResponseState.Success -> {
-            LaunchedEffect(Unit) {
-                val message = state.transferResponse.message
-                navController.navigate( Screen.SubmissionScreen(data = message, key = Screen.TransferSummaryScreen.toString()),
-                    builder = {
-                        popUpTo(Screen.DashboardScreen) { inclusive = true }
+            if (!isRefreshing) {
+                // Start account refresh
+                LaunchedEffect(Unit) {
+                    isRefreshing = true
+                    val email = authManager.getLoginResponse()?.data?.email
+                    loginViewModel.refreshAccount(StatusRequest(email!!))
+                }
+            } else {
+                // Handle the refresh response
+                when (refreshResponse) {
+                    is UserAccountState.Loading -> {
+                        AppLoader()
                     }
-                )
+                    is UserAccountState.Success -> {
+                        LaunchedEffect(Unit) {
+                            val message = state.transferResponse.message
+                            val response = (refreshResponse as UserAccountState.Success).userAccount
+                            navController.navigate(
+                                ( Screen.SubmissionScreen(data = message, key = Screen.TransferSummaryScreen.toString())),
+                                builder = {
+                                    popUpTo(Screen.DashboardScreen) { inclusive = true }
+                                }
+                            )
+                        }
+                    }
+                    is UserAccountState.Error -> {
+                        if (showDialog) {
+                            AcceptDialog(
+                                title = "Error",
+                                message = (refreshResponse as UserAccountState.Error).message,
+                                buttonText = "Retry",
+                                onButtonClick = {
+                                    showDialog = false
+                                    isRefreshing = false
+                                    navController.navigate(Screen.LoginScreen)
+                                },
+                                onDismissRequest = { showDialog = false }
+                            )
+                        }
+                    }
+                }
             }
         }
         is TransferResponseState.Error -> {
@@ -126,12 +171,38 @@ fun RenderTransferState(
 }
 
 
+//@Composable
+//fun RenderTransferState(
+//    state: TransferResponseState,
+//    navController: NavHostController
+//) {
+//    var showDialog by remember { mutableStateOf(true) }
+//    when (state) {
+//        is TransferResponseState.Loading -> {
+//            showDialog = true
+//            AppLoader()
+//        }
+//        is TransferResponseState.Success -> {
+//            LaunchedEffect(Unit) {
+//                val message = state.transferResponse.message
+//                navController.navigate( Screen.SubmissionScreen(data = message, key = Screen.TransferSummaryScreen.toString()),
+//                    builder = {
+//                        popUpTo(Screen.DashboardScreen) { inclusive = true }
+//                    }
+//                )
+//            }
+//        }
+//        is TransferResponseState.Error -> {
+//            if (showDialog) {
+//                AcceptDialog(
+//                    title = "Error",
+//                    message = state.message,
+//                    buttonText = "Okay",
+//                    onButtonClick = { showDialog = false },
+//                    onDismissRequest = { showDialog = false }
+//                )
+//            }
+//        }
+//    }
+//}
 
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun TransferSummaryScreenPreview()
-{
-    val navController = rememberNavController()
-    TransferSummaryScreen(navController, accounts = Screen.TransferSummaryScreen("", "", "", "", ""))
-}

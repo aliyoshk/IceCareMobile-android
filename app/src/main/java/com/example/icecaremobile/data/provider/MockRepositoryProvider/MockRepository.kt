@@ -16,6 +16,7 @@ import com.example.icecaremobile.domain.model.Response.RegistrationResponse
 import com.example.icecaremobile.domain.model.Response.TransactionHistory
 import com.example.icecaremobile.domain.model.Response.TransactionHistoryResponse
 import com.example.icecaremobile.domain.model.Response.TransferResponse
+import com.example.icecaremobile.domain.model.Response.UserAccount
 import com.example.icecaremobile.domain.model.network.ApiError
 import com.example.icecaremobile.domain.repository.IRepository
 import kotlinx.coroutines.delay
@@ -64,31 +65,33 @@ class MockRepository @Inject constructor() : IRepositoryProvider
                             token = "rfgdssgdygsfguy463634",
                             status = "Approved",
                             accountNumber = "012567823",
-                            nairaBalance = "567000",
-                            dollarBalance = "50",
                             email = "johndoe@gmail.com",
-                            dollarRate = 1500.0,
                             fullName = "John Doe",
-                            companyNumber = listOf(
-                                CompanyPhones("0905678934"),
-                                CompanyPhones("0803678900"),
-                                CompanyPhones("0807678934")
-                            ),
-                            companyAccounts = listOf(
-                                CompanyAccounts(
-                                    accountNumber = "2134789034",
-                                    accountName = "Ice Care Nig Ltd",
-                                    bankName = "UBA"
+                            userAccount = UserAccount(
+                                dollarRate = 1500.0,
+                                nairaBalance = "567000",
+                                dollarBalance = "50",
+                                companyNumber = listOf(
+                                    CompanyPhones("0905678934"),
+                                    CompanyPhones("0803678900"),
+                                    CompanyPhones("0807678934")
                                 ),
-                                CompanyAccounts(
-                                    accountNumber = "0252458264",
-                                    accountName = "Ice Care Nig Ltd",
-                                    bankName = "Wema Bank"
-                                ),
-                                CompanyAccounts(
-                                    accountNumber = "5678902314",
-                                    accountName = "Ice Care Nig Ltd",
-                                    bankName = "Providus Bank"
+                                companyAccounts = listOf(
+                                    CompanyAccounts(
+                                        accountNumber = "2134789034",
+                                        accountName = "Ice Care Nig Ltd",
+                                        bankName = "UBA"
+                                    ),
+                                    CompanyAccounts(
+                                        accountNumber = "0252458264",
+                                        accountName = "Ice Care Nig Ltd",
+                                        bankName = "Wema Bank"
+                                    ),
+                                    CompanyAccounts(
+                                        accountNumber = "5678902314",
+                                        accountName = "Ice Care Nig Ltd",
+                                        bankName = "Providus Bank"
+                                    )
                                 )
                             )
                         )
@@ -153,6 +156,43 @@ class MockRepository @Inject constructor() : IRepositoryProvider
                         status = true,
                         message = "Your account top up request has been submitted for review",
                         data = true
+                    )
+                )
+            }
+
+            override suspend fun refreshAccount(
+                email: String,
+                onSuccess: (UserAccount) -> Unit,
+                onError: (ApiError) -> Unit
+            ) {
+                delay(2000)
+                onSuccess(
+                    UserAccount(
+                        dollarRate = 75000.0,
+                        nairaBalance = "5567000",
+                        dollarBalance = "1000",
+                        companyNumber = listOf(
+                            CompanyPhones("0905678934"),
+                            CompanyPhones("0803678900"),
+                            CompanyPhones("0807678934")
+                        ),
+                        companyAccounts = listOf(
+                            CompanyAccounts(
+                                accountNumber = "2134789034",
+                                accountName = "Ice Care Nig Ltd",
+                                bankName = "UBA"
+                            ),
+                            CompanyAccounts(
+                                accountNumber = "0252458264",
+                                accountName = "Ice Care Nig Ltd",
+                                bankName = "Wema Bank"
+                            ),
+                            CompanyAccounts(
+                                accountNumber = "5678902314",
+                                accountName = "Ice Care Nig Ltd",
+                                bankName = "Providus Bank"
+                            )
+                        )
                     )
                 )
             }

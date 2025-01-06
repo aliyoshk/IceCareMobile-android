@@ -35,7 +35,7 @@ fun CallScreen(
 
         CallUI(
             modifier = Modifier.padding(padding),
-            numbers = userData?.companyNumber ?: emptyList()
+            numbers = userData?.userAccount?.companyNumber ?: emptyList()
         )
     }
 }

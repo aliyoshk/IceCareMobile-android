@@ -4,6 +4,7 @@ import com.example.icecaremobile.data.provider.RepositoryProvider.IRepositoryPro
 import com.example.icecaremobile.domain.auth.AuthManager
 import com.example.icecaremobile.domain.model.Request.AccountPaymentRequest
 import com.example.icecaremobile.domain.model.Request.LoginRequest
+import com.example.icecaremobile.domain.model.Request.RefreshRequest
 import com.example.icecaremobile.domain.model.Request.RegistrationRequest
 import com.example.icecaremobile.domain.model.Request.StatusRequest
 import com.example.icecaremobile.domain.model.Request.ThirdPartyRequest
@@ -13,6 +14,7 @@ import com.example.icecaremobile.domain.model.Response.LoginResponse
 import com.example.icecaremobile.domain.model.Response.RegistrationResponse
 import com.example.icecaremobile.domain.model.Response.TransactionHistoryResponse
 import com.example.icecaremobile.domain.model.Response.TransferResponse
+import com.example.icecaremobile.domain.model.Response.UserAccount
 import com.example.icecaremobile.domain.model.network.ApiError
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -46,7 +48,8 @@ class GetUseCase @Inject constructor(
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
                         authManager.saveLoginResponse(loginResponse)
-                        authManager.saveBankResponse(loginResponse.data.companyAccounts)
+                        authManager.saveUserAccountResponse(loginResponse.data.userAccount)
+                        authManager.saveBankResponse(loginResponse.data.userAccount.companyAccounts)
                         onSuccess(loginResponse)
                     } catch (e: Exception) {
                         onError(ApiError(message = e.message ?: "Error saving login response"))
@@ -82,7 +85,8 @@ class GetUseCase @Inject constructor(
                     }
                 }
             },
-            onError = onError)
+            onError = onError
+        )
     }
 
     //Third party transfer block
@@ -110,6 +114,27 @@ class GetUseCase @Inject constructor(
         onError: (ApiError) -> Unit
     ) {
         repository.getTransferStatus(statusRequest.email, onSuccess, onError)
+    }
+
+    //Refresh account block
+    suspend operator fun  invoke(
+        request: RefreshRequest,
+        onSuccess: (UserAccount) -> Unit,
+        onError: (ApiError) -> Unit
+    ) {
+        repository.refreshAccount(request.email,
+            onSuccess = {
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        authManager.saveUserAccountResponse(it)
+                        onSuccess(it)
+                    } catch (e: Exception) {
+                        onError(ApiError(message = e.message ?: "Error saving user account response"))
+                    }
+                }
+            },
+            onError
+        )
     }
 
     //Transaction history Status block

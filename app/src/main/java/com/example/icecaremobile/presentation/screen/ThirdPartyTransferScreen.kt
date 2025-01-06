@@ -86,7 +86,7 @@ fun ThirdPartyTransferScreen(
         )
 
         if (onSubmitClick.value)
-            RenderTransferState(transferState.value, navController)
+            RenderTransferState(transferState.value, navController, authManager)
     }
 }
 

@@ -53,7 +53,7 @@ fun AccountBalanceTransferScreen(
             mutableStateOf(
                 if (enteredNairaAmount.isNotEmpty()) {
                     try {
-                        BigDecimal(enteredNairaAmount).divide(BigDecimal(userData?.dollarRate ?: 1.0),
+                        BigDecimal(enteredNairaAmount).divide(BigDecimal(userData?.userAccount?.dollarRate ?: 1.0),
                             3,
                             RoundingMode.HALF_UP
                         )
@@ -101,7 +101,7 @@ fun AccountBalanceTransferScreen(
 
         if (onSubmitClick.value) {
             Log.d("OnClickedIssue", transferState.value.toString())
-            RenderTransferState(transferState.value, navController)
+            RenderTransferState(transferState.value, navController, authManager)
             Log.d("OnClickedIssue", transferState.value.toString())
         }
     }

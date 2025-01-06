@@ -10,6 +10,7 @@ import com.example.icecaremobile.domain.model.Response.LoginResponse
 import com.example.icecaremobile.domain.model.Response.RegistrationResponse
 import com.example.icecaremobile.domain.model.Response.TransactionHistoryResponse
 import com.example.icecaremobile.domain.model.Response.TransferResponse
+import com.example.icecaremobile.domain.model.Response.UserAccount
 import com.example.icecaremobile.domain.model.network.ApiError
 
 interface IRepository {
@@ -47,6 +48,12 @@ interface IRepository {
     suspend fun accountTopUp(
         topUpRequest: TopUpRequest,
         onSuccess: (TransferResponse) -> Unit,
+        onError: (ApiError) -> Unit
+    )
+
+    suspend fun refreshAccount(
+        email: String,
+        onSuccess: (UserAccount) -> Unit,
         onError: (ApiError) -> Unit
     )
 

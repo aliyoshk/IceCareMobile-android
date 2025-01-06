@@ -14,10 +14,14 @@ data class LoginResponseData(
     val token: String,
     val phone: String,
     val status: String,
+    val accountNumber: String,
+    val userAccount: UserAccount,
+)
+
+data class UserAccount(
+    val dollarRate: Double,
     val nairaBalance: String,
     val dollarBalance: String,
-    val accountNumber: String,
-    val dollarRate: Double,
     val companyNumber: List<CompanyPhones>,
     val companyAccounts: List<CompanyAccounts>
 )

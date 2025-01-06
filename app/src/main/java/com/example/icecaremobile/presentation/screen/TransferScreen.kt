@@ -61,7 +61,7 @@ fun TransferScreen(navController: NavHostController)
 
         TransferUI(
             modifier = Modifier.padding(padding),
-            accounts = userData?.companyAccounts ?: emptyList(),
+            accounts = userData?.userAccount?.companyAccounts ?: emptyList(),
             enteredDollar = { enteredDollarAmount = it },
             nairaAmount = { enteredNairaAmount = it },
             purpose = { enteredPurpose = it },
@@ -83,7 +83,7 @@ fun TransferScreen(navController: NavHostController)
                                 selectedBankDetails?.accountNumber,
                                 enteredNairaAmount, enteredDollarAmount,
                                 email = userData?.email,
-                                dollarRate = userData?.dollarRate.toString(),
+                                dollarRate = userData?.userAccount?.dollarRate.toString(),
                                 description = enteredPurpose
                             )
                         )

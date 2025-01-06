@@ -115,7 +115,7 @@ fun MultipleTransferScreen(navController: NavHostController) {
                         transactionDate = LocalDate.now().toString(),
                         description = purposeOfPayment,
                         dollarAmount = dollarAmount.toDouble(),
-                        dollarRate = userData?.dollarRate ?: 0.0,
+                        dollarRate = userData?.userAccount?.dollarRate ?: 0.0,
                         customerEmail = userData?.email ?: "",
                         bankDetails = bankDetails,
                         transferEvidence = transferEvidence
@@ -129,7 +129,7 @@ fun MultipleTransferScreen(navController: NavHostController) {
         )
 
         if (onSubmitClick.value) {
-            RenderTransferState(transferState.value, navController)
+            RenderTransferState(transferState.value, navController, authManager)
         }
     }
 }

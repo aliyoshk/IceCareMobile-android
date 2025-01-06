@@ -13,9 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.icecaremobile.data.local.auth.AuthManagerImpl
 import com.example.icecaremobile.domain.model.Response.LoginResponseData
 import com.example.icecaremobile.presentation.navigator.Screen
@@ -30,7 +28,10 @@ fun DashboardScreen(navController: NavHostController)
     var loginResponse by remember { mutableStateOf<LoginResponseData?>(null) }
 
     LaunchedEffect(Unit) {
+        Log.e("Executing Dashboard launched effect", "Launched effect executed")
         loginResponse = authManager.getLoginResponse()?.data
+
+        Log.e("Executing Dashboard launched effect", "Logging response $loginResponse")
     }
 
     Scaffold(
@@ -48,8 +49,8 @@ fun DashboardScreen(navController: NavHostController)
                 modifier = Modifier.padding(padding),
                 name = loginResponse?.fullName?.split(" ")?.firstOrNull() ?: "",
                 acctNumber = loginResponse?.accountNumber ?: "",
-                dollarRate = loginResponse?.dollarRate.toString(),
-                balance = loginResponse?.nairaBalance ?: "",
+                dollarRate = loginResponse?.userAccount?.dollarRate.toString(),
+                balance = loginResponse?.userAccount?.nairaBalance ?: "",
                 onConverterClick = { navController.navigate(Screen.ConverterScreen) },
                 onRemitStatusClick = { navController.navigate(Screen.RemitStatusScreen("isRemitStatus")) },
                 onTransferStatusClick = { navController.navigate(Screen.StatusScreen) },
@@ -60,12 +61,4 @@ fun DashboardScreen(navController: NavHostController)
             )
         }
     }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun DashboardScreenPreview()
-{
-    val navController = rememberNavController()
-    DashboardScreen(navController)
 }

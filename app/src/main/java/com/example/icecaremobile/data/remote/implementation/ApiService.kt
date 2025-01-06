@@ -11,6 +11,7 @@ import com.example.icecaremobile.domain.model.Response.LoginResponse
 import com.example.icecaremobile.domain.model.Response.RegistrationResponse
 import com.example.icecaremobile.domain.model.Response.TransactionHistoryResponse
 import com.example.icecaremobile.domain.model.Response.TransferResponse
+import com.example.icecaremobile.domain.model.Response.UserAccount
 import retrofit2.Response
 import retrofit2.http.Body
 import javax.inject.Inject
@@ -37,6 +38,10 @@ class ApiService @Inject constructor(private val apiService: IApiService) {
 
     suspend fun accountTopUp(@Body topUpRequest: TopUpRequest): Response<TransferResponse> {
         return apiService.accountTopUp(topUpRequest)
+    }
+
+    suspend fun refreshAccount(email: String): Response<UserAccount> {
+        return apiService.refreshAccount(email)
     }
 
     suspend fun getTransferStatus(email: String): Response<TransferResponse> {
