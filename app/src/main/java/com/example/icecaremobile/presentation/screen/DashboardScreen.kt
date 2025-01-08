@@ -1,7 +1,6 @@
 package com.example.icecaremobile.presentation.screen
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -28,20 +27,14 @@ fun DashboardScreen(navController: NavHostController)
     var loginResponse by remember { mutableStateOf<LoginResponseData?>(null) }
 
     LaunchedEffect(Unit) {
-        Log.e("Executing Dashboard launched effect", "Launched effect executed")
         loginResponse = authManager.getLoginResponse()?.data
-
-        Log.e("Executing Dashboard launched effect", "Logging response $loginResponse")
     }
 
     Scaffold(
         Modifier.fillMaxSize()
     ){ padding ->
 
-        Log.e("DashboardScreen", "Dashboard launched successful")
-
         if (loginResponse == null) {
-            Log.e("DashboardScreen", "Login response is null")
             return@Scaffold
         }
         else {
