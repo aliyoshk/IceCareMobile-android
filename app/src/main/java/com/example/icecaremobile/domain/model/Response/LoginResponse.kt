@@ -1,5 +1,3 @@
-package com.example.icecaremobile.domain.model.Response
-
 data class LoginResponse(
     val status : Boolean,
     val message: String,

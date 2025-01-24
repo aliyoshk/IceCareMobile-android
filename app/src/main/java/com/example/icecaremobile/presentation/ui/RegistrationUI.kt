@@ -145,7 +145,7 @@ fun RegistrationUI(
         ) {
             Checkbox(
                 checked = isTermsChecked,
-                onCheckedChange = onTermsCheckedChange ,
+                onCheckedChange = onTermsCheckedChange,
                 colors = CheckboxDefaults.colors(LightGray)
             )
 

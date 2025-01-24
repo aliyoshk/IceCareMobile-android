@@ -29,8 +29,7 @@ fun SubmissionScreen(
             modifier = Modifier.padding(padding),
             bodyText = message ?: "",
             textColor = color,
-            onButtonClick =
-            {
+            onButtonClick = {
                 if (route == Screen.RegistrationScreen.toString()) {
                     navController.navigate((Screen.LoginScreen),
                         builder = { popUpTo(Screen.LandingScreen) { inclusive = true } }

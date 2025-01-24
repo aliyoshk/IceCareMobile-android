@@ -1,4 +1,4 @@
-package com.example.icecaremobile.presentation.ui.component
+package com.example.icecaremobile.presentation.ui
 
 import android.content.Context
 import android.content.Intent

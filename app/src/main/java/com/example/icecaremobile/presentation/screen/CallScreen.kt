@@ -14,8 +14,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.example.icecaremobile.data.local.auth.AuthManagerImpl
 import com.example.icecaremobile.domain.model.Response.LoginResponseData
+import com.example.icecaremobile.presentation.ui.CallUI
 import com.example.icecaremobile.presentation.ui.component.AppTopBar
-import com.example.icecaremobile.presentation.ui.component.CallUI
 
 
 @Composable

@@ -14,10 +14,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.icecaremobile.core.utils.Helpers
 import com.example.icecaremobile.data.remote.entity.RegistrationResponseState
 import com.example.icecaremobile.domain.model.Request.RegistrationRequest
@@ -143,12 +141,4 @@ fun RegistrationResponseHandler(
         }
         null -> { showDialog = true }
     }
-}
-
-@Composable
-@Preview(showBackground = true, showSystemUi = true)
-fun RegistrationScreenPreview()
-{
-    val navController = rememberNavController()
-    RegistrationScreen(navController)
 }

@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.icecaremobile.R
 import com.example.icecaremobile.core.utils.Helpers
+import com.example.icecaremobile.domain.model.Response.AccountDetails
 import com.example.icecaremobile.domain.model.Response.TransactionHistory
 import com.example.icecaremobile.ui.theme.DarkGolden
 
@@ -209,5 +210,41 @@ fun HistoryListItem(
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
 fun TransactionHistoryUIPreview() {
-    TransactionHistoryUI(searchText = {}, onItemSelection = {}, historyData = listOf())
+    var response = listOf(
+            TransactionHistory(
+                totalAmount = "-78000",
+                description = "UBA | 0123456789",
+                transactionDate = "04/Mar/2023",
+                category = "Third Party Transfer ",
+                accountDetails = listOf(
+                    AccountDetails(
+                        amount = "50000",
+                        accountNumber = "21342213211",
+                        accountName = "Ice Care Nig Ltd",
+                        bankName = "United bank For Africa"
+                    )
+                )
+            ),
+            TransactionHistory(
+                totalAmount = "+50000",
+                description = "0221345675",
+                transactionDate = "04/Dec/2023",
+                category = "Fund Account",
+                accountDetails = listOf(
+                    AccountDetails(
+                        amount = "10000",
+                        accountNumber = "0221345675",
+                        accountName = "Ice Care Nig Ltd",
+                        bankName = "Providus Bank"
+                    ),
+                    AccountDetails(
+                        amount = "50000",
+                        accountNumber = "21342213211",
+                        accountName = "Ice Care Nig Ltd",
+                        bankName = "United bank For Africa"
+                    )
+                )
+            )
+        )
+    TransactionHistoryUI(searchText = {}, onItemSelection = {}, historyData = response)
 }

@@ -40,21 +40,6 @@ fun TransferScreen(navController: NavHostController)
         var selectedBankDetails by remember { mutableStateOf<CompanyAccounts?>(null) }
         var enteredDollarAmount by remember { mutableStateOf("") }
         var enteredNairaAmount by remember { mutableStateOf("") }
-//        val calculatedDollarEquivalence by remember(enteredNairaAmount) {
-//            mutableStateOf(
-//                if (enteredNairaAmount.isNotEmpty()) {
-//                    try {
-//                        BigDecimal(enteredNairaAmount).divide(
-//                            BigDecimal(userData?.dollarRate ?: 1.0),
-//                            3,
-//                            RoundingMode.HALF_UP
-//                        )
-//                    } catch (e: Exception) {
-//                        BigDecimal.ZERO
-//                    }
-//                } else BigDecimal.ZERO
-//            )
-//        }
         var enteredPurpose by remember { mutableStateOf("") }
         var boxCheck by remember { mutableStateOf(false) }
         var fieldErrors by remember { mutableStateOf(mapOf<String, String>()) }
