@@ -1,5 +1,5 @@
 package com.example.icecaremobile.presentation.ui
-
+import CompanyAccounts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.icecaremobile.domain.model.Response.CompanyAccounts
 import com.example.icecaremobile.presentation.ui.component.AccountListCard
 import com.example.icecaremobile.presentation.ui.component.AppButton
 import com.example.icecaremobile.ui.theme.AppGolden
