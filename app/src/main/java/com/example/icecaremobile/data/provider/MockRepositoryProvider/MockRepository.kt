@@ -1,5 +1,10 @@
 package com.example.icecaremobile.data.provider.MockRepositoryProvider
 
+import CompanyAccounts
+import CompanyPhones
+import LoginResponse
+import LoginResponseData
+import UserAccount
 import com.example.icecaremobile.data.provider.RepositoryProvider.IRepositoryProvider
 import com.example.icecaremobile.domain.model.Request.AccountPaymentRequest
 import com.example.icecaremobile.domain.model.Request.LoginRequest
@@ -8,15 +13,10 @@ import com.example.icecaremobile.domain.model.Request.ThirdPartyRequest
 import com.example.icecaremobile.domain.model.Request.TopUpRequest
 import com.example.icecaremobile.domain.model.Request.TransferRequest
 import com.example.icecaremobile.domain.model.Response.AccountDetails
-import com.example.icecaremobile.domain.model.Response.CompanyAccounts
-import com.example.icecaremobile.domain.model.Response.CompanyPhones
-import com.example.icecaremobile.domain.model.Response.LoginResponse
-import com.example.icecaremobile.domain.model.Response.LoginResponseData
 import com.example.icecaremobile.domain.model.Response.RegistrationResponse
 import com.example.icecaremobile.domain.model.Response.TransactionHistory
 import com.example.icecaremobile.domain.model.Response.TransactionHistoryResponse
 import com.example.icecaremobile.domain.model.Response.TransferResponse
-import com.example.icecaremobile.domain.model.Response.UserAccount
 import com.example.icecaremobile.domain.model.network.ApiError
 import com.example.icecaremobile.domain.repository.IRepository
 import kotlinx.coroutines.delay

@@ -1,16 +1,16 @@
 package com.example.icecaremobile.data.remote.dataSource
 
+import LoginResponse
+import UserAccount
 import com.example.icecaremobile.domain.model.Request.AccountPaymentRequest
 import com.example.icecaremobile.domain.model.Request.LoginRequest
 import com.example.icecaremobile.domain.model.Request.RegistrationRequest
 import com.example.icecaremobile.domain.model.Request.ThirdPartyRequest
 import com.example.icecaremobile.domain.model.Request.TopUpRequest
 import com.example.icecaremobile.domain.model.Request.TransferRequest
-import com.example.icecaremobile.domain.model.Response.LoginResponse
 import com.example.icecaremobile.domain.model.Response.RegistrationResponse
 import com.example.icecaremobile.domain.model.Response.TransactionHistoryResponse
 import com.example.icecaremobile.domain.model.Response.TransferResponse
-import com.example.icecaremobile.domain.model.Response.UserAccount
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
